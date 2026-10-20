@@ -1,0 +1,761 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
+// Admin Controllers
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\HowworksController;
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\AboutBannerController;
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\BlogPostController;
+use App\Http\Controllers\Admin\MCQController;
+use App\Http\Controllers\Admin\HelpController;
+use App\Http\Controllers\CurrencyController;
+
+// Auth Controllers
+use App\Http\Controllers\Auth\AdminLoginController;
+use App\Http\Controllers\Frontend\AuthController;
+
+// Frontend Controllers
+use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\LoginController;
+use App\Http\Controllers\Frontend\EventController;
+use App\Http\Controllers\Frontend\ServiceController;
+use App\Http\Controllers\Frontend\SearchController;
+
+// Customer & Professional
+use App\Http\Controllers\Customer\UpcomingAppointmentController;
+use App\Http\Controllers\Customer\CustomerBookingController;
+use App\Http\Controllers\Professional\ProfessionalController;
+use App\Http\Controllers\Professional\BillingController;
+use App\Http\Controllers\OnboardingController;
+
+// Models
+use App\Models\AboutUs;
+use App\Models\Whychoose;
+use App\Models\Testimonial;
+use App\Models\AboutBanner;
+use App\Models\AboutExperience;
+use App\Models\AboutHowWeWork;
+use App\Models\AboutFAQ;
+use App\Models\Event;
+use App\Models\EventDetail;
+use App\Models\EventFAQ;
+use App\Models\Contactbanner;
+use App\Models\ContactDetail;
+use App\Models\BlogBanner;
+use App\Models\BlogPost;
+use App\Models\Blog;
+use App\Models\Service;
+use App\Models\AllEvent;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ContactFormController;
+use App\Http\Controllers\Customer\BookingController;
+
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+if (app()->environment('local')) {
+    Route::get('/tazen-v2-preview', function () {
+        $services = Service::query()
+            ->where('status', 'active')
+            ->orderBy('name')
+            ->get();
+
+        $whychooses = \App\Models\Whychoose::latest()->get();
+
+        $professionals = \App\Models\Professional::query()
+            ->where('status', 'accepted')
+            ->where('active', true)
+            ->with([
+                'profile',
+                'professionalServices.service',
+                'reviews' => fn ($query) => $query->where('is_approved', true),
+            ])
+            ->latest()
+            ->limit(6)
+            ->get();
+
+        $howworks = \App\Models\Howworks::latest()->get();
+
+        $recentBlogPosts = \App\Models\BlogPost::query()
+            ->with('blog')
+            ->whereHas('blog', fn ($query) => $query->where('status', 'active'))
+            ->whereDate('published_at', '<=', now()->toDateString())
+            ->latest()
+            ->limit(3)
+            ->get();
+
+        $faqs = \App\Models\FAQ::query()
+            ->where('status', true)
+            ->orderBy('order')
+            ->get();
+
+        $adminEventDetails = \App\Models\EventDetail::query()
+            ->with(['event' => fn ($query) => $query->where('status', 'approved')->where('show_on_homepage', true)])
+            ->where('creator_type', 'admin')
+            ->whereHas('event', fn ($query) => $query->where('status', 'approved')->where('show_on_homepage', true))
+            ->latest()
+            ->limit(6)
+            ->get();
+
+        $adminEvents = $adminEventDetails->map(function ($detail) {
+            $bannerImages = is_array($detail->banner_image) ? $detail->banner_image : [];
+
+            return (object) [
+                'event_id' => $detail->event_id,
+                'title' => $detail->event?->heading,
+                'description' => $detail->event?->mini_heading,
+                'image' => $bannerImages[0] ?? $detail->event?->card_image,
+                'date' => $detail->event?->date,
+                'time' => $detail->time ?: $detail->event?->time,
+                'location' => $detail->city,
+                'event_mode' => $detail->event_mode,
+                'price' => $detail->starting_fees,
+                'created_at' => $detail->created_at,
+            ];
+        });
+
+        $professionalEvents = \App\Models\AllEvent::query()
+            ->where('created_by_type', 'professional')
+            ->where('status', 'approved')
+            ->where('show_on_homepage', true)
+            ->with(['eventDetails' => fn ($query) => $query->where('creator_type', 'professional')->latest()])
+            ->latest()
+            ->limit(6)
+            ->get()
+            ->map(function ($event) {
+                $detail = $event->eventDetails->first();
+
+                return (object) [
+                    'event_id' => $event->id,
+                    'title' => $event->heading,
+                    'description' => $event->mini_heading ?: $event->short_description,
+                    'image' => $event->card_image,
+                    'date' => $event->date,
+                    'time' => $event->time ?: $detail?->time,
+                    'location' => $detail?->city,
+                    'event_mode' => $detail?->event_mode,
+                    'price' => $event->starting_fees,
+                    'created_at' => $event->created_at,
+                ];
+            });
+
+        $events = $adminEvents
+            ->concat($professionalEvents)
+            ->sortByDesc('created_at')
+            ->take(6)
+            ->values();
+
+        return view('tazen-v2.home', compact('services', 'whychooses', 'professionals', 'howworks', 'events', 'recentBlogPosts', 'faqs'));
+    })->name('tazen-v2.preview');
+}
+
+Route::get('/run-plans-seeder', function () {
+    Artisan::call('db:seed', ['--class' => 'PlansSeeder']);
+    return "Plans Seeder ran successfully!";
+});
+
+Route::get('/csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+});
+
+// Route to check login status (no authentication required)
+Route::post('/check-login', [BookingController::class, 'checkLogin'])->name('check.login');
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('gridlisting', [HomeController::class, 'professionals'])->name('gridlisting');
+Route::post('/currency/switch', [CurrencyController::class, 'switch'])->name('currency.switch');
+
+// Professional details page - public viewing but requires auth for booking
+Route::get("professionals/details/{id}/{professional_name?}/{sub_service_slug?}", [HomeController::class, 'professionalsDetails'])->name('professionals.details');
+
+// AJAX routes for dynamic filtering
+Route::get('/get-sub-services', [HomeController::class, 'getSubServices'])->name('get.sub.services');
+Route::get('/get-professional-rates-availability', [HomeController::class, 'getProfessionalRatesAvailability'])->name('get.professional.rates.availability');
+Route::get("professionals/details/{id}/{professional_name?}", [HomeController::class, 'professionalsDetails'])->name('professionals.details.simple');
+// Removed conflicting duplicate route name to ensure JSON endpoint resolves correctly
+// Route::get('professionals/get-rates-by-sub-service', [HomeController::class, 'getProfessionalRatesBySubService'])->name('get.professional.rates.availability');
+
+Route::get('about', function () {
+    $about_us = AboutUs::latest()->get();
+    $whychooses = Whychoose::latest()->get();
+    $testimonials = Testimonial::latest()->get();
+    $banners = AboutBanner::latest()->get();
+    $aboutexperiences = AboutExperience::latest()->get();
+    $abouthowweworks = AboutHowWeWork::latest()->get();
+    $aboutfaqs = AboutFAQ::latest()->get();
+    $services = Service::latest()->get();
+
+    return view('frontend.sections.about', compact('services', 'about_us', 'whychooses', 'testimonials', 'banners', 'aboutexperiences', 'abouthowweworks', 'aboutfaqs'));
+});
+Route::get('/eventlist', function (Request $request) {
+    $filter = $request->query('filter');
+    $category = $request->query('category');
+    $price_range = $request->query('price_range');
+    $city = $request->query('city');
+    $event_mode = $request->query('event_mode');
+
+    // Get admin events - ONLY approved admin created event details (no homepage toggle requirement for event list)
+    $adminEvents = EventDetail::with('event')
+        ->where('creator_type', 'admin')
+        ->whereHas('event', function ($query) use ($filter, $category, $price_range) {
+        // Only show approved events (homepage toggle not required for event list page)
+        $query->where('status', 'approved');
+        if ($filter == 'today') {
+            $query->whereDate('date', Carbon::today()->toDateString());
+        } elseif ($filter == 'tomorrow') {
+            $query->whereDate('date', Carbon::tomorrow()->toDateString());
+        } elseif ($filter == 'weekend') {
+            $startOfWeekend = Carbon::now()->next(Carbon::SATURDAY)->startOfDay();
+            $endOfWeekend = Carbon::now()->next(Carbon::SUNDAY)->endOfDay();
+            $query->whereBetween('date', [$startOfWeekend, $endOfWeekend]);
+        }
+
+        if ($category) {
+            $query->where('mini_heading', $category);
+        }
+
+        if ($price_range) {
+            switch ($price_range) {
+                case '100-200':
+                    $query->whereBetween('starting_fees', [100, 200]);
+                    break;
+                case '200-300':
+                    $query->whereBetween('starting_fees', [200, 300]);
+                    break;
+                case '300-400':
+                    $query->whereBetween('starting_fees', [300, 400]);
+                    break;
+                case '400-500':
+                    $query->whereBetween('starting_fees', [400, 500]);
+                    break;
+                case '500-1000':
+                    $query->whereBetween('starting_fees', [500, 1000]);
+                    break;
+            }
+        }
+    });
+
+    // Add city filter for admin events
+    if ($city) {
+        $adminEvents = $adminEvents->where('city', $city);
+    }
+
+    // Add event mode filter for admin events
+    if ($event_mode) {
+        $adminEvents = $adminEvents->where('event_mode', $event_mode);
+    }
+
+    $adminEvents = $adminEvents->latest()->get();
+
+    // Get approved professional events from AllEvent model (no homepage toggle requirement for event list)
+    $professionalEvents = AllEvent::with('professional')
+        ->where('created_by_type', 'professional')
+        ->where('status', 'approved');
+
+    // Apply filters to professional events
+    if ($filter == 'today') {
+        $professionalEvents = $professionalEvents->whereDate('date', Carbon::today()->toDateString());
+    } elseif ($filter == 'tomorrow') {
+        $professionalEvents = $professionalEvents->whereDate('date', Carbon::tomorrow()->toDateString());
+    } elseif ($filter == 'weekend') {
+        $startOfWeekend = Carbon::now()->next(Carbon::SATURDAY)->startOfDay();
+        $endOfWeekend = Carbon::now()->next(Carbon::SUNDAY)->endOfDay();
+        $professionalEvents = $professionalEvents->whereBetween('date', [$startOfWeekend, $endOfWeekend]);
+    }
+
+    if ($category) {
+        $professionalEvents = $professionalEvents->where('mini_heading', $category);
+    }
+
+    if ($price_range) {
+        switch ($price_range) {
+            case '100-200':
+                $professionalEvents = $professionalEvents->whereBetween('starting_fees', [100, 200]);
+                break;
+            case '200-300':
+                $professionalEvents = $professionalEvents->whereBetween('starting_fees', [200, 300]);
+                break;
+            case '300-400':
+                $professionalEvents = $professionalEvents->whereBetween('starting_fees', [300, 400]);
+                break;
+            case '400-500':
+                $professionalEvents = $professionalEvents->whereBetween('starting_fees', [400, 500]);
+                break;
+            case '500-1000':
+                $professionalEvents = $professionalEvents->whereBetween('starting_fees', [500, 1000]);
+                break;
+        }
+    }
+
+    $professionalEvents = $professionalEvents->latest()->get();
+
+    Route::get('/get-sub-services', [HomeController::class, 'getSubServices'])->name('get.sub.services');
+
+    // Transform professional events to match admin event structure
+    $professionalEvents = $professionalEvents->map(function ($event) {
+        // Create a pseudo EventDetail structure for consistency with admin events
+        $pseudoEventDetail = new stdClass();
+        $pseudoEventDetail->id = $event->id;
+        $pseudoEventDetail->event = $event;
+        return $pseudoEventDetail;
+    });
+
+    // Combine both types of events
+    $events = collect($adminEvents)->merge($professionalEvents)->sortByDesc('created_at');
+
+    $services = Service::latest()->get();
+
+    // Get unique categories for the filter (from both admin and professional events that are approved)
+    $adminCategories = AllEvent::where('created_by_type', 'admin')
+        ->where('status', 'approved')
+        ->distinct()
+        ->pluck('mini_heading');
+    $professionalCategories = AllEvent::where('created_by_type', 'professional')
+        ->where('status', 'approved')
+        ->distinct()
+        ->pluck('mini_heading');
+    $categories = $adminCategories->merge($professionalCategories)->unique();
+
+    // Get unique cities for the filter
+    $cities = EventDetail::distinct()->pluck('city')->filter();
+
+    // Get unique event modes for the filter
+    $event_modes = ['online', 'offline'];
+
+    return view('frontend.sections.eventlist', compact('events', 'services', 'filter', 'categories', 'category', 'price_range', 'cities', 'city', 'event_modes', 'event_mode'));
+})->name('event.list');
+Route::get('/allevent/{id}', function ($id) {
+    // Try to find in AllEvent (this table has status column)
+    $allEvent = AllEvent::where('id', $id)
+        ->where('status', 'approved')
+        ->first();
+
+    if ($allEvent && $allEvent->created_by_type === 'professional') {
+        // Professional event found
+        $services = Service::all();
+        $eventfaqs = EventFAQ::latest()->get();
+        
+        // Get event details if available (EventDetail does NOT have status column)
+        $eventDetail = EventDetail::where('event_id', $id)
+                                  ->where('creator_type', 'professional')
+                                  ->first();
+
+        return view('frontend.sections.allevent', compact('allEvent', 'services', 'eventfaqs', 'eventDetail'));
+    } elseif ($allEvent && $allEvent->created_by_type === 'admin') {
+        // Admin event found in all_events table
+        $event = $allEvent;
+        $services = Service::all();
+        $eventfaqs = EventFAQ::latest()->get();
+        
+        // Get event details if available
+        $eventDetail = EventDetail::where('event_id', $allEvent->id)
+            ->where('creator_type', 'admin')
+            ->first();
+            
+        return view('frontend.sections.allevent', compact('event', 'services', 'eventfaqs', 'eventDetail'));
+    }
+    
+    // Not found in all_events, maybe the ID is an EventDetail ID
+    $eventDetail = EventDetail::where('id', $id)
+        ->where('creator_type', 'admin')
+        ->first();
+
+    if (!$eventDetail || !$eventDetail->event_id) {
+        abort(404, 'Event not found');
+    }
+
+    // Get the associated event from all_events and check if approved
+    $allEvent = AllEvent::where('id', $eventDetail->event_id)
+        ->where('status', 'approved')
+        ->first();
+
+    if (!$allEvent) {
+        abort(404, 'Event not found or not approved');
+    }
+
+    $event = $allEvent;
+    $services = Service::all();
+    $eventfaqs = EventFAQ::latest()->get();
+
+    return view('frontend.sections.allevent', compact('event', 'services', 'eventfaqs', 'eventDetail'));
+})->name('event.details');
+Route::get('allevent', function ($id) {
+    $eventdetails = Eventdetail::with('event')->latest()->get();
+    // dd($eventdetails);
+    $eventfaqs = EventFAQ::latest()->get();
+    $event = Event::findOrFail($id);
+
+    return view('frontend.sections.allevent', compact('eventdetails', 'eventfaqs', 'event'));
+});
+
+Route::get('/allevents', [EventController::class, 'index'])->name('allevents');
+Route::get('/service/{service:slug}', [ServiceController::class, 'show'])->name('service.show');
+Route::get('/service/{service:slug}/questions', [HomeController::class, 'getServiceQuestions'])->name('service.questions');
+
+
+Route::get('blog', function (Request $request) {
+    $blogbanners = BlogBanner::latest()->get();
+    $services = Service::latest()->get();
+    $latestBlogs = BlogPost::latest()->take(3)->get();
+    $categoryCounts = BlogPost::select('category', DB::raw('count(*) as post_count'))
+        ->groupBy('category')
+        ->get();
+    $search = $request->input('search');
+    $category = $request->input('category');
+
+    $blogPosts = BlogPost::with('blog')
+        ->when($search, function ($query, $search) {
+            return $query->where(function ($q) use ($search) {
+                $q->whereHas('blog', function ($q) use ($search) {
+                    $q->where('title', 'like', '%' . $search . '%');
+                })
+                    ->orWhere('category', 'like', '%' . $search . '%');
+            });
+        })
+        ->when($category, function ($query, $category) {
+            return $query->where('category', $category);
+        })
+        ->latest()
+        ->paginate(9);
+
+    return view('frontend.sections.blog', compact('blogbanners', 'blogPosts', 'services', 'latestBlogs', 'categoryCounts', 'search', 'category'));
+})->name('blog.index');
+Route::get('/blog-post/{identifier}', function ($identifier) {
+    $blogPost = null;
+
+    if (is_numeric($identifier)) {
+        // Handle numeric ID
+        $blogPost = App\Models\BlogPost::with('blog')->find($identifier);
+        if ($blogPost) {
+            // Redirect to slug URL for SEO consistency
+            $slug = \Illuminate\Support\Str::slug($blogPost->blog->title ?? '');
+            if ($slug && $slug !== (string) $identifier) {
+                return redirect()->route('blog.show', $slug);
+            }
+        }
+    } else {
+        // Handle slug - find by matching slugified title
+        $allBlogPosts = App\Models\BlogPost::with('blog')->get();
+        foreach ($allBlogPosts as $bp) {
+            if (\Illuminate\Support\Str::slug($bp->blog->title ?? '') === $identifier) {
+                $blogPost = $bp;
+                break;
+            }
+        }
+    }
+
+    // Handle case where blog doesn't exist
+    if (!$blogPost) {
+        abort(404, 'Blog not found');
+    }
+
+    $relatedBlog = DB::table('blogs')->where('id', $blogPost->blog_id)->first();
+    $latestBlogs = App\Models\BlogPost::latest()->take(3)->get();
+    $categoryCounts = App\Models\BlogPost::select('category', DB::raw('count(*) as post_count'))
+        ->groupBy('category')
+        ->get();
+    $comments = \App\Models\Comment::where('blog_post_id', $blogPost->id)
+        ->where('is_approved', true)
+        ->latest()
+        ->take(4)
+        ->get();
+
+    // Fetch latest services
+    $services = App\Models\Service::latest()->get();
+
+    return view('frontend.sections.blog-post', compact('blogPost', 'services', 'relatedBlog', 'latestBlogs', 'categoryCounts', 'comments'));
+})->name('blog.show');
+Route::get('eventdetails', function () {
+    return view('frontend.sections.eventdetails');
+});
+Route::get('interiordesign', function () {
+    return view('frontend.sections.interiordesign');
+});
+Route::get('pshychology', function () {
+    return view('frontend.sections.pshychology');
+});
+Route::get('fitness', function () {
+    return view('frontend.sections.fitness-yoga');
+});
+Route::get('dieticians', function () {
+    return view('frontend.sections.dieticians');
+});
+Route::get('contact', function () {
+    $contactbanners = Contactbanner::latest()->get();
+    $contactdetails = ContactDetail::latest()->get();
+    $services = Service::latest()->get();
+    return view('frontend.sections.contact', compact('contactbanners', 'contactdetails', 'services'));
+});
+
+Route::get('help', function () {
+    $services = Service::latest()->get();
+    return view('frontend.sections.help', compact('services'));
+});
+
+Route::get('influencer', function () {
+    return view('frontend.sections.influencer');
+});
+Route::get('stylist', function () {
+    return view('frontend.sections.stylist');
+});
+Route::get('job', function () {
+    return view('frontend.sections.job');
+});
+Route::get('career', function () {
+    $careers = \App\Models\Career::where('status', 'active')->latest()->get();
+    return view('frontend.sections.career', compact('careers'));
+})->name('career');
+Route::get('job-details/{id}', function ($id) {
+    $career = \App\Models\Career::findOrFail($id);
+    return view('frontend.sections.job-details', compact('career'));
+})->name('job.details');
+Route::post('job-application/store', [\App\Http\Controllers\Frontend\JobApplicationController::class, 'store'])->name('job.application.store');
+Route::get('astro', function () {
+    return view('frontend.sections.astro');
+});
+Route::get('blog-post', function () {
+    $blogbanners = BlogBanner::latest()->get();
+
+    return view('frontend.sections.blog-post', compact('blogbanners'));
+});
+
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::get('register', [LoginController::class, 'showRegisterForm'])->name('register');
+
+Route::post('login', [LoginController::class, 'login'])->middleware('throttle:5,1')->name('login.submit');
+Route::post('register', [LoginController::class, 'register'])->name('register.submit');
+Route::post('/register/send-otp', [App\Http\Controllers\Frontend\LoginController::class, 'sendOtp'])->name('register.send-otp');
+Route::post('/register/verify-otp', [App\Http\Controllers\Frontend\LoginController::class, 'verifyOtp'])->name('register.verify-otp');
+Route::post('/register/save-lead', [App\Http\Controllers\Frontend\LoginController::class, 'saveCustomerLead'])->name('register.save-lead');
+Route::post('/register/verify-otp', [App\Http\Controllers\Frontend\LoginController::class, 'verifyOtp'])->name('register.verify-otp');
+Route::post('/register/create-incomplete', [App\Http\Controllers\Frontend\LoginController::class, 'createIncompleteUser'])->name('register.create-incomplete');
+Route::post('/register/complete', [App\Http\Controllers\Frontend\LoginController::class, 'completeRegistration'])->name('register.complete');
+
+
+Route::get('admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
+Route::post('admin/store', [AdminLoginController::class, 'store'])->name('admin.store');
+Route::get('admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+
+
+// Route::prefix('admin')->group(function () {
+//     Route::get('/about', [AdminAboutPageController::class, 'edit'])->name('admin.about.edit');
+//     Route::put('/about', [AdminAboutPageController::class, 'update'])->name('admin.about.update');
+// });
+
+Route::post('/submit-questionnaire', [HomeController::class, 'submitQuestionnaire'])->name('submitQuestionnaire');
+
+// Service session save route (no authentication required for sharing)
+Route::post('/set-service-session', [HomeController::class, 'setServiceSession'])->name('set.service.session');
+
+// Professionals listing page (no authentication required for viewing)
+Route::get("professionals", [HomeController::class, 'professionals'])->name('professionals');
+
+// Onboarding routes (require authentication)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/onboarding/status', [OnboardingController::class, 'getOnboardingStatus'])->name('onboarding.status');
+    Route::post('/onboarding/complete-customer', [OnboardingController::class, 'completeCustomerOnboarding'])->name('onboarding.complete.customer');
+    Route::post('/onboarding/complete-professional', [OnboardingController::class, 'completeProfessionalOnboarding'])->name('onboarding.complete.professional');
+    Route::post('/onboarding/reset-customer', [OnboardingController::class, 'resetCustomerOnboarding'])->name('onboarding.reset.customer');
+    Route::post('/onboarding/reset-professional', [OnboardingController::class, 'resetProfessionalOnboarding'])->name('onboarding.reset.professional');
+});
+
+Route::middleware(['auth:user'])->group(function () {
+    // Upcoming appointments routes
+    Route::get('/upcoming-appointments', [UpcomingAppointmentController::class, 'index'])->name('user.upcoming-appointment.index');
+    Route::post('/customer/upload-document', [UpcomingAppointmentController::class, 'uploadDocument'])->name('user.upload-document');
+    Route::get('/customer/document-info/{id}', [UpcomingAppointmentController::class, 'getDocumentInfo'])->name('user.document-info');
+
+    // Booking and Payment routes
+    Route::post('/booking/initiate-payment', [CustomerBookingController::class, 'initiatePayment'])->name('user.booking.initiate-payment');
+    Route::post('/booking/verify-payment', [CustomerBookingController::class, 'verifyPayment'])->name('user.booking.verify-payment');
+    Route::get('/booking/success', [CustomerBookingController::class, 'success'])->name('user.booking.success');
+    Route::get('/event/booking/success', [CustomerBookingController::class, 'eventSuccess'])->name('user.event.booking.success');
+
+    // Customer Billing routes
+    Route::get('/customer/billing', [CustomerBookingController::class, 'billing'])->name('user.billing.index');
+    Route::get('/customer/billing/download/{id}', [CustomerBookingController::class, 'downloadInvoice'])->name('user.billing.download');
+
+    // New routes for paymentFailed and retryBooking
+    Route::post('customer/booking/payment-failed', [CustomerBookingController::class, 'paymentFailed'])->name('user.customer.booking.payment.failed');
+    Route::get('customer/booking/retry/{booking_id}', [CustomerBookingController::class, 'retryBooking'])->name('user.customer.booking.retry');
+
+    Route::post('/get-mcq-questions', [CustomerBookingController::class, 'getMCQQuestions'])->name('get.mcq.questions');
+    Route::post('/submit-mcq-answers', [CustomerBookingController::class, 'submitMCQAnswers'])->name('user.mcq.submit');
+});
+
+Route::get('/admin/banners', [BannerController::class, 'index'])->name('admin.banner.index');
+Route::post('/admin/banners', [BannerController::class, 'store'])->name('admin.banner.store');
+
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('homeblog', \App\Http\Controllers\Admin\HomeBlogController::class);
+    Route::resource('howworks', \App\Http\Controllers\Admin\HowworksController::class);
+    Route::resource('about-banner', AboutBannerController::class);
+    Route::get('/mcq-answers', [App\Http\Controllers\Admin\McqAnswerController::class, 'index'])->name('mcq-answers.index');
+    Route::get('/contact-forms', [App\Http\Controllers\Admin\ContactFormController::class, 'index'])->name('contact-forms.index');
+    Route::get('/contact-forms/export', [App\Http\Controllers\Admin\ContactFormController::class, 'export'])->name('contact-forms.export');
+    Route::delete('/contact-forms/{contactForm}', [App\Http\Controllers\Admin\ContactFormController::class, 'destroy'])->name('contact-forms.destroy');
+});
+
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('aboutus', \App\Http\Controllers\Admin\AboutUsController::class);
+});
+Route::get('professional/login', [ProfessionalController::class, 'showLoginForm'])->name('professional.login');
+Route::post('professional/store', [ProfessionalController::class, 'store'])->middleware('throttle:5,1')->name('professional.store');
+Route::get('professional/logout', [ProfessionalController::class, 'logout'])->name('professional.logout');
+Route::get('professional/register', [ProfessionalController::class, 'registerForm'])->name('professional.register');
+Route::post('professional/register', [ProfessionalController::class, 'register'])->name('professional.register.submit');
+Route::post('professional/send-otp', [ProfessionalController::class, 'sendOTP'])->name('professional.send.otp');
+Route::post('professional/verify-otp', [ProfessionalController::class, 'verifyOTP'])->name('professional.verify.otp');
+
+
+// Route::get('/get-mcqs/{service_id}', [ServiceController::class, 'getMcqs']);
+Route::post('/submit-mcq', [MCQController::class, 'store'])->name('submit.mcq');
+Route::get('/get-mcq-questions/{serviceId}', [HomeController::class, 'getServiceQuestions']);
+// Forgot Password
+Route::get('/forgot-password', [AuthController::class, 'showForgotForm'])->name('forgot.form');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.send');
+
+// Reset Password
+Route::get('/reset-password', [AuthController::class, 'showResetForm'])->name('password.reset.form');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.reset');
+
+// Add these routes for user password reset
+Route::middleware('guest')->group(function () {
+    Route::get('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showForgotForm'])
+        ->name('forgot.form');
+    Route::post('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLink'])
+        ->name('forgot.send');
+    Route::get('/reset-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showResetForm'])
+        ->name('password.reset.form');
+    Route::post('/reset-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'resetPassword'])
+        ->name('password.reset');
+});
+
+// Add these routes for professional password reset
+Route::prefix('professional')->name('professional.')->group(function () {
+    Route::middleware('guest:professional')->group(function () {
+        Route::get('/forgot-password', [App\Http\Controllers\Professional\AuthController::class, 'showForgotForm'])
+            ->name('forgot.form');
+        Route::post('/forgot-password', [App\Http\Controllers\Professional\AuthController::class, 'sendResetLink'])
+            ->name('forgot.send');
+        Route::get('/reset-password', [App\Http\Controllers\Professional\AuthController::class, 'showResetForm'])
+            ->name('password.reset.form');
+        Route::post('/reset-password', [App\Http\Controllers\Professional\AuthController::class, 'resetPassword'])
+            ->name('password.reset');
+    });
+});
+
+Route::middleware(['auth:professional'])->group(function () {
+    // Professional billing routes
+    Route::get('/billing', [BillingController::class, 'index'])->name('professional.billing.index');
+    Route::get('/billing/download-invoice/{booking}', [\App\Http\Controllers\Professional\ProfessionalBillingController::class, 'downloadInvoice'])->name('professional.billing.download-invoice');
+});
+
+// Professional payment routes
+Route::middleware(['auth:admin'])->group(function () {
+    // Existing routes...
+    Route::post('/admin/professional/payment/save', [App\Http\Controllers\Admin\BillingController::class, 'savePayment'])
+        ->name('admin.professional.payment.save');
+    Route::post('/admin/professional/payment/update-status', [App\Http\Controllers\Admin\BillingController::class, 'updatePaymentStatus'])
+        ->name('admin.professional.payment.update-status');
+});
+
+Route::get('user/terms-and-conditions', function () {
+    return response()->file(public_path('pdf/user-terms-and-conditions.pdf'));
+})->name('user.terms');
+Route::get('professional/terms-and-conditions', function () {
+    return response()->file(public_path('pdf/professional-terms-and-conditions.pdf'));
+})->name('professional.terms');
+
+Route::get('terms', function () {
+    $services = Service::latest()->get();
+    return view('frontend.sections.terms', compact('services'));
+})->name('terms');
+
+Route::get('/services/search', [HomeController::class, 'searchservice'])->name('services.search');
+
+// Admin review routes
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:admin']], function () {
+    Route::get('reviews', [App\Http\Controllers\Admin\ReviewController::class, 'index'])
+        ->name('reviews.index');
+    Route::delete('reviews/{review}', [App\Http\Controllers\Admin\ReviewController::class, 'destroy'])
+        ->name('reviews.destroy');
+});
+
+// Professional review routes
+Route::prefix('professional')->middleware(['auth:professional'])->name('professional.')->group(function () {
+    Route::get('/reviews', [App\Http\Controllers\Professional\ReviewController::class, 'index'])
+        ->name('reviews.index');
+});
+Route::get('/search-services', [HomeController::class, 'searchServices'])->name('search.services');
+Route::get('event-booking/success', [EventController::class, 'bookingSuccess'])
+    ->name('event.booking.success');
+
+// Help & FAQ Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('help', \App\Http\Controllers\Admin\HelpController::class);
+});
+
+// Frontend Help & FAQ Route
+Route::get('/help', [\App\Http\Controllers\Admin\HelpController::class, 'frontend'])->name('help.index');
+Route::get('/check-auth-status', function () {
+    return response()->json([
+        'authenticated' => Auth::guard('user')->check()
+    ]);
+});
+
+Route::post('/force-login', [App\Http\Controllers\Frontend\LoginController::class, 'forceLogin'])->middleware('throttle:5,1')->name('force.login');
+
+Route::middleware(['auth:user', 'check.active.session'])->group(function () {
+    Route::get('/user/dashboard', function () {
+        return view('user.dashboard');
+    })->name('user.dashboard');
+});
+
+Route::post('/contact', [ContactFormController::class, 'store'])->name('contact.store');
+
+Route::post('/blog-post/{id}/comment', [App\Http\Controllers\CommentController::class, 'store'])->name('blog.comment.store');
+
+// Comment Management Routes
+Route::get('/blog-comments', [App\Http\Controllers\Admin\CommentController::class, 'index'])->name('admin.comments.index');
+Route::post('/blog-comments/{id}/approve', [App\Http\Controllers\Admin\CommentController::class, 'approve'])->name('admin.comments.approve');
+Route::delete('/blog-comments/{id}', [App\Http\Controllers\Admin\CommentController::class, 'destroy'])->name('admin.comments.destroy');
+Route::get('/blog-comments/export', [App\Http\Controllers\Admin\CommentController::class, 'export'])->name('admin.comments.export');
+
+
+
+// Add this route for Excel export
+Route::get('admin/professional/billing/export-excel', [App\Http\Controllers\Admin\BillingController::class, 'exportBillingToExcel'])
+    ->name('admin.professional.billing.export-excel');
+
+// Add this route for Customer billing Excel export
+Route::get('admin/customer/billing/export-excel', [App\Http\Controllers\Admin\BillingController::class, 'exportCustomerBillingToExcel'])
+    ->name('admin.customer.billing.export-excel');
+Route::get('/privacy', function () {
+    return view('frontend.sections.privacy');
+})->name('privacy');
+
+// Add this in the professional group routes section
+Route::get('/professional/rate/session-types', [App\Http\Controllers\Professional\RateController::class, 'getSessionTypes'])->name('professional.rate.get-session-types')->middleware('auth:professional');
+
+// Fallback route - MUST be the last route defined
+Route::fallback(function () {
+    abort(404);
+});
