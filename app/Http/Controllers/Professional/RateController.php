@@ -8,6 +8,7 @@ use App\Models\ProfessionalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class RateController extends Controller
 {
@@ -19,6 +20,7 @@ class RateController extends Controller
         $professionalId = Auth::guard('professional')->id();
         
         $rates = Rate::where('professional_id', $professionalId)
+            ->whereHas('professionalService', fn ($query) => $query->where('professional_id', $professionalId))
             ->with(['professionalService.service', 'subService'])
             ->get();
             
@@ -51,41 +53,52 @@ class RateController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the incoming request data
         $validated = $request->validate([
-            'professional_service_id' => 'required|exists:professional_services,id',
-            'rateData' => 'required|array',
-            'rateData.*.session_type' => 'required|string|max:255',
+            'professional_service_id' => 'required|integer|exists:professional_services,id',
+            'rateData' => 'required|array|min:1|max:100',
+            'rateData.*.session_type' => 'required|string|in:One Time,Monthly,Quarterly,Free Hand',
             'rateData.*.sub_service_id' => 'nullable|exists:sub_services,id',
-            'rateData.*.num_sessions' => 'required|integer|min:1',
-            'rateData.*.rate_per_session' => 'required|numeric|min:0',
-            'rateData.*.final_rate' => 'required|numeric|min:0',
+            'rateData.*.num_sessions' => 'required|integer|min:1|max:10000',
+            'rateData.*.rate_per_session' => 'required|numeric|min:0|max:999999.99',
+            'rateData.*.final_rate' => 'required|numeric|min:0|max:999999.99',
             'rateData.*.features' => 'nullable|array',
             'rateData.*.features.*' => 'nullable|string|max:255',
         ]);
         
         $professionalId = Auth::guard('professional')->id();
-        $professionalServiceId = $request->input('professional_service_id');
+        $professionalServiceId = $validated['professional_service_id'];
+        $professionalService = ProfessionalService::where('professional_id', $professionalId)
+            ->with('subServices')
+            ->findOrFail($professionalServiceId);
+        $allowedSubServiceIds = array_map('intval', $professionalService->subServices->modelKeys());
         
-        // Get the actual service_id from professional_services table
-        $professionalService = ProfessionalService::findOrFail($professionalServiceId);
-        $serviceId = $professionalService->service_id;
-        
-        // Check for duplicate session types with sub-service combinations within the submitted data
         $combinations = [];
-        foreach ($request->input('rateData') as $rate) {
+        foreach ($validated['rateData'] as $rate) {
+            if ($rate['num_sessions'] * $rate['rate_per_session'] > 999999.99) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'The final rate cannot exceed ₹999,999.99.',
+                ], 422);
+            }
+
+            if (!empty($rate['sub_service_id']) && !in_array((int) $rate['sub_service_id'], $allowedSubServiceIds, true)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'A selected sub-service does not belong to your service.',
+                ], 422);
+            }
+
             $key = $rate['session_type'] . '|' . ($rate['sub_service_id'] ?? 'null');
-            if (in_array($key, $combinations)) {
+            if (isset($combinations[$key])) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Duplicate session types with the same sub-service are not allowed in the same submission.',
                 ], 422);
             }
-            $combinations[] = $key;
+            $combinations[$key] = true;
         }
         
-        // Check against existing rates for this professional
-        foreach ($request->input('rateData') as $rate) {
+        foreach ($validated['rateData'] as $rate) {
             $exists = Rate::where('professional_id', $professionalId)
                     ->where('professional_service_id', $professionalServiceId)
                 ->where('session_type', $rate['session_type'])
@@ -104,7 +117,27 @@ class RateController extends Controller
         DB::beginTransaction();
 
         try {
-            foreach ($request->input('rateData') as $rate) {
+            ProfessionalService::where('professional_id', $professionalId)
+                ->lockForUpdate()
+                ->findOrFail($professionalServiceId);
+
+            foreach ($validated['rateData'] as $rate) {
+                $duplicate = Rate::where('professional_id', $professionalId)
+                    ->where('professional_service_id', $professionalServiceId)
+                    ->where('session_type', $rate['session_type'])
+                    ->where('sub_service_id', $rate['sub_service_id'] ?? null)
+                    ->exists();
+
+                if ($duplicate) {
+                    DB::rollBack();
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'A rate already exists for this session type and service.',
+                    ], 422);
+                }
+            }
+
+            foreach ($validated['rateData'] as $rate) {
                 // Filter out empty features
                 $features = isset($rate['features']) ? array_values(array_filter($rate['features'], function($feature) {
                     return !empty(trim($feature));
@@ -122,7 +155,7 @@ class RateController extends Controller
                     'sub_service_id' => $rate['sub_service_id'] ?? null,
                     'num_sessions' => $rate['num_sessions'],
                     'rate_per_session' => $rate['rate_per_session'],
-                    'final_rate' => $rate['final_rate'],
+                    'final_rate' => $rate['num_sessions'] * $rate['rate_per_session'],
                     'features' => $features,
                 ]);
             }
@@ -132,13 +165,17 @@ class RateController extends Controller
                 'status' => 'success',
                 'message' => 'Rates added successfully.',
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             DB::rollBack();
+            Log::error('Failed to create professional rates.', [
+                'professional_id' => $professionalId,
+                'professional_service_id' => $professionalServiceId,
+                'exception' => $e,
+            ]);
 
             return response()->json([
                 'status' => 'error',
                 'message' => 'An error occurred while adding the rates. Please try again.',
-                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -147,10 +184,17 @@ class RateController extends Controller
      * Get already used session types for the logged in professional
      * Returns session types with their sub_service_id to properly check duplicates
      */
-    public function getSessionTypes()
+    public function getSessionTypes(Request $request)
     {
         $professionalId = Auth::guard('professional')->id();
+        $validated = $request->validate([
+            'professional_service_id' => 'required|integer',
+        ]);
+        $professionalService = ProfessionalService::where('professional_id', $professionalId)
+            ->findOrFail($validated['professional_service_id']);
+
         $rates = Rate::where('professional_id', $professionalId)
+            ->where('professional_service_id', $professionalService->id)
             ->select('session_type', 'sub_service_id')
             ->get()
             ->map(function($rate) {
@@ -180,8 +224,13 @@ class RateController extends Controller
      */
     public function edit(string $id)
     {
-        $rates = Rate::findOrFail($id);
-        return view('professional.rate.edit', compact('rates'));
+        $rates = Rate::with('professionalService.service', 'subService')
+            ->where('professional_id', Auth::guard('professional')->id())
+            ->whereHas('professionalService', fn ($query) => $query->where('professional_id', Auth::guard('professional')->id()))
+            ->findOrFail($id);
+        $professionalService = $rates->professionalService;
+
+        return view('professional.rate.edit', compact('rates', 'professionalService'));
     }
 
     /**
@@ -189,10 +238,14 @@ class RateController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $professionalId = Auth::guard('professional')->id();
+        $rate = Rate::where('professional_id', $professionalId)
+            ->whereHas('professionalService', fn ($query) => $query->where('professional_id', $professionalId))
+            ->findOrFail($id);
         $validated = $request->validate([
-            'num_sessions' => 'required|integer|min:1',
-            'rate_per_session' => 'required|numeric|min:0',
-            'final_rate' => 'required|numeric|min:0',
+            'session_type' => 'required|string|in:One Time,Monthly,Quarterly,Free Hand',
+            'num_sessions' => 'required|integer|min:1|max:10000',
+            'rate_per_session' => 'required|numeric|min:0|max:999999.99',
             'features' => 'nullable|array',
             'features.*' => 'nullable|string|max:255',
         ]);
@@ -209,7 +262,27 @@ class RateController extends Controller
             }
         }
 
-        $rate = Rate::findOrFail($id);
+        if ($validated['num_sessions'] * $validated['rate_per_session'] > 999999.99) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The final rate cannot exceed ₹999,999.99.',
+            ], 422);
+        }
+
+        $duplicate = Rate::where('professional_id', $rate->professional_id)
+            ->where('professional_service_id', $rate->professional_service_id)
+            ->where('session_type', $validated['session_type'])
+            ->where('sub_service_id', $rate->sub_service_id)
+            ->where('id', '!=', $rate->id)
+            ->exists();
+        if ($duplicate) {
+            return response()->json([
+                'success' => false,
+                'message' => 'A rate already exists for this session type and service.',
+            ], 422);
+        }
+
+        $validated['final_rate'] = $validated['num_sessions'] * $validated['rate_per_session'];
         $rate->update($validated);
 
         return response()->json(['success' => true, 'message' => 'Rate updated successfully.']);
@@ -222,7 +295,10 @@ class RateController extends Controller
      */
     public function destroy(string $id)
     {
-        $rate = Rate::findOrFail($id);
+        $professionalId = Auth::guard('professional')->id();
+        $rate = Rate::where('professional_id', $professionalId)
+            ->whereHas('professionalService', fn ($query) => $query->where('professional_id', $professionalId))
+            ->findOrFail($id);
         $rate->delete();
 
         return response()->json([

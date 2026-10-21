@@ -624,38 +624,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Toast notification function
 function showToast(message, type = 'info') {
-    // Create toast element
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? '#2ecc71' : type === 'error' ? '#e74c3c' : '#3498db'};
-        color: white;
-        padding: 12px 20px;
-        border-radius: 6px;
-        z-index: 10000;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-    `;
-    toast.textContent = message;
-    
-    document.body.appendChild(toast);
-    
-    // Animate in
-    setTimeout(() => {
-        toast.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        toast.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            document.body.removeChild(toast);
-        }, 300);
-    }, 3000);
+    const showNotification = window.YuktioneToast?.[type];
+    if (typeof showNotification !== 'function') {
+        console.error(`Professional profile notification type "${type}" is unavailable.`);
+        return;
+    }
+
+    showNotification(message);
 }
 
 // Handle delete button click
@@ -694,6 +669,8 @@ $('#profileForm').submit(function(e) {
     }
     
     // Add loading state
+    const submitButton = document.getElementById('submitBtn');
+    submitButton.disabled = true;
     $('#submitBtn').addClass('btn-loading').html('');
     
     // Reset validation state
@@ -724,10 +701,12 @@ $('#profileForm').submit(function(e) {
                 }, 1500);
             } else {
                 toastr.error(response.message || "Something went wrong");
+                submitButton.disabled = false;
                 $('#submitBtn').removeClass('btn-loading').html('<i class="fas fa-save"></i> Save Profile');
             }
         },
         error: function(xhr) {
+            submitButton.disabled = false;
             $('#submitBtn').removeClass('btn-loading').html('<i class="fas fa-save"></i> Save Profile');
             
             if (xhr.status === 422) {
@@ -740,7 +719,7 @@ $('#profileForm').submit(function(e) {
                     $('#' + key).next('.form-control-feedback').text(value[0]);
                 });
             } else {
-                toastr.error(xhr.responseJSON.message || "An unexpected error occurred");
+                toastr.error(xhr.responseJSON?.message || "An unexpected error occurred");
             }
         }
     });

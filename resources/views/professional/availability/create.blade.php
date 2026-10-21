@@ -310,11 +310,20 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('weekly_slots', JSON.stringify(slotsArray));
         
         // Submit form
+        const submitButton = this.querySelector('button[type="submit"]');
+        if (submitButton.disabled) {
+            return;
+        }
+        submitButton.disabled = true;
+        submitButton.dataset.originalText = submitButton.innerHTML;
+        submitButton.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Saving...';
+
         fetch('{{ route("professional.availability.store") }}', {
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'X-Requested-With': 'XMLHttpRequest'
             }
         })
         .then(response => response.json())
@@ -326,26 +335,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 1500);
             } else {
                 if (data.errors) {
-                    showError(data.errors.join('<br>'));
+                    const errors = Array.isArray(data.errors)
+                        ? data.errors
+                        : Object.values(data.errors).flat();
+                    showError(errors.join(' '));
                 } else {
                     showError(data.message || 'An error occurred');
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = submitButton.dataset.originalText;
                 }
             }
         })
         .catch(error => {
             console.error('Error:', error);
             showError('An error occurred while saving availability');
+            submitButton.disabled = false;
+            submitButton.innerHTML = submitButton.dataset.originalText;
         });
     });
 
     function showError(message) {
         const errorContainer = document.getElementById('error-messages');
-        errorContainer.innerHTML = `
-            <div class="alert alert-danger alert-dismissible fade show rounded-control border border-error/20 bg-error-surface p-4 text-sm text-error relative" role="alert">
-                ${message}
-                <button type="button" class="btn-close inline-flex h-8 w-8 items-center justify-center rounded-full text-text-muted hover:bg-surface-muted after:content-['×'] after:text-xl" data-bs-dismiss="alert"></button>
-            </div>
-        `;
+        const alert = document.createElement('div');
+        alert.className = 'alert alert-danger rounded-control border border-error/20 bg-error-surface p-4 text-sm text-error';
+        alert.setAttribute('role', 'alert');
+        alert.textContent = message;
+        errorContainer.replaceChildren(alert);
         errorContainer.scrollIntoView({ behavior: 'smooth' });
     }
 

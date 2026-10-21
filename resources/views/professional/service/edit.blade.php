@@ -37,7 +37,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <input type="hidden" name="serviceId" value="{{ $service->service_id }}">
+                            <input type="hidden" name="serviceId" value="{{ old('serviceId', $service->service_id ?? $matchingServiceId) }}">
                             <span class="muted-note mt-2 block text-sm text-text-muted">Service category is read-only on this page and cannot be changed.</span>
                         </div>
                     </div>
@@ -115,8 +115,15 @@ $(document).ready(function() {
     $('#serviceForm').submit(function(e) {
         e.preventDefault();
         let form = this;
+        const submitButton = form.querySelector('button[type="submit"]');
+        if (submitButton.disabled) {
+            return;
+        }
         let formData = new FormData(form);
         formData.append('_method', 'PUT');
+        submitButton.disabled = true;
+        submitButton.dataset.originalText = submitButton.innerHTML;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
         $.ajax({
             url: "{{ route('professional.service.update', $service->id) }}",
@@ -140,13 +147,19 @@ $(document).ready(function() {
                 }
             },
             error: function(xhr) {
+                submitButton.disabled = false;
+                submitButton.innerHTML = submitButton.dataset.originalText;
                 if (xhr.status === 422) {
-                    let errors = xhr.responseJSON.errors;
-                    $.each(errors, function(key, value) {
-                        toastr.error(value[0]);
-                    });
+                    const errors = xhr.responseJSON?.errors || {};
+                    if (Object.keys(errors).length) {
+                        $.each(errors, function(key, value) {
+                            toastr.error(value[0]);
+                        });
+                    } else {
+                        toastr.error(xhr.responseJSON?.message || 'Please check the submitted information.');
+                    }
                 } else {
-                    toastr.error(xhr.responseJSON.message || "An unexpected error occurred");
+                    toastr.error(xhr.responseJSON?.message || "An unexpected error occurred");
                 }
             }
         });
@@ -193,7 +206,11 @@ function loadSubServices(serviceId, selectedSubServices = []) {
 
 function enforceSubServiceLimit(container) {
     container.find('input[type="checkbox"]').off('change').on('change', function() {
-        // selection not limited
+        const selected = container.find('input[type="checkbox"]:checked').length;
+        if (selected > 2) {
+            this.checked = false;
+            toastr.error('You can select up to two sub-services.');
+        }
     });
 }
 </script>

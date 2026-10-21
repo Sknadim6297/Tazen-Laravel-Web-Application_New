@@ -23,6 +23,7 @@ class BookingController extends Controller
 
     $query = Booking::with('timedates')
         ->where('professional_id', $professionalId);
+    $hasAnyBookings = Booking::where('professional_id', $professionalId)->exists();
 
     if ($request->filled('search_name')) {
         $search = $request->search_name;
@@ -55,14 +56,14 @@ class BookingController extends Controller
         }
     }
 
-    $bookings = $query->orderBy('booking_date', 'desc')->get();
+    $bookings = $query->orderBy('booking_date', 'desc')->paginate(15)->withQueryString();
 
     $planTypes = Booking::where('professional_id', $professionalId)
         ->select('plan_type')
         ->distinct()
         ->pluck('plan_type');
 
-    return view('professional.booking.index', compact('bookings', 'planTypes'));
+    return view('professional.booking.index', compact('bookings', 'planTypes', 'hasAnyBookings'));
 }
 
 /**

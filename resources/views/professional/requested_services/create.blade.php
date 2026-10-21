@@ -89,6 +89,11 @@
 @section('scripts')
 <script>
 $('#addService').click(function () {
+    if ($('.requested-service').length >= 20) {
+        toastr.error('You can add up to 20 requested services.');
+        return;
+    }
+
     $('#requestedServicesContainer').append(`
         <div class="dynamic-group requested-service grid gap-4 rounded-control border border-border bg-surface-muted p-4 md:grid-cols-2">
             <div class="form-group mb-5 space-y-2">
@@ -107,15 +112,20 @@ $('#addService').click(function () {
 });
 
 $('#addEducation').click(function () {
+    if ($('.education-entry').length >= 20) {
+        toastr.error('You can add up to 20 education entries.');
+        return;
+    }
+
     $('#educationContainer').append(`
         <div class="dynamic-group education-entry grid gap-4 rounded-control border border-border bg-surface-muted p-4 md:grid-cols-2">
             <div class="form-group mb-5 space-y-2">
                 <label class="block text-sm font-medium text-text-secondary">College Name</label>
-                <input type="text" name="college_name[]" class="form-control w-full rounded-control border border-border bg-white px-3 py-2.5 text-sm text-text-primary shadow-sm placeholder:text-text-muted focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-200" placeholder="Enter college name" required>
+                <input type="text" name="college_name[]" class="form-control w-full rounded-control border border-border bg-white px-3 py-2.5 text-sm text-text-primary shadow-sm placeholder:text-text-muted focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-200" placeholder="Enter college name">
             </div>
             <div class="form-group mb-5 space-y-2">
                 <label class="block text-sm font-medium text-text-secondary">Degree</label>
-                <input type="text" name="degree[]" class="form-control w-full rounded-control border border-border bg-white px-3 py-2.5 text-sm text-text-primary shadow-sm placeholder:text-text-muted focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-200" placeholder="Enter degree" required>
+                <input type="text" name="degree[]" class="form-control w-full rounded-control border border-border bg-white px-3 py-2.5 text-sm text-text-primary shadow-sm placeholder:text-text-muted focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-200" placeholder="Enter degree">
             </div>
             <div class="form-group mb-5 space-y-2">
                 <button type="button" class="remove-education">Delete</button>

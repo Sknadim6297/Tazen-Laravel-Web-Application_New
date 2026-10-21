@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Professional;
 
 use App\Http\Controllers\Controller;
 use App\Models\Availability;
-use App\Models\AvailabilitySlot;
+use App\Models\Professional;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class AvailabilityController extends Controller
 {
@@ -39,104 +42,126 @@ class AvailabilityController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'months' => 'required|array|min:1',
-            'months.*' => 'string|regex:/^\d{4}-\d{2}$/',
+        $validated = $request->validate([
+            'months' => 'required|array|min:1|max:12',
+            'months.*' => 'required|string|date_format:Y-m|distinct',
             'session_duration' => 'required|integer|min:15|max:240',
-            'weekly_slots' => 'required|string', // JSON string from frontend
+            'weekly_slots' => 'required|string|max:20000',
         ]);
 
         $professionalId = Auth::guard('professional')->id();
-        
-        // Parse weekly slots JSON
-        $weeklySlots = json_decode($request->weekly_slots, true);
-        if (!$weeklySlots || !is_array($weeklySlots)) {
-            return response()->json([
-                'success' => false,
-                'errors' => ['Invalid weekly slots data']
-            ], 422);
-        }
-
-        $errors = [];
+        $weeklySlots = $this->validatedWeeklySlots($request->weekly_slots);
         $successfulMonths = [];
         $skippedMonths = [];
 
-        // Validate time slots
-        foreach ($weeklySlots as $index => $slot) {
-            if (!isset($slot['weekday']) || !isset($slot['start_time']) || !isset($slot['end_time'])) {
-                $errors[] = "Invalid slot data at position " . ($index + 1);
-                continue;
-            }
-            
-            try {
-                $startTime = Carbon::createFromFormat('H:i', $slot['start_time']);
-                $endTime = Carbon::createFromFormat('H:i', $slot['end_time']);
-                
-                if ($startTime->gte($endTime)) {
-                    $errors[] = "Start time must be before end time for slot #" . ($index + 1);
+        try {
+            DB::transaction(function () use (
+                $validated,
+                $weeklySlots,
+                $professionalId,
+                &$successfulMonths,
+                &$skippedMonths
+            ) {
+                Professional::whereKey($professionalId)->lockForUpdate()->firstOrFail();
+                foreach ($validated['months'] as $month) {
+                    $exists = Availability::where('professional_id', $professionalId)
+                        ->where('month', $month)
+                        ->exists();
+
+                    if ($exists) {
+                        $skippedMonths[] = $month;
+                        continue;
+                    }
+
+                    $availability = Availability::create([
+                        'professional_id' => $professionalId,
+                        'month' => $month,
+                        'session_duration' => $validated['session_duration'],
+                        'weekdays' => json_encode([]),
+                    ]);
+                    $this->createSlots($availability, $weeklySlots);
+                    $successfulMonths[] = $month;
                 }
-            } catch (\Exception $e) {
-                $errors[] = "Invalid time format for slot #" . ($index + 1);
-            }
-        }
-        
-        if (count($errors) > 0) {
+            });
+        } catch (\Throwable $exception) {
+            Log::error('Failed to create professional availability.', [
+                'professional_id' => $professionalId,
+                'exception' => $exception,
+            ]);
+
             return response()->json([
                 'success' => false,
-                'errors' => $errors
-            ], 422);
+                'message' => 'Availability could not be saved. No changes were applied; please try again.',
+            ], 500);
         }
 
-        // Process each month
-        foreach ($request->months as $month) {
-            // Check if availability for this month already exists
-            $existingAvailability = Availability::where('professional_id', $professionalId)
-                                                ->where('month', $month)
-                                                ->first();
-
-            if ($existingAvailability) {
-                $skippedMonths[] = $month;
-                continue;
-            }
-
-            try {
-                $availability = Availability::create([
-                    'professional_id' => $professionalId,
-                    'month' => $month,
-                    'session_duration' => $request->session_duration,
-                    'weekdays' => json_encode([]), // Keep for backward compatibility
-                ]);
-
-                // Create weekday-specific time slots
-                foreach ($weeklySlots as $slot) {
-                    AvailabilitySlot::create([
-                        'availability_id' => $availability->id,
-                        'weekday' => $slot['weekday'],
-                        'start_time' => $slot['start_time'] . ':00',
-                        'end_time' => $slot['end_time'] . ':00',
-                    ]);
-                }
-                
-                $successfulMonths[] = $month;
-            } catch (\Exception $e) {
-                Log::error("Failed to create availability for month {$month}: " . $e->getMessage());
-            }
-        }
-
-        // Prepare response message
         $message = '';
-        if (count($successfulMonths) > 0) {
+        if ($successfulMonths) {
             $message .= 'Availability created for ' . count($successfulMonths) . ' month(s). ';
         }
-        if (count($skippedMonths) > 0) {
+        if ($skippedMonths) {
             $message .= count($skippedMonths) . ' month(s) already had availability and were skipped. ';
         }
 
         return response()->json([
             'success' => true,
-            'message' => $message,
+            'message' => trim($message),
             'redirect' => route('professional.availability.index')
         ]);
+    }
+
+    private function validatedWeeklySlots(string $json): array
+    {
+        $slots = json_decode($json, true);
+        if (!is_array($slots) || !array_is_list($slots) || count($slots) === 0 || count($slots) > 100) {
+            throw ValidationException::withMessages([
+                'weekly_slots' => 'Add at least one valid time slot.',
+            ]);
+        }
+
+        $validator = Validator::make($slots, [
+            '*.weekday' => 'required|string|in:mon,tue,wed,thu,fri,sat,sun',
+            '*.start_time' => 'required|date_format:H:i',
+            '*.end_time' => 'required|date_format:H:i',
+        ]);
+        $validator->validate();
+
+        $byDay = [];
+        foreach ($slots as $index => $slot) {
+            if ($slot['start_time'] >= $slot['end_time']) {
+                throw ValidationException::withMessages([
+                    'weekly_slots.' . $index . '.end_time' => 'The end time must be after the start time.',
+                ]);
+            }
+
+            $byDay[$slot['weekday']][] = $slot;
+        }
+
+        foreach ($byDay as $daySlots) {
+            usort($daySlots, fn (array $left, array $right) => strcmp($left['start_time'], $right['start_time']));
+            $previousEnd = null;
+            foreach ($daySlots as $slot) {
+                if ($previousEnd !== null && $slot['start_time'] < $previousEnd) {
+                    throw ValidationException::withMessages([
+                        'weekly_slots' => 'Time slots on the same weekday cannot overlap.',
+                    ]);
+                }
+                $previousEnd = $slot['end_time'];
+            }
+        }
+
+        return $slots;
+    }
+
+    private function createSlots(Availability $availability, array $weeklySlots): void
+    {
+        foreach ($weeklySlots as $slot) {
+            $availability->availabilitySlots()->create([
+                'weekday' => $slot['weekday'],
+                'start_time' => $slot['start_time'] . ':00',
+                'end_time' => $slot['end_time'] . ':00',
+            ]);
+        }
     }
 
     public function show(Availability $availability)
@@ -169,163 +194,105 @@ class AvailabilityController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'months' => 'required|array|min:1',
-            'months.*' => 'string|regex:/^\d{4}-\d{2}$/',
+        $validated = $request->validate([
+            'months' => 'required|array|min:1|max:12',
+            'months.*' => 'required|string|date_format:Y-m|distinct',
             'session_duration' => 'required|integer|min:15|max:240',
-            'weekly_slots' => 'required|string', // JSON string from frontend
+            'weekly_slots' => 'required|string|max:20000',
         ]);
 
-        $availability = Availability::findOrFail($id);
-        if ($availability->professional_id != Auth::guard('professional')->id()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized access'
-            ], 403);
-        }
+        $professionalId = Auth::guard('professional')->id();
+        $availability = Availability::where('professional_id', $professionalId)->findOrFail($id);
+        $weeklySlots = $this->validatedWeeklySlots($request->weekly_slots);
 
-        // Parse weekly slots JSON
-        $weeklySlots = json_decode($request->weekly_slots, true);
-        if (!$weeklySlots || !is_array($weeklySlots)) {
-            return response()->json([
-                'success' => false,
-                'errors' => ['Invalid weekly slots data']
-            ], 422);
-        }
-
-        $selectedMonths = $request->months;
+        $selectedMonths = $validated['months'];
         $firstMonth = array_shift($selectedMonths);
         
         $successfulMonths = [];
         $skippedMonths = [];
 
-        // Validate time slots
-        $errors = [];
-        foreach ($weeklySlots as $index => $slot) {
-            if (!isset($slot['weekday']) || !isset($slot['start_time']) || !isset($slot['end_time'])) {
-                $errors[] = "Invalid slot data at position " . ($index + 1);
-                continue;
-            }
-            
-            try {
-                $startTime = Carbon::createFromFormat('H:i', $slot['start_time']);
-                $endTime = Carbon::createFromFormat('H:i', $slot['end_time']);
-                
-                if ($startTime->gte($endTime)) {
-                    $errors[] = "Start time must be before end time for slot #" . ($index + 1);
-                }
-            } catch (\Exception $e) {
-                $errors[] = "Invalid time format for slot #" . ($index + 1);
-            }
-        }
-        
-        if (count($errors) > 0) {
-            return response()->json([
-                'success' => false,
-                'errors' => $errors
-            ], 422);
-        }
-
         try {
-            // Check if another availability already exists for this month (excluding current one)
-            $conflictingAvailability = Availability::where('professional_id', Auth::guard('professional')->id())
-                                                    ->where('month', $firstMonth)
-                                                    ->where('id', '!=', $id)
-                                                    ->first();
-            
-            if ($conflictingAvailability) {
-                $skippedMonths[] = $firstMonth;
-            } else {
-                // Update availability
-                $availability->update([
-                    'month' => $firstMonth,
-                    'session_duration' => $request->session_duration,
-                    'weekdays' => json_encode([]), // Keep for backward compatibility
-                ]);
+            DB::transaction(function () use (
+                $availability,
+                $professionalId,
+                $firstMonth,
+                $selectedMonths,
+                $weeklySlots,
+                $validated,
+                &$successfulMonths,
+                &$skippedMonths
+            ) {
+                Professional::whereKey($professionalId)->lockForUpdate()->firstOrFail();
+                $conflict = Availability::where('professional_id', $professionalId)
+                    ->where('month', $firstMonth)
+                    ->where('id', '!=', $availability->id)
+                    ->exists();
 
-                // Clear existing slots and create new ones
-                $availability->availabilitySlots()->delete();
-
-                foreach ($weeklySlots as $slot) {
-                    AvailabilitySlot::create([
-                        'availability_id' => $availability->id,
-                        'weekday' => $slot['weekday'],
-                        'start_time' => $slot['start_time'] . ':00',
-                        'end_time' => $slot['end_time'] . ':00',
+                if ($conflict) {
+                    $skippedMonths[] = $firstMonth;
+                } else {
+                    $availability->update([
+                        'month' => $firstMonth,
+                        'session_duration' => $validated['session_duration'],
+                        'weekdays' => json_encode([]),
                     ]);
-                }
-                
-                $successfulMonths[] = $firstMonth;
-            }
-            
-            // Create new availabilities for additional months
-            foreach ($selectedMonths as $month) {
-                $existingAvailability = Availability::where('professional_id', Auth::guard('professional')->id())
-                                                    ->where('month', $month)
-                                                    ->first();
-
-                if ($existingAvailability) {
-                    $skippedMonths[] = $month;
-                    continue;
+                    $availability->availabilitySlots()->delete();
+                    $this->createSlots($availability, $weeklySlots);
+                    $successfulMonths[] = $firstMonth;
                 }
 
-                try {
-                    $newAvailability = Availability::create([
-                        'professional_id' => Auth::guard('professional')->id(),
-                        'month' => $month,
-                        'session_duration' => $request->session_duration,
-                        'weekdays' => json_encode([]), // Keep for backward compatibility
-                    ]);
+                foreach ($selectedMonths as $month) {
+                    $exists = Availability::where('professional_id', $professionalId)
+                        ->where('month', $month)
+                        ->exists();
 
-                    foreach ($weeklySlots as $slot) {
-                        AvailabilitySlot::create([
-                            'availability_id' => $newAvailability->id,
-                            'weekday' => $slot['weekday'],
-                            'start_time' => $slot['start_time'] . ':00',
-                            'end_time' => $slot['end_time'] . ':00',
-                        ]);
+                    if ($exists) {
+                        $skippedMonths[] = $month;
+                        continue;
                     }
-                    
-                    $successfulMonths[] = $month;
-                } catch (\Exception $e) {
-                    Log::error("Failed to create availability for month {$month}: " . $e->getMessage());
-                }
-            }
 
+                    $newAvailability = Availability::create([
+                        'professional_id' => $professionalId,
+                        'month' => $month,
+                        'session_duration' => $validated['session_duration'],
+                        'weekdays' => json_encode([]),
+                    ]);
+                    $this->createSlots($newAvailability, $weeklySlots);
+                    $successfulMonths[] = $month;
+                }
+            });
         } catch (\Exception $e) {
-            Log::error("Failed to update availability: " . $e->getMessage());
+            Log::error('Failed to update professional availability.', [
+                'availability_id' => $availability->id,
+                'professional_id' => $professionalId,
+                'exception' => $e,
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update availability: ' . $e->getMessage()
+                'message' => 'Availability could not be saved. No changes were applied; please try again.',
             ], 500);
         }
 
-        // Prepare response message
         $message = '';
-        if (count($successfulMonths) > 0) {
+        if ($successfulMonths) {
             $message .= 'Availability updated for ' . count($successfulMonths) . ' month(s). ';
         }
-        if (count($skippedMonths) > 0) {
+        if ($skippedMonths) {
             $message .= count($skippedMonths) . ' month(s) already had availability and were skipped. ';
         }
 
         return response()->json([
             'success' => true,
-            'message' => $message,
+            'message' => trim($message),
             'redirect' => route('professional.availability.index')
         ]);
     }
 
     public function destroy($id)
     {
-        $availability = Availability::findOrFail($id);
-        
-        if ($availability->professional_id != Auth::guard('professional')->id()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized access'
-            ], 403);
-        }
+        $availability = Availability::where('professional_id', Auth::guard('professional')->id())
+            ->findOrFail($id);
 
         try {
             // Delete associated slots first

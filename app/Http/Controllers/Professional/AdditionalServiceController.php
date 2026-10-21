@@ -21,14 +21,157 @@ class AdditionalServiceController extends Controller
     /**
      * Display a listing of additional services for the professional
      */
-    public function index()
+    public function index(Request $request)
     {
-        $additionalServices = AdditionalService::with(['user', 'booking'])
-            ->forProfessional(Auth::guard('professional')->id())
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $filterRules = [
+            'search' => ['nullable', 'string', 'max:255'],
+            'customer_id' => ['nullable', 'integer'],
+            'payment_status' => ['nullable', 'in:pending,paid,failed'],
+            'service_status' => ['nullable', 'in:completed,in_progress,ready_to_start,awaiting_delivery_date,awaiting_payment,rejected,under_negotiation,price_updated,pending_review,awaiting_admin,pending'],
+            'date_range' => ['nullable', 'in:today,week,month,custom'],
+            'from_date' => ['nullable', 'date'],
+            'to_date' => ['nullable', 'date', 'after_or_equal:from_date'],
+        ];
+        $filterValidator = \Illuminate\Support\Facades\Validator::make($request->query(), $filterRules);
+        $filters = $request->only(array_keys($filterRules));
+        foreach ($filterValidator->errors()->keys() as $invalidField) {
+            unset($filters[$invalidField]);
+        }
+        $filterErrors = $filterValidator->errors()->all();
 
-        return view('professional.additional-services.index', compact('additionalServices'));
+        $professionalId = Auth::guard('professional')->id();
+        $servicesQuery = AdditionalService::with(['user', 'booking'])
+            ->forProfessional($professionalId);
+
+        if (!empty($filters['search'])) {
+            $search = trim($filters['search']);
+            $servicesQuery->where(function ($query) use ($search) {
+                $query->where('service_name', 'like', "%{$search}%")
+                    ->orWhere('id', 'like', "%{$search}%")
+                    ->orWhere('booking_id', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($userQuery) use ($search) {
+                        $userQuery->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        if (!empty($filters['customer_id'])) {
+            $servicesQuery->where('user_id', $filters['customer_id']);
+        }
+
+        if (!empty($filters['payment_status'])) {
+            $servicesQuery->where('payment_status', $filters['payment_status']);
+        }
+
+        if (!empty($filters['service_status'])) {
+            $this->applyServiceStatusFilter($servicesQuery, $filters['service_status']);
+        }
+
+        if (!empty($filters['date_range'])) {
+            $now = now();
+
+            if ($filters['date_range'] === 'custom' && !empty($filters['from_date']) && !empty($filters['to_date'])) {
+                $servicesQuery
+                    ->whereDate('created_at', '>=', $filters['from_date'])
+                    ->whereDate('created_at', '<=', $filters['to_date']);
+            } elseif ($filters['date_range'] !== 'custom') {
+                $startDate = match ($filters['date_range']) {
+                    'today' => $now->copy()->startOfDay(),
+                    'week' => $now->copy()->subDays(7)->startOfDay(),
+                    'month' => $now->copy()->subMonth()->startOfDay(),
+                };
+
+                $servicesQuery->where('created_at', '>=', $startDate);
+            }
+        }
+
+        $additionalServices = $servicesQuery
+            ->latest()
+            ->paginate(10);
+        $additionalServices->appends($filters);
+
+        $customers = \App\Models\User::query()
+            ->whereIn('id', AdditionalService::forProfessional($professionalId)
+                ->select('user_id')
+                ->distinct())
+            ->orderBy('name')
+            ->get(['id', 'name']);
+        $hasServices = AdditionalService::forProfessional($professionalId)->exists();
+
+        return view('professional.additional-services.index', compact(
+            'additionalServices',
+            'customers',
+            'filters',
+            'filterErrors',
+            'hasServices'
+        ));
+    }
+
+    /**
+     * Apply the same service-status definitions used by the listing badges.
+     */
+    private function applyServiceStatusFilter($query, string $status): void
+    {
+        $query->where(function ($statusQuery) use ($status) {
+            switch ($status) {
+                case 'completed':
+                    $statusQuery->where('consulting_status', 'done')
+                        ->whereNotNull('customer_confirmed_at');
+                    break;
+                case 'in_progress':
+                    $statusQuery->where('consulting_status', 'in_progress');
+                    break;
+                case 'ready_to_start':
+                    $statusQuery->where('admin_status', 'approved')
+                        ->where('payment_status', 'paid')
+                        ->where('delivery_date_set', true);
+                    break;
+                case 'awaiting_delivery_date':
+                    $statusQuery->where('admin_status', 'approved')
+                        ->where('payment_status', 'paid')
+                        ->where(function ($query) {
+                            $query->where('delivery_date_set', false)
+                                ->orWhereNull('delivery_date_set');
+                        });
+                    break;
+                case 'awaiting_payment':
+                    $statusQuery->where('admin_status', 'approved')
+                        ->where(function ($query) {
+                            $query->where('payment_status', '!=', 'paid')
+                                ->orWhereNull('payment_status');
+                        });
+                    break;
+                case 'rejected':
+                    $statusQuery->where('admin_status', 'rejected');
+                    break;
+                case 'under_negotiation':
+                    $statusQuery->where('admin_status', 'pending')
+                        ->where('negotiation_status', 'user_negotiated');
+                    break;
+                case 'price_updated':
+                    $statusQuery->where('admin_status', 'pending')
+                        ->where('negotiation_status', 'admin_responded');
+                    break;
+                case 'pending_review':
+                    $statusQuery->where('admin_status', 'pending')
+                        ->whereNotIn('negotiation_status', ['user_negotiated', 'admin_responded'])
+                        ->where('professional_status', 'pending');
+                    break;
+                case 'awaiting_admin':
+                    $statusQuery->where('admin_status', 'pending')
+                        ->whereNotIn('negotiation_status', ['user_negotiated', 'admin_responded'])
+                        ->where('professional_status', 'approved');
+                    break;
+                case 'pending':
+                    $statusQuery->where('admin_status', 'pending')
+                        ->whereNotIn('negotiation_status', ['user_negotiated', 'admin_responded'])
+                        ->where(function ($query) {
+                            $query->whereNull('professional_status')
+                                ->orWhereNotIn('professional_status', ['pending', 'approved']);
+                        });
+                    break;
+            }
+        });
     }
 
     /**
@@ -43,6 +186,7 @@ class AdditionalServiceController extends Controller
             $booking = Booking::with('user')
                 ->where('id', $bookingId)
                 ->where('professional_id', Auth::guard('professional')->id())
+                ->where('status', '!=', 'cancelled')
                 ->first();
             
             if (!$booking) {
@@ -76,6 +220,7 @@ class AdditionalServiceController extends Controller
         // Verify booking belongs to this professional
         $booking = Booking::where('id', $request->booking_id)
             ->where('professional_id', Auth::guard('professional')->id())
+            ->where('status', '!=', 'cancelled')
             ->first();
 
         if (!$booking) {
@@ -268,6 +413,7 @@ class AdditionalServiceController extends Controller
                 'delivery_date' => $request->delivery_date,
                 'delivery_date_reason' => $request->delivery_reason,
                 'delivery_date_set_by_professional_at' => now(),
+                'delivery_date_set' => true,
                 'can_complete_consultation' => false, // Will be updated when date passes
             ]);
 

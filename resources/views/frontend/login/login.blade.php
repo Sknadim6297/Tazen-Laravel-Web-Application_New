@@ -8,9 +8,19 @@
 
 @section('title', 'Sign In | Yuktione')
 @section('meta_description', 'Sign in to your Yuktione account to manage consultations and bookings.')
+@section('body_class', 'yuktione-auth-page')
+
+@push('head')
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+@endpush
+
+@push('styles')
+    @vite('resources/css/customer-panel.css')
+    @vite('resources/css/auth-theme.css')
+@endpush
 
 @section('content')
-<div class="mx-auto grid min-h-dvh w-full max-w-[1600px] lg:grid-cols-2">
+<div id="loginPanel" data-yuktione-auth class="yuktione-auth-page mx-auto grid min-h-dvh w-full max-w-[1600px] bg-background lg:grid-cols-2">
     <section class="flex min-w-0 items-center justify-center px-5 py-5 sm:px-8 sm:py-6 lg:px-10 lg:py-4 xl:px-16" aria-labelledby="login-heading">
         <div class="w-full max-w-md">
             <a href="{{ route('home') }}" class="inline-flex items-center rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus-ring" aria-label="Yuktione home">
@@ -123,7 +133,7 @@
         </div>
     </section>
 
-    <aside class="relative hidden overflow-hidden bg-linear-to-br from-brand-950 via-brand-800 to-brand-primary px-10 py-8 text-white lg:flex lg:items-center xl:px-16" aria-label="About Yuktione consultations">
+    <aside class="login-hero relative hidden overflow-hidden px-10 py-8 text-white lg:flex lg:items-center xl:px-16" aria-label="About Yuktione consultations">
         <div aria-hidden="true" class="absolute -right-24 -top-24 size-96 rounded-full border border-white/10"></div>
         <div aria-hidden="true" class="absolute -bottom-40 -left-24 size-[30rem] rounded-full border border-white/10"></div>
         <div aria-hidden="true" class="absolute right-16 top-1/4 size-40 rounded-full bg-brand-accent/20 blur-3xl"></div>
@@ -150,7 +160,7 @@
     </aside>
 </div>
 
-<dialog id="termsDialog" aria-labelledby="termsDialogTitle" class="m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-panel border border-border bg-surface p-0 text-text-primary shadow-popover backdrop:bg-brand-950/50">
+<dialog id="termsDialog" @if($initialRole === 'customer') data-yuktione-panel="customer" @endif aria-labelledby="termsDialogTitle" class="m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-panel border border-border bg-surface p-0 text-text-primary shadow-popover backdrop:bg-brand-950/50">
     <div class="flex items-center justify-between gap-4 border-b border-divider px-4 py-3 sm:px-6">
         <h2 id="termsDialogTitle" class="font-display text-lg font-semibold text-brand-secondary">Terms and Conditions</h2>
         <button type="button" id="closeTerms" class="inline-flex size-9 shrink-0 items-center justify-center rounded-control text-text-secondary hover:bg-surface-muted hover:text-text-primary focus-visible:outline-2 focus-visible:outline-focus-ring" aria-label="Close terms and conditions">
@@ -186,6 +196,7 @@
     const togglePassword = document.getElementById('togglePassword');
     const termsAccepted = document.getElementById('terms_accepted');
     const termsDialog = document.getElementById('termsDialog');
+    const loginPanel = document.getElementById('loginPanel');
     const termsContent = document.getElementById('termsContent');
     const agreeTerms = document.getElementById('agreeTerms');
     const termsError = document.getElementById('terms-error');
@@ -236,6 +247,10 @@
             return;
         }
         role = nextRole;
+        [loginPanel, termsDialog].forEach((element) => {
+            if (role === 'customer') element.dataset.yuktionePanel = 'customer';
+            else delete element.dataset.yuktionePanel;
+        });
         const config = roleLinks[role];
         form.action = config.action;
         document.getElementById('forgotLink').href = config.forgot;

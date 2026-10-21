@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Professional;
 
 use App\Http\Controllers\Controller;
+use App\Models\Professional;
 use App\Models\ProfessionalService;
 use App\Models\Service;
 use App\Models\SubService;
 use App\Traits\ImageUploadTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ServiceController extends Controller
 {
@@ -107,6 +111,17 @@ class ServiceController extends Controller
             ], 400);
         }
         
+        $professional = Auth::guard('professional')->user();
+        $specialization = $professional->profile?->specialization;
+        $service = Service::find($serviceId);
+
+        if (!$service || !$specialization || !$this->matchesSpecialization($service, $specialization)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The selected service is not available for your specialization.',
+            ], 403);
+        }
+
         $subServices = SubService::where('service_id', $serviceId)
             ->where('status', 1)
             ->select('id', 'name', 'description')
@@ -127,38 +142,43 @@ class ServiceController extends Controller
         $professional = Auth::guard('professional')->user();
         $existingServices = ProfessionalService::where('professional_id', $professional->id)->count();
         if ($existingServices > 0) {
-            return redirect()->route('professional.service.index')
-                ->with('error', 'You can only add one service. Please edit your existing service instead.');
+            return response()->json([
+                'success' => false,
+                'message' => 'You can only add one service. Please edit your existing service instead.',
+            ], 409);
         }
         
-        $request->validate([
+        $validated = $request->validate([
             'serviceId' => 'required|integer|exists:services,id',
-            'serviceDuration' => 'required|integer',
-            'features' => 'nullable|array',
-            'serviceTags' => 'nullable|string',
-            'serviceRequirements' => 'nullable|string',
-            'subServices' => 'nullable|array|',
-            'subServices.*' => 'exists:sub_services,id',
+            'serviceDuration' => 'required|integer|min:15|max:240',
+            'features' => 'nullable|array|max:20',
+            'features.*' => 'string|max:255',
+            'serviceTags' => 'nullable|string|max:1000',
+            'serviceRequirements' => 'nullable|string|max:5000',
+            'subServices' => 'nullable|array|max:2',
+            'subServices.*' => 'required|integer|distinct|exists:sub_services,id',
+            'serviceImage' => 'nullable|image|max:5120',
         ]);
         
         // Validate that the professional can only create services in their specialization
         $profile = $professional->profile;
         $specialization = $profile ? $profile->specialization : null;
         
-        if ($specialization) {
-            $selectedService = Service::find($request->serviceId);
-            if ($selectedService) {
-                $isValidSpecialization = strtolower($selectedService->name) === strtolower($specialization) ||
-                                       stripos($selectedService->name, $specialization) !== false ||
-                                       stripos($specialization, $selectedService->name) !== false;
-                
-                if (!$isValidSpecialization) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'You can only create services in your registered specialization: ' . $specialization
-                    ], 422);
-                }
-            }
+        $selectedService = Service::findOrFail($validated['serviceId']);
+        if (!$specialization || !$this->matchesSpecialization($selectedService, $specialization)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You can only create services in your registered specialization.',
+            ], 422);
+        }
+
+        $subServiceIds = $validated['subServices'] ?? [];
+        if ($subServiceIds && SubService::where('service_id', $selectedService->id)
+                ->whereIn('id', $subServiceIds)->count() !== count($subServiceIds)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'One or more selected sub-services do not belong to the selected service.',
+            ], 422);
         }
         
         // If no serviceId is provided, get the professional's specialization 
@@ -184,20 +204,20 @@ class ServiceController extends Controller
 
         $service = new ProfessionalService();
         $service->professional_id = Auth::guard('professional')->id();
-        $service->service_id = $request->serviceId;
+        $service->service_id = $selectedService->id;
         
         // Get the service category name to use as service_name
-        $serviceCategory = Service::find($request->serviceId);
+        $serviceCategory = $selectedService;
     $service->service_name = $serviceCategory ? $serviceCategory->name : 'Online Service';
     // Keep legacy 'category' column in sync to satisfy NOT NULL schemas
     $service->category = $service->service_name;
         
-        $service->duration = $request->serviceDuration;
+        $service->duration = $validated['serviceDuration'];
         $service->description = 'Online session service'; // Add default description
     // Store features as array; Eloquent will JSON-encode due to casts
-    $service->features = $request->features ?? ['online'];
-        $service->tags = $request->serviceTags;
-        $service->requirements = $request->serviceRequirements;
+    $service->features = $validated['features'] ?? ['online'];
+        $service->tags = $validated['serviceTags'] ?? null;
+        $service->requirements = $validated['serviceRequirements'] ?? null;
 
         if ($request->hasFile('serviceImage')) {
             try {
@@ -209,29 +229,55 @@ class ServiceController extends Controller
                     ], 400);
                 }
             } catch (\Exception $e) {
+                Log::error('Failed to upload professional service image.', [
+                    'professional_id' => $professional->id,
+                    'exception' => $e,
+                ]);
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error occurred while uploading the image. ' . $e->getMessage()
+                    'message' => 'The service image could not be uploaded. Please try again.',
                 ], 500);
             }
         }
 
-        $service->save();
-        
-        // Attach selected sub-services if any (ensure they belong to the selected service and limit to 2)
-        if ($request->has('subServices') && is_array($request->subServices)) {
-            // Validate that all sub-services belong to the selected service
-            $validSubServices = SubService::where('service_id', $request->serviceId)
-                ->whereIn('id', $request->subServices)
-                ->pluck('id')
-                ->toArray();
+        try {
+            $created = DB::transaction(function () use ($professional, $service, $subServiceIds) {
+                Professional::whereKey($professional->id)->lockForUpdate()->firstOrFail();
+                if (ProfessionalService::where('professional_id', $professional->id)->exists()) {
+                    return false;
+                }
 
-            // Enforce maximum 2 selections server-side as well
-            $validSubServices = array_slice($validSubServices, 0, 2);
+                $service->save();
+                if ($subServiceIds) {
+                    $service->subServices()->attach($subServiceIds);
+                }
 
-            if (!empty($validSubServices)) {
-                $service->subServices()->attach($validSubServices);
+                return true;
+            });
+        } catch (\Throwable $exception) {
+            if ($service->image_path) {
+                Storage::disk('public')->delete($service->image_path);
             }
+            Log::error('Failed to create professional service.', [
+                'professional_id' => $professional->id,
+                'exception' => $exception,
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'The service could not be saved. Please try again.',
+            ], 500);
+        }
+
+        if (!$created) {
+            if ($service->image_path) {
+                Storage::disk('public')->delete($service->image_path);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'You can only add one service. Please edit your existing service instead.',
+            ], 409);
         }
 
         return response()->json([
@@ -283,47 +329,68 @@ class ServiceController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $request->validate([
+        $validated = $request->validate([
             'serviceId' => 'required|integer|exists:services,id',
-            'serviceDuration' => 'required|integer',
-            'features' => 'nullable|array',
-            'serviceTags' => 'nullable|string',
-            'serviceRequirements' => 'nullable|string',
-            'subServices' => 'nullable|array',
-            'subServices.*' => 'exists:sub_services,id',
+            'serviceDuration' => 'required|integer|min:15|max:240',
+            'features' => 'nullable|array|max:20',
+            'features.*' => 'string|max:255',
+            'serviceTags' => 'nullable|string|max:1000',
+            'serviceRequirements' => 'nullable|string|max:5000',
+            'subServices' => 'nullable|array|max:2',
+            'subServices.*' => 'required|integer|distinct|exists:sub_services,id',
+            'serviceImage' => 'nullable|image|max:5120',
         ]);
 
         $service = ProfessionalService::where('id', $id)
             ->where('professional_id', Auth::guard('professional')->id())
             ->firstOrFail();
 
-        // Update service_id and service_name if changed
-        if ($request->serviceId != $service->service_id) {
-            $service->service_id = $request->serviceId;
-            
-            // Get the service category name to use as service_name
-            $serviceCategory = Service::find($request->serviceId);
-            $service->service_name = $serviceCategory ? $serviceCategory->name : 'Online Service';
-            // Keep legacy 'category' column in sync when service changes
-            $service->category = $service->service_name;
+        if ($service->service_id && (int) $validated['serviceId'] !== (int) $service->service_id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The service category cannot be changed after creation.',
+            ], 422);
         }
 
-        $service->duration = $request->serviceDuration;
+        $serviceCategory = Service::findOrFail($validated['serviceId']);
+        $specialization = Auth::guard('professional')->user()->profile?->specialization;
+        if (!$specialization || !$this->matchesSpecialization($serviceCategory, $specialization)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You can only use a service category matching your registered specialization.',
+            ], 422);
+        }
+
+        $subServiceIds = $validated['subServices'] ?? [];
+        if ($subServiceIds && SubService::where('service_id', $serviceCategory->id)
+                ->whereIn('id', $subServiceIds)->count() !== count($subServiceIds)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'One or more selected sub-services do not belong to your service.',
+            ], 422);
+        }
+
+        if (!$service->service_id) {
+            $service->service_id = $serviceCategory->id;
+            $service->service_name = $serviceCategory->name;
+            $service->category = $serviceCategory->name;
+        }
+
+        $service->duration = $validated['serviceDuration'];
         $service->description = 'Online session service'; // Add default description
         // Store features as array; Eloquent will JSON-encode due to casts
-        $service->features = $request->features ?? ['online'];
-        $service->tags = $request->serviceTags;
-        $service->requirements = $request->serviceRequirements;
+        $service->features = $validated['features'] ?? ['online'];
+        $service->tags = $validated['serviceTags'] ?? null;
+        $service->requirements = $validated['serviceRequirements'] ?? null;
 
         // Ensure category is set even if serviceId didn’t change (for older rows)
         if (empty($service->category)) {
             $service->category = $service->service_name;
         }
 
+        $oldImagePath = null;
         if ($request->hasFile('serviceImage')) {
-            if ($service->image_path && file_exists(public_path($service->image_path))) {
-                @unlink(public_path($service->image_path));
-            }
+            $oldImagePath = $service->image_path;
             try {
                 $service->image_path = $this->uploadImage($request, 'serviceImage', 'uploads/professional/photo');
                 if (!$service->image_path) {
@@ -333,28 +400,38 @@ class ServiceController extends Controller
                     ], 400);
                 }
             } catch (\Exception $e) {
+                Log::error('Failed to upload professional service image.', [
+                    'professional_id' => $service->professional_id,
+                    'exception' => $e,
+                ]);
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error occurred while uploading the image. ' . $e->getMessage()
+                    'message' => 'The service image could not be uploaded. Please try again.',
                 ], 500);
             }
         }
+        try {
+            DB::transaction(function () use ($service, $subServiceIds) {
+                $service->save();
+                $service->subServices()->sync($subServiceIds);
+            });
+        } catch (\Throwable $exception) {
+            if ($request->hasFile('serviceImage') && $service->image_path) {
+                Storage::disk('public')->delete($service->image_path);
+            }
+            Log::error('Failed to update professional service.', [
+                'professional_id' => $service->professional_id,
+                'service_id' => $service->id,
+                'exception' => $exception,
+            ]);
 
-        $service->save();
-        
-        // Update sub-services
-        if ($request->has('subServices') && is_array($request->subServices)) {
-            // Validate that all sub-services belong to the selected service
-            $validSubServices = SubService::where('service_id', $request->serviceId)
-                ->whereIn('id', $request->subServices)
-                ->pluck('id')
-                ->toArray();
-            
-            // Sync sub-services (this will replace existing ones)
-            $service->subServices()->sync($validSubServices);
-        } else {
-            // If no sub-services are selected, remove all existing ones
-            $service->subServices()->detach();
+            return response()->json([
+                'success' => false,
+                'message' => 'The service could not be saved. Please try again.',
+            ], 500);
+        }
+        if ($oldImagePath) {
+            Storage::disk('public')->delete($oldImagePath);
         }
 
         return response()->json([
@@ -374,16 +451,22 @@ class ServiceController extends Controller
             ->where('professional_id', Auth::guard('professional')->id())
             ->firstOrFail();
 
-        // Delete the image file if it exists
-        if ($service->image_path && file_exists(public_path($service->image_path))) {
-            @unlink(public_path($service->image_path));
-        }
-
+        $imagePath = $service->image_path;
         $service->delete();
+        if ($imagePath) {
+            Storage::disk('public')->delete($imagePath);
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'Service has been deleted successfully.'
         ]);
+    }
+
+    private function matchesSpecialization(Service $service, string $specialization): bool
+    {
+        return strtolower($service->name) === strtolower($specialization)
+            || stripos($service->name, $specialization) !== false
+            || stripos($specialization, $service->name) !== false;
     }
 }

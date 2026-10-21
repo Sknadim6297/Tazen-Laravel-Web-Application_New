@@ -7,8 +7,8 @@
 @endsection
 
 @section('content')
-<div class="chat-page min-h-full bg-slate-50 px-4 py-6 text-slate-900 sm:px-6 lg:px-8">
-    <div class="chat-shell mx-auto max-w-5xl space-y-6">
+<div class="chat-page min-h-full bg-surface-muted px-3 py-4 text-text-primary sm:px-5 sm:py-5">
+<div class="chat-shell mx-auto max-w-2xl space-y-4">
         <section class="chat-hero flex flex-col gap-4 rounded-2xl border border-brand-100 bg-gradient-to-br from-white via-brand-50 to-white p-6 shadow-card sm:flex-row sm:items-center sm:justify-between">
             <div class="hero-meta">
                 <span class="hero-eyebrow"><i class="ri-message-3-line"></i>Support</span>
@@ -30,7 +30,7 @@
                 <p>Stay connected with the admin team for quick assistance.</p>
             </header>
             <div class="chat-card__body">
-                <div class="chat-messages-wrapper min-h-[24rem] max-h-[65vh] overflow-y-auto p-5">
+                <div class="chat-messages-wrapper min-h-[18rem] max-h-[55vh] overflow-y-auto p-4 sm:p-5">
                     <div id="chatMessages">
                         <div class="loading-spinner">
                             <div class="spinner-border text-primary" role="status">

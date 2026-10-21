@@ -4,9 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Forgot Password | Yuktione</title>
-    @vite('resources/css/tazen.css')
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    @vite(['resources/css/tazen.css', 'resources/css/auth-theme.css'])
 </head>
-<body class="min-h-screen bg-brand-50 px-4 py-10 font-sans text-text-primary sm:px-6">
+<body class="yuktione-auth-page min-h-screen bg-brand-50 px-4 py-10 font-sans text-text-primary sm:px-6">
     <main class="mx-auto flex min-h-[75vh] w-full max-w-lg items-center justify-center">
         <section class="w-full rounded-panel border border-brand-100 bg-white p-6 shadow-card sm:p-9">
             <a href="{{ route('home') }}" class="mb-7 flex justify-center" aria-label="Yuktione home">

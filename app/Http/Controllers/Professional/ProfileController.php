@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
@@ -131,10 +132,9 @@ class ProfileController extends Controller
      */
     public function edit(string $id)
     {
-        $profile = Profile::findOrFail($id);
-        if ($profile->professional_id != Auth::guard('professional')->id()) {
-            return redirect()->route('professional.profile.index')->with('error', 'Unauthorized access');
-        }
+        $profile = Profile::where('professional_id', Auth::guard('professional')->id())
+            ->findOrFail($id);
+
         return view('professional.profile.add-profile', compact('profile'));
     }
 
@@ -143,27 +143,32 @@ class ProfileController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $professionalId = Auth::guard('professional')->id();
+        $profile = Profile::where('professional_id', $professionalId)->findOrFail($id);
+
         $data = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'phone' => 'nullable|string',
-            'specialization' => 'nullable|string',
-            'experience' => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'email', 'max:255', Rule::unique('professionals', 'email')->ignore($professionalId)],
+            'phone' => 'nullable|string|max:30',
+            'specialization' => 'nullable|string|max:255',
+            'experience' => 'nullable|string|max:255',
             'startingPrice' => 'nullable|string|regex:/^(\d+(\.\d{1,2})?(-\d+(\.\d{1,2})?)?)$/',
-            'address' => 'nullable|string',
-            'education' => 'nullable|string',
-            'comments' => 'nullable|string',
-            'bio' => 'nullable|string',
+            'address' => 'nullable|string|max:1000',
+            'education' => 'nullable|string|max:5000',
+            'comments' => 'nullable|string|max:5000',
+            'bio' => 'nullable|string|max:5000',
             'gst_number' => 'nullable|string|max:15',
             'gst_address' => 'nullable|string|max:1000',
-            'gst_certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
-            'photo' => 'nullable|image',
-            'cropped_photo' => 'nullable|string', // Base64 cropped photo data
-            'gallery.*' => 'nullable|image',
-            'deleted_images' => 'nullable|string', // Changed from delete_gallery array to deleted_images string
-            'qualificationDocument' => 'nullable|file',
-            'aadhaarCard' => 'nullable|file',
-            'panCard' => 'nullable|file',
+            'gst_certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'photo' => 'nullable|image|max:5120',
+            'cropped_photo' => 'nullable|string|max:12000000',
+            'gallery' => 'nullable|array|max:20',
+            'gallery.*' => 'nullable|image|max:5120',
+            'deleted_images' => 'nullable|json',
+            'qualificationDocument' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:10240',
+            'idProofDocument' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'aadhaarCard' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'panCard' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
             // Bank account details
             'account_holder_name' => 'nullable|string|max:255',
             'bank_name' => 'nullable|string|max:255',
@@ -171,31 +176,32 @@ class ProfileController extends Controller
             'ifsc_code' => 'nullable|string|max:11',
             'account_type' => 'nullable|in:savings,current',
             'bank_branch' => 'nullable|string|max:255',
-            'bank_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'bank_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
         ]);
 
-        $profile = Profile::findOrFail($id);
-        
-        // Security check - ensure the profile belongs to the authenticated professional
-        if ($profile->professional_id != Auth::guard('professional')->id()) {
-            return response()->json(['status' => 'error', 'message' => 'Unauthorized access'], 403);
-        }
-        
-        $professionalId = Auth::guard('professional')->id();
+        $filesToDelete = [];
 
         // Handle profile photo update
         if ($request->hasFile('photo')) {
-            if ($profile->photo) {
-                Storage::disk('public')->delete($profile->photo);
+            $oldPhoto = $profile->photo;
+            $newPhoto = $this->uploadImage($request, 'photo', 'uploads/profiles/photo');
+            if ($newPhoto) {
+                $profile->photo = $newPhoto;
+                if ($oldPhoto) {
+                    $filesToDelete[] = $oldPhoto;
+                }
             }
-            $profile->photo = $this->uploadImage($request, 'photo', 'uploads/profiles/photo');
         } elseif ($request->filled('cropped_photo')) {
             // Handle cropped photo as base64 data
             try {
-                $croppedPhotoData = $request->cropped_photo;
-                
-                // Process base64 image data and handle old photo deletion
-                $profile->photo = $this->uploadBase64Image($croppedPhotoData, 'uploads/profiles/photo', $profile->photo);
+                $oldPhoto = $profile->photo;
+                $profile->photo = $this->uploadBase64Image(
+                    $request->cropped_photo,
+                    'uploads/profiles/photo'
+                );
+                if ($oldPhoto) {
+                    $filesToDelete[] = $oldPhoto;
+                }
             } catch (\Exception $e) {
                 Log::error('Base64 image upload failed: ' . $e->getMessage());
                 return response()->json(['status' => 'error', 'message' => 'Photo upload failed. Please try again.'], 500);
@@ -220,11 +226,7 @@ class ProfileController extends Controller
                     $key = array_search($imagePath, $currentGallery);
                     
                     if ($key !== false) {
-                        // Delete the physical file
-                        if (file_exists(public_path($imagePath))) {
-                            unlink(public_path($imagePath));
-                        }
-                        
+                        $filesToDelete[] = $imagePath;
                         // Remove from the gallery array
                         unset($currentGallery[$key]);
                     }
@@ -248,42 +250,51 @@ class ProfileController extends Controller
             }
         }
         
-        // Update gallery with preserved + new images
-        try {
-            $profile->gallery = json_encode($currentGallery);
-        } catch (\Exception $e) {
-            // Fallback: if JSON encoding fails, store empty array
-            Log::error('Gallery JSON encoding failed: ' . $e->getMessage());
-            $profile->gallery = json_encode([]);
+        $encodedGallery = json_encode($currentGallery);
+        if ($encodedGallery === false) {
+            Log::error('Gallery JSON encoding failed.', [
+                'profile_id' => $profile->id,
+                'json_error' => json_last_error_msg(),
+            ]);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'The gallery could not be saved. Please try again.',
+            ], 500);
         }
+        $profile->gallery = $encodedGallery;
 
         // Handle document uploads
         if ($request->hasFile('qualificationDocument')) {
-            if ($profile->qualification_document) {
-                Storage::disk('public')->delete($profile->qualification_document);
-            }
+            $oldDocument = $profile->qualification_document;
             $profile->qualification_document = $this->uploadImage($request, 'qualificationDocument', 'uploads/profiles/documents');
+            if ($oldDocument) {
+                $filesToDelete[] = $oldDocument;
+            }
         }
 
         if ($request->hasFile('idProofDocument')) {
-            if ($profile->id_proof_document) {
-                Storage::disk('public')->delete($profile->id_proof_document);
-            }
+            $oldDocument = $profile->id_proof_document;
             $profile->id_proof_document = $this->uploadImage($request, 'idProofDocument', 'uploads/profiles/identity');
+            if ($oldDocument) {
+                $filesToDelete[] = $oldDocument;
+            }
         }
 
         if ($request->hasFile('gst_certificate')) {
-            if ($profile->gst_certificate) {
-                Storage::disk('public')->delete($profile->gst_certificate);
-            }
+            $oldDocument = $profile->gst_certificate;
             $profile->gst_certificate = $this->uploadImage($request, 'gst_certificate', 'uploads/profiles/gst');
+            if ($oldDocument) {
+                $filesToDelete[] = $oldDocument;
+            }
         }
 
         if ($request->hasFile('bank_document')) {
-            if ($profile->bank_document) {
-                Storage::disk('public')->delete($profile->bank_document);
-            }
+            $oldDocument = $profile->bank_document;
             $profile->bank_document = $this->uploadImage($request, 'bank_document', 'uploads/profiles/bank');
+            if ($oldDocument) {
+                $filesToDelete[] = $oldDocument;
+            }
         }
 
         // Update other fields
@@ -325,6 +336,14 @@ class ProfileController extends Controller
             'profile_name' => $profile->name,
             'professional_id' => $professionalId
         ]);
+
+        foreach (array_unique($filesToDelete) as $path) {
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            } elseif (file_exists(public_path($path))) {
+                unlink(public_path($path));
+            }
+        }
 
         return response()->json(['status' => 'success', 'message' => 'Profile updated successfully!']);
     }

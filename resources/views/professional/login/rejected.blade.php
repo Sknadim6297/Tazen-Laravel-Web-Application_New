@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Update Your Professional Profile | Yuktione</title>
-    @vite('resources/css/tazen.css')
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    @vite(['resources/css/tazen.css', 'resources/css/auth-theme.css'])
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -14,40 +17,40 @@
         .form-step.active { display: block; }
         .invalid-feedback { display: none; color: #b42318; font-size: .875rem; margin-top: .5rem; }
         .invalid-feedback.show { display: block; }
-        body.professional-rejected-page { min-height: 100vh; background: radial-gradient(ellipse at top left, #dff4ff 0, #eff9ff 45%, #f8fbff 100%); }
+        body.professional-rejected-page { min-height: 100vh; background: #eaf8f5; }
         #login { width: min(100% - 2rem, 58rem); margin: 2.5rem auto; }
-        #login > aside { padding: clamp(1.25rem, 4vw, 3rem); border: 1px solid #dff4ff; border-radius: 1.5rem; background: #fff; box-shadow: 0 18px 55px -28px rgb(8 43 88 / .35); }
+        #login > aside { padding: clamp(1.25rem, 4vw, 3rem); border: 1px solid #e0e9f0; border-radius: 1.5rem; background: #fff; box-shadow: 0 18px 55px -28px rgb(38 50 56 / .2); }
         #login .step-logo { margin-bottom: 1.25rem; text-align: center; }
         #login .step-logo img { width: auto; height: auto; max-width: 14rem; max-height: 4rem; object-fit: contain; }
-        #login h2 { margin: .25rem 0 1.25rem; color: #082b58; font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 700; text-align: center; }
-        #login .step-header { margin: 0 0 1.4rem; padding-bottom: 1rem; border-bottom: 1px solid #e2edf6; }
-        #login .step-header h4 { margin: 0; color: #082b58; font-size: 1.2rem; font-weight: 650; }
-        #login .form-step { padding: clamp(1rem, 3vw, 1.75rem); border: 1px solid #e2edf6; border-radius: 1rem; background: #fff; }
+        #login h2 { margin: .25rem 0 1.25rem; color: #263238; font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 700; text-align: center; }
+        #login .step-header { margin: 0 0 1.4rem; padding-bottom: 1rem; border-bottom: 1px solid #e0e9f0; }
+        #login .step-header h4 { margin: 0; color: #263238; font-size: 1.2rem; font-weight: 650; }
+        #login .form-step { padding: clamp(1rem, 3vw, 1.75rem); border: 1px solid #e0e9f0; border-radius: 1rem; background: #fff; }
         #login .form-group { position: relative; margin: 0 0 1.2rem; }
-        #login .form-group > label { display: block; margin: 0 0 .5rem; color: #102a43; font-size: .9rem; font-weight: 600; }
-        #login .form-control { display: block; width: 100%; min-height: 3rem; padding: .75rem .9rem; border: 1px solid #c9dfef; border-radius: .65rem; background: #fff; color: #102a43; font: inherit; outline: none; transition: border-color .18s, box-shadow .18s; }
-        #login .form-control:focus { border-color: #026fd8; box-shadow: 0 0 0 4px rgb(2 111 216 / .12); }
+        #login .form-group > label { display: block; margin: 0 0 .5rem; color: #263238; font-size: .9rem; font-weight: 600; }
+        #login .form-control { display: block; width: 100%; min-height: 3rem; padding: .75rem .9rem; border: 1px solid #e0e9f0; border-radius: .65rem; background: #fff; color: #263238; font: inherit; outline: none; transition: border-color .18s, box-shadow .18s; }
+        #login .form-control:focus { border-color: #168a80; box-shadow: 0 0 0 4px rgb(22 138 128 / .12); }
         #login .form-control.is-invalid { border-color: #b42318; }
-        #login .text-muted, #login .form-text { display: block; margin-top: .5rem; color: #526b84; font-size: .82rem; line-height: 1.5; }
-        #login .alert { margin: 0 0 1.25rem; padding: .9rem 1rem; border: 1px solid #bfe9ff; border-radius: .75rem; background: #eff9ff; color: #084987; }
-        #login .btn_1, #login .btn { display: inline-flex; min-height: 2.8rem; align-items: center; justify-content: center; padding: .7rem 1.1rem; border: 1px solid #026fd8; border-radius: .65rem; background: #026fd8; color: #fff; font: inherit; font-size: .9rem; font-weight: 600; text-align: center; cursor: pointer; }
-        #login .btn_1:hover, #login .btn:hover { background: #005db8; }
+        #login .text-muted, #login .form-text { display: block; margin-top: .5rem; color: #64748b; font-size: .82rem; line-height: 1.5; }
+        #login .alert { margin: 0 0 1.25rem; padding: .9rem 1rem; border: 1px solid #b7e2dc; border-radius: .75rem; background: #eaf8f5; color: #11776f; }
+        #login .btn_1, #login .btn { display: inline-flex; min-height: 2.8rem; align-items: center; justify-content: center; padding: .7rem 1.1rem; border: 1px solid #168a80; border-radius: .65rem; background: #168a80; color: #fff; font: inherit; font-size: .9rem; font-weight: 600; text-align: center; cursor: pointer; }
+        #login .btn_1:hover, #login .btn:hover { background: #11776f; }
         #login .full-width { width: 100%; margin-top: .6rem; }
         #login .form-check { display: flex; align-items: center; gap: .6rem; }
-        #login .form-check-input { accent-color: #026fd8; }
-        #login .copy { margin-top: 1.5rem; color: #526b84; font-size: .8rem; text-align: center; }
-        #rejectionModal { position: fixed; z-index: 60; inset: 0; display: none; align-items: center; justify-content: center; overflow-y: auto; padding: 1rem; background: rgb(8 43 88 / .58); }
-        #rejectionModal .custom-modal-content { width: min(100%, 32rem); padding: clamp(1.5rem, 5vw, 2.5rem); border: 1px solid #dff4ff; border-radius: 1.25rem; background: #fff; text-align: center; box-shadow: 0 24px 70px -24px rgb(8 43 88 / .45); }
+        #login .form-check-input { accent-color: #168a80; }
+        #login .copy { margin-top: 1.5rem; color: #64748b; font-size: .8rem; text-align: center; }
+        #rejectionModal { position: fixed; z-index: 60; inset: 0; display: none; align-items: center; justify-content: center; overflow-y: auto; padding: 1rem; background: rgb(38 50 56 / .58); }
+        #rejectionModal .custom-modal-content { width: min(100%, 32rem); padding: clamp(1.5rem, 5vw, 2.5rem); border: 1px solid #e0e9f0; border-radius: 1.25rem; background: #fff; text-align: center; box-shadow: 0 24px 70px -24px rgb(38 50 56 / .3); }
         #rejectionModal .modal-icon { display: flex; width: 3.5rem; height: 3.5rem; align-items: center; justify-content: center; margin: 0 auto 1rem; border-radius: 9999px; background: #fff7ed; color: #c2410c; font-size: 1.6rem; }
         #rejectionModal h2 { margin: 0 0 .75rem; font-size: 1.5rem; }
-        #rejectionModal p { color: #415a77; line-height: 1.6; }
-        #rejectionModal .rejection-reason { padding: 1rem; border-radius: .75rem; background: #f5faff; color: #102a43; text-align: left; }
-        #rejectionModal .resubmit-btn { display: inline-flex; min-height: 2.8rem; align-items: center; justify-content: center; margin-top: .75rem; padding: .7rem 1.1rem; border: 0; border-radius: .65rem; background: #026fd8; color: #fff; font-weight: 600; cursor: pointer; }
+        #rejectionModal p { color: #475569; line-height: 1.6; }
+        #rejectionModal .rejection-reason { padding: 1rem; border-radius: .75rem; background: #f5fbf9; color: #263238; text-align: left; }
+        #rejectionModal .resubmit-btn { display: inline-flex; min-height: 2.8rem; align-items: center; justify-content: center; margin-top: .75rem; padding: .7rem 1.1rem; border: 0; border-radius: .65rem; background: #168a80; color: #fff; font-weight: 600; cursor: pointer; }
         @media (max-width: 640px) { #login { margin: 1rem auto; } }
     </style>
 </head>
 
-<body class="professional-rejected-page font-sans text-text-primary">
+<body class="yuktione-auth-page professional-rejected-page font-sans text-text-primary">
 
     <div id="login">
         <aside>

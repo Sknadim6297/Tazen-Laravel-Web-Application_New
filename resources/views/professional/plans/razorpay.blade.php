@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
             plan_name: '{{ $purchase->plan_name }}'
         },
         theme: {
-            color: '#4f46e5'
+            color: '#168a80'
         },
         modal: {
             ondismiss: function() {

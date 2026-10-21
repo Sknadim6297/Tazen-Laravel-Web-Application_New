@@ -3,15 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#026FD8">
+    <meta name="theme-color" content="#168A80">
     <title>Application Under Review | Yuktione</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="{{ asset('frontend/assets/Yuktione_logo.png') }}">
-    @vite(['resources/css/tazen.css', 'resources/css/yuktione-feedback.css'])
+    @vite(['resources/css/tazen.css', 'resources/css/yuktione-feedback.css', 'resources/css/auth-theme.css'])
 </head>
-<body class="flex min-h-screen items-center justify-center bg-background px-3 py-5 font-sans text-text-primary sm:px-5">
+<body class="yuktione-auth-page flex min-h-screen items-center justify-center bg-background px-3 py-5 font-sans text-text-primary sm:px-5">
     <main class="w-full max-w-[430px]">
         @php
             $applicationStatus = $professional->status ?? 'pending';

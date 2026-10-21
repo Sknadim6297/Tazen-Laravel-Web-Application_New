@@ -3,8 +3,6 @@
 @section('title', 'Additional Service Details')
 
 @section('styles')
-
-@vite('resources/css/tazen.css')
 <style>.show-shell{display:flex}.show-hero{display:flex}.show-grid{display:grid}.show-card__head{display:flex}.show-card__body{display:flex}.custom-modal{display:none}.custom-modal.show{display:flex}</style>
 @endsection
 

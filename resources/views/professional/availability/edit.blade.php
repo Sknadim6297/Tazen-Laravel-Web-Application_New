@@ -373,6 +373,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('editAvailabilityForm').addEventListener('submit', function(e) {
         e.preventDefault();
+        const submitButton = this.querySelector('button[type="submit"]');
+        if (submitButton.disabled) {
+            return;
+        }
         const totalSlots = Object.values(weeklySlots).reduce((sum, daySlots) => sum + daySlots.length, 0);
         if (totalSlots === 0) {
             alert('Please add at least one time slot');
@@ -399,6 +403,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
         formData.append('weekly_slots', JSON.stringify(slotsArray));
+        submitButton.disabled = true;
+        submitButton.dataset.originalText = submitButton.innerHTML;
+        submitButton.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Saving...';
         showLoading();
         fetch(`{{ route('professional.availability.update', $availability->id) }}`, {
             method: 'POST',
@@ -414,13 +421,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert(data.message);
                 window.location.href = "{{ route('professional.availability.index') }}";
             } else {
-                alert(data.message || 'An error occurred. Please try again.');
+                const errors = data.errors ? Object.values(data.errors).flat().join('\n') : '';
+                alert(errors || data.message || 'An error occurred. Please try again.');
+                submitButton.disabled = false;
+                submitButton.innerHTML = submitButton.dataset.originalText;
             }
         })
         .catch(error => {
             hideLoading();
             console.error('Error:', error);
             alert('An error occurred. Please try again.');
+            submitButton.disabled = false;
+            submitButton.innerHTML = submitButton.dataset.originalText;
         });
     });
 });

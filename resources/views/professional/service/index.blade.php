@@ -48,7 +48,7 @@
                         <tbody>
                             @forelse($services as $service)
                                 <tr>
-                                    <td data-label="Service Category" class="border-b border-divider px-4 py-3 align-top">{{ $service->service->name }}</td>
+                                    <td data-label="Service Category" class="border-b border-divider px-4 py-3 align-top">{{ $service->service?->name ?? $service->service_name ?? 'Service' }}</td>
                                     <td data-label="Sub-Services" class="border-b border-divider px-4 py-3 align-top">
                                         @if($service->subServices->count() > 0)
                                             @foreach($service->subServices as $subService)
@@ -105,7 +105,7 @@ $(document).on('click', '.delete-item', function(e) {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
+        cancelButtonColor: '#64748b',
         confirmButtonText: 'Yes, delete it!',
         cancelButtonText: 'Cancel'
     }).then((result) => {

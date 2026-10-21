@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="user-type" content="professional">
     <meta name="user-id" content="{{ Auth::guard('professional')->id() }}">
-    <meta name="theme-color" content="#026FD8">
+    <meta name="theme-color" content="#168A80">
     <title>@yield('title', 'Professional workspace | Yuktione')</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,6 +23,7 @@
     @vite('resources/css/yuktione-feedback.css')
     @yield('styles')
     @stack('styles')
+    @vite('resources/css/professional-panel.css')
 </head>
 <body data-yuktione-panel="professional" class="min-h-screen bg-background font-sans text-text-primary antialiased">
     <a

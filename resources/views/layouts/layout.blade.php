@@ -287,13 +287,38 @@
 	<!-- Schema Markup -->
 	@yield('schema')
 	@vite('resources/css/yuktione-feedback.css')
+	@php
+		$isCustomerPanelFlow = request()->routeIs(
+			'user.booking',
+			'user.booking.summary',
+			'user.booking.success',
+			'user.booking.retry',
+			'user.customer.booking.retry',
+			'user.event.booking.success',
+			'event.booking.success',
+			'user.my-bookings'
+		);
+	@endphp
+	@if ($isCustomerPanelFlow)
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+		@vite('resources/css/customer-panel.css')
+	@endif
+	<link href="{{ asset('frontend/assets/css/tazen-public-chrome.css') }}" rel="stylesheet">
 </head>
 
 <body>
 
 	@include('frontend.sections.header')
 
-	@yield('content')
+	@if ($isCustomerPanelFlow)
+		<div data-yuktione-panel="customer">
+			@yield('content')
+		</div>
+	@else
+		@yield('content')
+	@endif
 	
 	@if (!isset($showFooter) || $showFooter)
 	@include('frontend.sections.footer')

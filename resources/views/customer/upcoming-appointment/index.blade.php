@@ -31,57 +31,57 @@
     }
 
     .custom-calendar-day-header {
-        color: #526b84;
+        color: var(--yk-body);
         font-weight: 600;
     }
 
     .custom-calendar-day {
-        border: 1px solid #c9dfef;
+        border: 1px solid var(--yk-border);
     }
 
     .custom-calendar-nav,
     .custom-calendar-day.available {
-        background: #eff9ff;
-        color: #026fd8;
+        background: var(--yk-mint);
+        color: var(--yk-primary);
         cursor: pointer;
     }
 
     .custom-calendar-nav {
         min-height: 2.5rem;
-        border: 1px solid #c9dfef;
+        border: 1px solid var(--yk-border);
         border-radius: 0.375rem;
         padding: 0 0.75rem;
     }
 
     .custom-calendar-month-year {
-        color: #082b58;
+        color: var(--yk-heading);
         font-weight: 600;
     }
 
     .custom-calendar-day.available:hover,
     .custom-calendar-day.selected {
-        background: #026fd8;
+        background: var(--yk-primary);
         color: #fff;
     }
 
     .custom-calendar-day.unavailable,
     .custom-calendar-day.past-date,
     .custom-calendar-day.other-month {
-        color: #8a9bad;
+        color: var(--yk-muted);
     }
 
     .custom-time-slot-option {
         cursor: pointer;
-        border: 1px solid #c9dfef;
+        border: 1px solid var(--yk-border);
         border-radius: 0.375rem;
         padding: 0.625rem 0.75rem;
     }
 
     .custom-time-slot-option:hover,
     .custom-time-slot-option.selected {
-        border-color: #026fd8;
-        background: #eff9ff;
-        color: #026fd8;
+        border-color: var(--yk-primary);
+        background: var(--yk-mint);
+        color: var(--yk-primary);
     }
 
     .custom-time-slot-option.disabled {
@@ -93,14 +93,14 @@
     .custom-loading-slots,
     .custom-no-slots-available {
         padding: 0.75rem;
-        color: #526b84;
+        color: var(--yk-body);
         font-size: 0.875rem;
         text-align: center;
     }
 
     .custom-calendar-error {
         padding: 0.75rem;
-        color: #b42318;
+        color: var(--yk-danger);
         font-size: 0.875rem;
         text-align: center;
     }

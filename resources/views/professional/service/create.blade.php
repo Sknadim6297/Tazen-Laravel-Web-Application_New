@@ -150,14 +150,25 @@ function loadSubServices(serviceId) {
 
 function enforceSubServiceLimit(container) {
     container.find('input[type="checkbox"]').off('change').on('change', function() {
-        // selection not limited
+        const selected = container.find('input[type="checkbox"]:checked').length;
+        if (selected > 2) {
+            this.checked = false;
+            toastr.error('You can select up to two sub-services.');
+        }
     });
 }
 
 $('#serviceForm').submit(function(e) {
     e.preventDefault();
     let form = this;
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton.disabled) {
+        return;
+    }
     let formData = new FormData(form);
+    submitButton.disabled = true;
+    submitButton.dataset.originalText = submitButton.innerHTML;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
     $.ajax({
         url: "{{ route('professional.service.store') }}",
@@ -178,13 +189,19 @@ $('#serviceForm').submit(function(e) {
             }
         },
         error: function(xhr) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = submitButton.dataset.originalText;
             if (xhr.status === 422) {
-                let errors = xhr.responseJSON.errors;
-                $.each(errors, function(key, value) {
-                    toastr.error(value[0]);
-                });
+                const errors = xhr.responseJSON?.errors || {};
+                if (Object.keys(errors).length) {
+                    $.each(errors, function(key, value) {
+                        toastr.error(value[0]);
+                    });
+                } else {
+                    toastr.error(xhr.responseJSON?.message || 'Please check the submitted information.');
+                }
             } else {
-                toastr.error(xhr.responseJSON.message || "An unexpected error occurred");
+                toastr.error(xhr.responseJSON?.message || "An unexpected error occurred");
             }
         }
     });

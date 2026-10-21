@@ -6,52 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Professional Login | Yuktione</title>
-    @vite('resources/css/tazen.css')
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    @vite(['resources/css/tazen.css', 'resources/css/auth-theme.css'])
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 
     <style>
         .invalid-feedback { display: none; color: #b42318; font-size: .875rem; margin-top: .5rem; }
-        body.professional-login-page { min-height: 100vh; background: radial-gradient(ellipse at top left, #dff4ff 0, #eff9ff 45%, #f8fbff 100%); }
-        #login { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); width: min(100% - 2rem, 62rem); min-height: 34rem; margin: 3rem auto; overflow: hidden; border: 1px solid #dff4ff; border-radius: 1.5rem; background: #fff; box-shadow: 0 18px 55px -28px rgb(8 43 88 / .35); }
-        #login > figure { display: flex; align-items: center; justify-content: center; margin: 0; padding: 2.5rem; background: linear-gradient(145deg, #eff9ff, #dff4ff); }
+        body.professional-login-page { min-height: 100vh; background: #eaf8f5; }
+        #login { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); width: min(100% - 2rem, 62rem); min-height: 34rem; margin: 3rem auto; overflow: hidden; border: 1px solid #e0e9f0; border-radius: 1.5rem; background: #fff; box-shadow: 0 18px 55px -28px rgb(38 50 56 / .2); }
+        #login > figure { display: flex; align-items: center; justify-content: center; margin: 0; padding: 2.5rem; background: #eaf8f5; }
         #login .logo_sticky { width: min(100%, 17rem); height: auto; object-fit: contain; }
         #login > aside { display: flex; flex-direction: column; justify-content: center; padding: clamp(1.5rem, 5vw, 3.5rem); }
-        #login h1 { margin: 0 0 2rem; color: #082b58; font-size: clamp(1.6rem, 4vw, 2.1rem); font-weight: 700; }
+        #login h1 { margin: 0 0 2rem; color: #263238; font-size: clamp(1.6rem, 4vw, 2.1rem); font-weight: 700; }
         #login .form-group { position: relative; margin-bottom: 1.25rem; }
-        #login .form-control { display: block; width: 100%; min-height: 3.1rem; padding: .8rem 1rem; border: 1px solid #c9dfef; border-radius: .65rem; background: #fff; color: #102a43; font: inherit; outline: none; transition: border-color .18s, box-shadow .18s; }
-        #login .form-control:focus { border-color: #026fd8; box-shadow: 0 0 0 4px rgb(2 111 216 / .12); }
+        #login .form-control { display: block; width: 100%; min-height: 3.1rem; padding: .8rem 1rem; border: 1px solid #e0e9f0; border-radius: .65rem; background: #fff; color: #263238; font: inherit; outline: none; transition: border-color .18s, box-shadow .18s; }
+        #login .form-control:focus { border-color: #168a80; box-shadow: 0 0 0 4px rgb(22 138 128 / .12); }
         #login .form-control.is-invalid { border-color: #b42318; }
-        #login .icon_mail_alt, #login .icon_lock_alt { position: absolute; top: 1rem; right: 1rem; color: #087fe7; }
+        #login .icon_mail_alt, #login .icon_lock_alt { position: absolute; top: 1rem; right: 1rem; color: #168a80; }
         #login .clearfix { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin: .25rem 0 1.5rem; }
-        #login .container_check { display: inline-flex; align-items: center; gap: .5rem; color: #415a77; font-size: .88rem; }
-        #login .container_check input { accent-color: #026fd8; }
-        #login a { color: #026fd8; font-weight: 600; text-decoration: none; }
-        #login a:hover { color: #082b58; text-decoration: underline; }
-        #login .text-muted { display: block; margin-top: .5rem; color: #526b84; font-size: .8rem; line-height: 1.5; }
-        #login .btn_1 { display: inline-flex; min-height: 3rem; align-items: center; justify-content: center; width: 100%; margin-top: .5rem; padding: .75rem 1.2rem; border: 0; border-radius: .65rem; background: #026fd8; color: #fff; font: inherit; font-weight: 650; cursor: pointer; transition: background .18s, transform .18s; }
-        #login .btn_1:hover:not(:disabled) { background: #005db8; transform: translateY(-1px); }
+        #login .container_check { display: inline-flex; align-items: center; gap: .5rem; color: #475569; font-size: .88rem; }
+        #login .container_check input { accent-color: #168a80; }
+        #login a { color: #168a80; font-weight: 600; text-decoration: none; }
+        #login a:hover { color: #11776f; text-decoration: underline; }
+        #login .text-muted { display: block; margin-top: .5rem; color: #64748b; font-size: .8rem; line-height: 1.5; }
+        #login .btn_1 { display: inline-flex; min-height: 3rem; align-items: center; justify-content: center; width: 100%; margin-top: .5rem; padding: .75rem 1.2rem; border: 0; border-radius: .65rem; background: #168a80; color: #fff; font: inherit; font-weight: 650; cursor: pointer; transition: background .18s, transform .18s; }
+        #login .btn_1:hover:not(:disabled) { background: #11776f; transform: translateY(-1px); }
         #login .btn_1:disabled { opacity: .6; cursor: wait; }
-        #login .add_top_10 { margin-top: 1.25rem; color: #415a77; font-size: .9rem; }
-        #login .copy { margin-top: 1.5rem; color: #526b84; font-size: .8rem; }
-        .yt-modal { position: fixed; z-index: 100; inset: 0; display: none; align-items: center; justify-content: center; padding: 1rem; background: rgb(8 43 88 / .58); }
+        #login .add_top_10 { margin-top: 1.25rem; color: #475569; font-size: .9rem; }
+        #login .copy { margin-top: 1.5rem; color: #64748b; font-size: .8rem; }
+        .yt-modal { position: fixed; z-index: 100; inset: 0; display: none; align-items: center; justify-content: center; padding: 1rem; background: rgb(38 50 56 / .58); }
         .yt-modal.is-open { display: flex; }
-        .yt-modal-panel { display: flex; flex-direction: column; width: min(100%, 36rem); max-height: min(90vh, 52rem); overflow: hidden; border: 1px solid #dff4ff; border-radius: 1rem; background: #fff; box-shadow: 0 24px 70px -24px rgb(8 43 88 / .45); }
+        .yt-modal-panel { display: flex; flex-direction: column; width: min(100%, 36rem); max-height: min(90vh, 52rem); overflow: hidden; border: 1px solid #e0e9f0; border-radius: 1rem; background: #fff; box-shadow: 0 24px 70px -24px rgb(38 50 56 / .3); }
         .yt-modal-panel.wide { width: min(100%, 54rem); }
-        .yt-modal-header, .yt-modal-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; border-bottom: 1px solid #e2edf6; }
-        .yt-modal-footer { justify-content: flex-end; border-top: 1px solid #e2edf6; border-bottom: 0; }
-        .yt-modal-header h2 { margin: 0; color: #082b58; font-size: 1.2rem; font-weight: 650; }
-        .yt-modal-close { display: inline-flex; width: 2.25rem; height: 2.25rem; align-items: center; justify-content: center; border: 0; border-radius: 9999px; background: #f5faff; color: #415a77; font-size: 1.25rem; cursor: pointer; }
-        .yt-modal-body { overflow-y: auto; padding: 1.25rem; color: #415a77; }
-        .yt-modal-footer button, .yt-modal-footer a { display: inline-flex; min-height: 2.6rem; align-items: center; justify-content: center; padding: .6rem 1rem; border: 1px solid #c9dfef; border-radius: .6rem; background: #fff; color: #084987; font: inherit; font-size: .9rem; font-weight: 600; text-decoration: none; cursor: pointer; }
-        .yt-modal-footer .primary { border-color: #026fd8; background: #026fd8; color: #fff; }
+        .yt-modal-header, .yt-modal-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; border-bottom: 1px solid #e0e9f0; }
+        .yt-modal-footer { justify-content: flex-end; border-top: 1px solid #e0e9f0; border-bottom: 0; }
+        .yt-modal-header h2 { margin: 0; color: #263238; font-size: 1.2rem; font-weight: 650; }
+        .yt-modal-close { display: inline-flex; width: 2.25rem; height: 2.25rem; align-items: center; justify-content: center; border: 0; border-radius: 9999px; background: #f5fbf9; color: #475569; font-size: 1.25rem; cursor: pointer; }
+        .yt-modal-body { overflow-y: auto; padding: 1.25rem; color: #475569; }
+        .yt-modal-footer button, .yt-modal-footer a { display: inline-flex; min-height: 2.6rem; align-items: center; justify-content: center; padding: .6rem 1rem; border: 1px solid #e0e9f0; border-radius: .6rem; background: #fff; color: #168a80; font: inherit; font-size: .9rem; font-weight: 600; text-decoration: none; cursor: pointer; }
+        .yt-modal-footer .primary { border-color: #168a80; background: #168a80; color: #fff; }
         .yt-modal-footer button:disabled { opacity: .5; cursor: not-allowed; }
         @media (max-width: 700px) { #login { display: flex; flex-direction: column; min-height: auto; margin: 1rem auto; } #login > figure { padding: 1.25rem; } #login .logo_sticky { width: 11rem; max-height: 4rem; } }
     </style>
 </head>
 
-<body class="professional-login-page font-sans text-text-primary">
+<body class="yuktione-auth-page professional-login-page font-sans text-text-primary">
     <div id="login">
         <figure>
             <a href="{{ route('home') }}" aria-label="Yuktione home"><img src="{{ asset('frontend/assets/Yuktione_logo.png') }}" alt="Yuktione" class="logo_sticky"></a>

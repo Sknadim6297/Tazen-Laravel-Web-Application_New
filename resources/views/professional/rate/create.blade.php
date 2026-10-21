@@ -271,7 +271,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fetch already used session types for current service/sub-service scope
     async function fetchUsedSessionTypes(subServiceId = null) {
         try {
-            const url = `{{ route('professional.rate.get-session-types') }}`;
+            const url = new URL(`{{ route('professional.rate.get-session-types') }}`);
+            url.searchParams.set('professional_service_id', currentServiceId);
             const resp = await fetch(url, { credentials: 'same-origin' });
             if (!resp.ok) return [];
             const data = await resp.json();

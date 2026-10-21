@@ -6,8 +6,6 @@
 
 @section('content')
 @php
-    $professional = Auth::guard('professional')->user();
-    $professionalService = $professional ? $professional->professionalServices->first() : null;
     $isServiceRate = !$rates->sub_service_id;
     $isSubServiceRate = $rates->sub_service_id;
     $currentSubService = null;

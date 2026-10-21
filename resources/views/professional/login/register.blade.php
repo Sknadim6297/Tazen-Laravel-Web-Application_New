@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Create your Yuktione professional account">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="theme-color" content="#026FD8">
+    <meta name="theme-color" content="#168A80">
     <title>Professional Registration | Yuktione</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="{{ asset('frontend/assets/Yuktione_logo.png') }}">
-    @vite(['resources/css/tazen.css', 'resources/css/yuktione-feedback.css'])
+    @vite(['resources/css/tazen.css', 'resources/css/yuktione-feedback.css', 'resources/css/auth-theme.css'])
 </head>
-<body class="min-h-screen bg-background font-sans text-text-primary antialiased">
-    <main class="flex min-h-screen items-center justify-center px-3 py-5 sm:px-5">
-        <section class="w-full max-w-[430px] rounded-panel border border-divider bg-surface p-5 shadow-card sm:p-7" aria-labelledby="registration-title">
-            <header class="mb-6">
-                <div class="mb-5 flex items-center justify-between gap-3">
+<body class="yuktione-auth-page min-h-screen bg-background font-sans text-text-primary antialiased">
+    <main class="flex min-h-screen items-center justify-center bg-linear-to-br from-brand-50 via-background to-white px-3 py-5 sm:px-5">
+        <section class="w-full max-w-xl rounded-panel border border-divider bg-surface p-5 shadow-card sm:p-8" aria-labelledby="registration-title">
+            <header class="mb-7">
+                <div class="mb-6 flex items-center justify-between gap-3">
                     <a href="{{ route('home') }}" aria-label="Yuktione home" class="inline-flex items-center">
                         <img src="{{ asset('frontend/assets/Yuktione_logo.png') }}" alt="Yuktione" class="h-9 w-auto max-w-36 object-contain">
                     </a>
@@ -25,10 +25,10 @@
                 </div>
 
                 <div class="mb-2 flex items-center justify-between gap-3">
-                    <h1 id="registration-title" class="text-xl font-semibold leading-tight text-brand-950 sm:text-2xl">Create your account</h1>
+                    <h1 id="registration-title" class="text-2xl font-semibold leading-tight tracking-tight text-brand-950 sm:text-3xl">Create your account</h1>
                     <span class="shrink-0 text-xs font-medium text-text-muted" data-registration-step-label>Step 1 of 3</span>
                 </div>
-                <p class="text-[13px] leading-5 text-text-muted">Join Yuktione and grow your professional practice.</p>
+                <p class="mt-2 text-sm leading-6 text-text-muted">Join Yuktione and grow your professional practice.</p>
                 <div class="mt-4 h-1.5 overflow-hidden rounded-full bg-brand-100" role="progressbar" aria-label="Registration progress" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
                     <div class="h-full w-1/3 rounded-full bg-brand-primary transition-[width] duration-300" data-registration-progress></div>
                 </div>

@@ -56,7 +56,7 @@
     @endphp
 
     <div class="space-y-6">
-        <section class="overflow-hidden rounded-panel bg-gradient-to-br from-brand-primary to-brand-950 p-6 text-white shadow-card sm:p-8">
+        <section class="professional-dashboard-hero overflow-hidden rounded-panel p-6 text-white shadow-card sm:p-8">
             <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                 <div class="max-w-2xl">
                     <p class="text-sm font-semibold text-white/80">Professional dashboard</p>

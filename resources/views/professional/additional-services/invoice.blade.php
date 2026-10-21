@@ -274,7 +274,7 @@
     padding: 20px;
     background: white;
     border-radius: 8px;
-    border-left: 4px solid #28a745;
+    border-left: 4px solid #168a80;
 }
 
 .price-stage {
@@ -284,7 +284,7 @@
 .price-value {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #28a745;
+    color: #168a80;
 }
 
 .price-label {

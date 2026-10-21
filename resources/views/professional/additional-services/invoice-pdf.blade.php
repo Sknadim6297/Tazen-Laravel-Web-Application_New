@@ -8,7 +8,7 @@
             font-family: Arial, sans-serif;
             font-size: 12px;
             line-height: 1.4;
-            color: #102a43;
+            color: #263238;
             margin: 0;
             padding: 20px;
         }
@@ -19,13 +19,13 @@
         }
         
         .invoice-header {
-            border-bottom: 3px solid #026fd8;
+            border-bottom: 3px solid #168a80;
             margin-bottom: 30px;
             padding-bottom: 20px;
         }
         
         .invoice-title {
-            color: #026fd8;
+            color: #168a80;
             font-size: 36px;
             font-weight: bold;
             margin-bottom: 5px;
@@ -78,7 +78,7 @@
         }
         
         .gst-breakdown {
-            background: #eff9ff;
+            background: #eaf8f5;
             border-radius: 5px;
             padding: 15px;
             margin: 15px 0;
@@ -92,7 +92,7 @@
         }
         
         .badge.bg-success {
-            background-color: #166534;
+            background-color: #168a80;
             color: white;
         }
         
@@ -127,8 +127,8 @@
         }
         
         .table-success {
-            background-color: #eff9ff;
-            color: #082b58;
+            background-color: #eaf8f5;
+            color: #263238;
         }
         
         strong {

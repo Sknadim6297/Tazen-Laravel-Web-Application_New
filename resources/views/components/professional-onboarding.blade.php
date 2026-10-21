@@ -104,15 +104,15 @@ document.addEventListener('DOMContentLoaded', function() {
 <style>
 /* Professional-specific styling */
 .professional-onboarding .onboarding-header {
-    background: linear-gradient(135deg, #026fd8 0%, #082b58 100%);
+    background: linear-gradient(135deg, #11776f 0%, #168a80 56%, #23a99a 100%);
 }
 
 .professional-help-btn {
-    background: linear-gradient(135deg, #026fd8 0%, #082b58 100%);
+    background: linear-gradient(135deg, #11776f 0%, #168a80 56%, #23a99a 100%);
 }
 
 .professional-help-btn:hover {
-    box-shadow: 0 6px 20px rgba(2, 111, 216, 0.4);
+    box-shadow: 0 6px 20px rgba(22, 138, 128, 0.35);
 }
 
 /* Ensure proper highlighting for professional dashboard elements */
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .sidebar .nav-item:hover {
-    background-color: rgba(2, 111, 216, 0.1);
+    background-color: rgba(22, 138, 128, 0.1);
     transition: all 0.3s ease;
 }
 
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /* Service management highlights */
 .service-management .service-item:hover {
-    background-color: rgba(2, 111, 216, 0.05);
+    background-color: rgba(22, 138, 128, 0.05);
     transition: all 0.3s ease;
 }
 </style>

@@ -420,8 +420,8 @@
                 <h4 style="margin: 0 0 8px 0; font-size: 12px; text-align: center; color: #333;">CUSTOMER PAYMENT BREAKDOWN</h4>
                 <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
                     <tr>
-                        <td style="border: 1px solid #ccc; padding: 4px; background: #e8f4f8;">Service: {{ $booking->service->name ?? 'Professional Service' }}</td>
-                        <td style="border: 1px solid #ccc; padding: 4px; text-align: right; background: #e8f4f8;">₹{{ number_format($baseAmount, 2) }}</td>
+                        <td style="border: 1px solid #ccc; padding: 4px; background: #eaf8f5;">Service: {{ $booking->service->name ?? 'Professional Service' }}</td>
+                        <td style="border: 1px solid #ccc; padding: 4px; text-align: right; background: #eaf8f5;">₹{{ number_format($baseAmount, 2) }}</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid #ccc; padding: 4px;">GST @ 18% on Service:</td>

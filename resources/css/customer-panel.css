@@ -1,0 +1,817 @@
+[data-yuktione-panel="customer"] {
+    --yk-primary: #168b80;
+    --yk-primary-hover: #0d756d;
+    --yk-primary-light: #eaf8f3;
+    --yk-heading: #102653;
+    --yk-body: #536789;
+    --yk-muted: #8493aa;
+    --yk-background: #f8fbfc;
+    --yk-surface: #ffffff;
+    --yk-border: #e2ebf0;
+    --yk-eucalyptus: #dff3ec;
+    --yk-soft-blue: #eaf3ff;
+    --yk-lavender: #f1edff;
+    --yk-mint: #eaf8f3;
+    --yk-success: #15966b;
+    --yk-danger: #e85d70;
+
+    --color-brand-50: var(--yk-mint);
+    --color-brand-100: var(--yk-eucalyptus);
+    --color-brand-200: #bfe5d9;
+    --color-brand-300: #92d4c5;
+    --color-brand-400: #4fb6a8;
+    --color-brand-500: var(--yk-primary);
+    --color-brand-600: #127f75;
+    --color-brand-700: var(--yk-primary);
+    --color-brand-800: var(--yk-primary-hover);
+    --color-brand-900: #0b5d58;
+    --color-brand-950: var(--yk-heading);
+    --color-brand-primary: var(--yk-primary);
+    --color-brand-secondary: var(--yk-heading);
+    --color-brand-accent: #4fb6a8;
+
+    --color-background: var(--yk-background);
+    --color-surface: var(--yk-surface);
+    --color-surface-muted: #f3f8f8;
+    --color-text-primary: var(--yk-heading);
+    --color-text-secondary: var(--yk-body);
+    --color-text-muted: var(--yk-muted);
+    --color-border: var(--yk-border);
+    --color-divider: #eaf0f3;
+
+    --color-success: var(--yk-success);
+    --color-success-surface: #eaf8f3;
+    --color-warning: #946b11;
+    --color-warning-surface: #fff8e8;
+    --color-error: #c8445a;
+    --color-error-surface: #fff0f2;
+    --color-info: #3677b8;
+    --color-info-surface: var(--yk-soft-blue);
+    --color-focus-ring: var(--yk-primary);
+
+    --font-sans: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-display: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+    --radius-control: 0.75rem;
+    --radius-card: 1rem;
+    --radius-panel: 1.25rem;
+    --shadow-card: 0 2px 8px rgb(16 38 83 / 0.035), 0 12px 28px -20px rgb(16 38 83 / 0.18);
+    --shadow-popover: 0 18px 44px -20px rgb(16 38 83 / 0.28);
+
+    color: var(--yk-body);
+    font-family: var(--font-sans);
+}
+
+body[data-yuktione-panel="customer"] {
+    background: var(--yk-background);
+    color: var(--yk-body);
+}
+
+body[data-yuktione-panel="customer"]#customer-auth-page {
+    align-items: center;
+    animation: none;
+    background: var(--yk-background);
+    color: var(--yk-body);
+    display: flex;
+    font-family: var(--font-sans);
+    justify-content: center;
+    min-height: 100vh;
+}
+
+[data-yuktione-panel="customer"] .contain {
+    background: var(--yk-surface);
+    border: 1px solid var(--yk-border);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-card);
+    backdrop-filter: none;
+}
+
+[data-yuktione-panel="customer"] .card-header {
+    background: var(--yk-mint);
+    border: 0;
+    border-radius: 0.75rem;
+    color: var(--yk-heading);
+}
+
+[data-yuktione-panel="customer"] .btn-primary {
+    background: var(--yk-primary);
+    border: 1px solid var(--yk-primary);
+    border-radius: 0.75rem;
+    color: #fff;
+}
+
+[data-yuktione-panel="customer"] .btn-primary:hover {
+    background: var(--yk-primary-hover);
+    border-color: var(--yk-primary-hover);
+    transform: none;
+}
+
+[data-yuktione-panel="customer"] .form-control:focus {
+    border-color: var(--yk-primary);
+    box-shadow: 0 0 0 3px rgb(22 139 128 / 0.12);
+}
+
+[data-yuktione-panel="customer"] .col-form-label {
+    color: var(--yk-heading);
+}
+
+[data-yuktione-panel="customer"] :where(h1, h2, h3, h4, h5, h6) {
+    color: var(--yk-heading);
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+}
+
+[data-yuktione-panel="customer"] :where(button, input, select, textarea) {
+    font: inherit;
+}
+
+[data-yuktione-panel="customer"] :where(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea) {
+    border-color: var(--yk-border);
+    border-radius: 0.75rem;
+    color: var(--yk-heading);
+}
+
+[data-yuktione-panel="customer"] :where(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea)::placeholder {
+    color: var(--yk-muted);
+}
+
+[data-yuktione-panel="customer"] :where(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea):focus {
+    border-color: var(--yk-primary);
+    box-shadow: 0 0 0 3px rgb(22 139 128 / 0.12);
+    outline: none;
+}
+
+[data-yuktione-panel="customer"] :where(input[type="checkbox"], input[type="radio"]) {
+    accent-color: var(--yk-primary);
+}
+
+[data-yuktione-panel="customer"] :where(a, button, input, select, textarea) {
+    transition-duration: 200ms;
+}
+
+[data-yuktione-panel="customer"] :where(a, button):focus-visible,
+[data-yuktione-panel="customer"] :where(input, select, textarea):focus-visible {
+    outline-color: var(--yk-primary);
+}
+
+[data-yuktione-panel="customer"] [data-panel-sidebar] {
+    background-color: var(--yk-surface);
+    border-color: var(--yk-border);
+}
+
+[data-yuktione-panel="customer"] [data-panel-sidebar] nav a[aria-current="page"] {
+    box-shadow: inset 3px 0 0 var(--yk-primary);
+    font-weight: 700;
+}
+
+[data-yuktione-panel="customer"] [data-panel-sidebar] nav a:not([aria-current="page"]):hover {
+    color: var(--yk-primary-hover);
+}
+
+[data-yuktione-panel="customer"] header.sticky {
+    border-color: var(--yk-border);
+    background-color: rgb(255 255 255 / 0.94);
+}
+
+[data-yuktione-panel="customer"] :where(.rounded-card, .rounded-panel) {
+    border-color: var(--yk-border);
+}
+
+[data-yuktione-panel="customer"] :where(.shadow-card, .shadow-popover) {
+    box-shadow: var(--shadow-card);
+}
+
+[data-yuktione-panel="customer"] :where(.custom-modal) {
+    background: rgb(16 38 83 / 0.38);
+    backdrop-filter: blur(3px);
+}
+
+[data-yuktione-panel="customer"] :where(.content-wrapper) {
+    display: grid;
+    gap: 1.5rem;
+    margin-inline: auto;
+    max-width: 80rem;
+    padding: 1.5rem 1rem;
+}
+
+[data-yuktione-panel="customer"] :where(.page-header) {
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+[data-yuktione-panel="customer"] :where(.page-title h1, .page-title h2, .page-title h3) {
+    color: var(--yk-heading);
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+}
+
+[data-yuktione-panel="customer"] :where(.page-title p) {
+    color: var(--yk-body);
+    line-height: 1.65;
+    margin: 0.5rem 0 0;
+    max-width: 48rem;
+}
+
+[data-yuktione-panel="customer"] :where(.breadcrumb) {
+    background: transparent;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+[data-yuktione-panel="customer"] :where(.breadcrumb li + li)::before {
+    color: var(--yk-muted);
+    content: "/";
+    margin-right: 0.5rem;
+}
+
+[data-yuktione-panel="customer"] :where(.breadcrumb a, .breadcrumb li) {
+    color: var(--yk-body);
+    font-size: 0.875rem;
+}
+
+[data-yuktione-panel="customer"] :where(.container-fluid, .container) {
+    margin-inline: auto;
+    max-width: 80rem;
+    padding-inline: 1rem;
+    width: 100%;
+}
+
+[data-yuktione-panel="customer"] :where(.row) {
+    display: flex;
+    flex-wrap: wrap;
+    margin-inline: -0.75rem;
+}
+
+[data-yuktione-panel="customer"] :where(.row > [class^="col-"], .row > [class*=" col-"]) {
+    min-width: 0;
+    padding-inline: 0.75rem;
+    width: 100%;
+}
+
+[data-yuktione-panel="customer"] :where(.card) {
+    background: var(--yk-surface);
+    border: 1px solid var(--yk-border);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+}
+
+[data-yuktione-panel="customer"] :where(.card-header) {
+    align-items: center;
+    background: #fbfdfd;
+    border-bottom: 1px solid var(--yk-border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+}
+
+[data-yuktione-panel="customer"] :where(.card-header h1, .card-header h2, .card-header h3, .card-header h4, .card-header h5, .card-header h6) {
+    color: var(--yk-heading);
+    margin: 0;
+}
+
+[data-yuktione-panel="customer"] :where(.card-body) {
+    padding: 1.25rem;
+}
+
+[data-yuktione-panel="customer"] :where(.table) {
+    border-collapse: collapse;
+    color: var(--yk-body);
+    margin-bottom: 0;
+    width: 100%;
+}
+
+[data-yuktione-panel="customer"] :where(.table th, .table td) {
+    border-bottom: 1px solid var(--yk-border);
+    padding: 0.8rem;
+    vertical-align: middle;
+}
+
+[data-yuktione-panel="customer"] :where(.table thead th, .table th) {
+    color: var(--yk-heading);
+    font-weight: 600;
+}
+
+[data-yuktione-panel="customer"] :where(.table-responsive) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+[data-yuktione-panel="customer"] :where(.form-control, .form-select) {
+    background-color: var(--yk-surface);
+    border: 1px solid var(--yk-border);
+    border-radius: 0.75rem;
+    color: var(--yk-heading);
+    min-height: 2.75rem;
+    padding: 0.625rem 0.8rem;
+    width: 100%;
+}
+
+[data-yuktione-panel="customer"] :where(.form-control:focus, .form-select:focus) {
+    border-color: var(--yk-primary);
+    box-shadow: 0 0 0 3px rgb(22 139 128 / 0.12);
+    outline: none;
+}
+
+[data-yuktione-panel="customer"] :where(.btn) {
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    display: inline-flex;
+    font-weight: 600;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.625rem 1rem;
+    text-decoration: none;
+}
+
+[data-yuktione-panel="customer"] :where(.btn-primary, .btn_1) {
+    background: var(--yk-primary);
+    border-color: var(--yk-primary);
+    color: #fff;
+}
+
+[data-yuktione-panel="customer"] :where(.btn-primary, .btn_1):hover {
+    background: var(--yk-primary-hover);
+    border-color: var(--yk-primary-hover);
+    color: #fff;
+}
+
+[data-yuktione-panel="customer"] :where(.btn-secondary) {
+    background: var(--yk-soft-blue);
+    border-color: var(--yk-border);
+    color: var(--yk-heading);
+}
+
+[data-yuktione-panel="customer"] :where(.btn-success) {
+    background: var(--yk-success);
+    color: #fff;
+}
+
+[data-yuktione-panel="customer"] :where(.btn-danger) {
+    background: var(--yk-danger);
+    color: #fff;
+}
+
+[data-yuktione-panel="customer"] :where(.badge, .booking-status) {
+    border-radius: 999px;
+    display: inline-flex;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    padding: 0.35rem 0.7rem;
+}
+
+[data-yuktione-panel="customer"] :where(.status-confirmed, .bg-success) {
+    background: var(--yk-mint);
+    color: var(--yk-success);
+}
+
+[data-yuktione-panel="customer"] :where(.status-pending, .bg-warning) {
+    background: #fff8e8;
+    color: #946b11;
+}
+
+[data-yuktione-panel="customer"] :where(.status-completed, .bg-info) {
+    background: var(--yk-soft-blue);
+    color: #3677b8;
+}
+
+[data-yuktione-panel="customer"] :where(.badge-paid, .badge-success) {
+    background: var(--yk-mint);
+    color: var(--yk-success);
+}
+
+[data-yuktione-panel="customer"] :where(.badge-pending, .badge-warning) {
+    background: #fff8e8;
+    color: #946b11;
+}
+
+[data-yuktione-panel="customer"] :where(.alert-success) {
+    background: var(--yk-mint);
+    border-color: #bfe5d9;
+    color: var(--yk-success);
+}
+
+[data-yuktione-panel="customer"] :where(.alert-danger) {
+    background: #fff0f2;
+    border-color: #f4c4cb;
+    color: #c8445a;
+}
+
+[data-yuktione-panel="customer"] :where(.alert-warning) {
+    background: #fff8e8;
+    border-color: #f0dfae;
+    color: #946b11;
+}
+
+[data-yuktione-panel="customer"] :where(.btn-group) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+[data-yuktione-panel="customer"] :where(.btn-group .btn) {
+    border-radius: 0.75rem;
+}
+
+[data-yuktione-panel="customer"] :where(.bg-primary, .text-primary) {
+    color: var(--yk-primary);
+}
+
+[data-yuktione-panel="customer"] :where(.bg-primary) {
+    background-color: var(--yk-primary);
+}
+
+[data-yuktione-panel="customer"] :where(.text-muted, .detail-label) {
+    color: var(--yk-muted);
+}
+
+[data-yuktione-panel="customer"] :where(.detail-value, .booking-id) {
+    color: var(--yk-heading);
+}
+
+[data-yuktione-panel="customer"] :where(.booking-card, .no-bookings) {
+    background: var(--yk-surface);
+    border: 1px solid var(--yk-border);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-card);
+    padding: 1.25rem;
+}
+
+[data-yuktione-panel="customer"] :where(.booking-header, .booking-actions) {
+    border-color: var(--yk-border);
+}
+
+[data-yuktione-panel="customer"] :where(.customer-profile-edit-shell) {
+    display: grid;
+    gap: 1.25rem;
+    margin-inline: auto;
+    max-width: 64rem;
+}
+
+[data-yuktione-panel="customer"] :where(.edit-hero, .profile-form-card, .form-section) {
+    background: var(--yk-surface);
+    border: 1px solid var(--yk-border);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-card);
+}
+
+[data-yuktione-panel="customer"] :where(.edit-hero) {
+    align-items: center;
+    background: linear-gradient(135deg, var(--yk-mint), #f6fbff 65%, var(--yk-lavender));
+    display: flex;
+    gap: 1.5rem;
+    justify-content: space-between;
+    padding: clamp(1.25rem, 4vw, 2.25rem);
+}
+
+[data-yuktione-panel="customer"] :where(.hero-eyebrow) {
+    color: var(--yk-primary);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+[data-yuktione-panel="customer"] :where(.edit-hero h1) {
+    font-size: clamp(1.6rem, 3vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0.55rem 0;
+}
+
+[data-yuktione-panel="customer"] :where(.edit-hero p) {
+    color: var(--yk-body);
+    line-height: 1.7;
+    margin: 0;
+    max-width: 44rem;
+}
+
+[data-yuktione-panel="customer"] :where(.edit-hero-illustration) {
+    align-items: center;
+    background: rgb(255 255 255 / 0.75);
+    border: 1px solid rgb(22 139 128 / 0.12);
+    border-radius: 1.25rem;
+    color: var(--yk-primary);
+    display: none;
+    flex: 0 0 5rem;
+    font-size: 2rem;
+    height: 5rem;
+    justify-content: center;
+}
+
+[data-yuktione-panel="customer"] :where(.profile-form-card) {
+    padding: clamp(1rem, 3vw, 1.75rem);
+}
+
+[data-yuktione-panel="customer"] :where(.form-section) {
+    box-shadow: none;
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+[data-yuktione-panel="customer"] :where(.form-section header) {
+    border-bottom: 1px solid var(--yk-border);
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+}
+
+[data-yuktione-panel="customer"] :where(.form-section h2) {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+[data-yuktione-panel="customer"] :where(.form-grid) {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr);
+}
+
+[data-yuktione-panel="customer"] :where(.form-group) {
+    display: grid;
+    gap: 0.45rem;
+    min-width: 0;
+    position: relative;
+}
+
+[data-yuktione-panel="customer"] :where(.form-group label) {
+    color: var(--yk-heading);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+[data-yuktione-panel="customer"] :where(.form-group input:not([type="file"]), .form-group textarea, .form-group select) {
+    background: var(--yk-surface);
+    border: 1px solid var(--yk-border);
+    border-radius: 0.75rem;
+    color: var(--yk-heading);
+    min-height: 2.75rem;
+    padding: 0.65rem 0.8rem;
+    width: 100%;
+}
+
+[data-yuktione-panel="customer"] :where(.form-group input:focus, .form-group textarea:focus, .form-group select:focus) {
+    border-color: var(--yk-primary);
+    box-shadow: 0 0 0 3px rgb(22 139 128 / 0.12);
+    outline: none;
+}
+
+[data-yuktione-panel="customer"] :where(.avatar-preview) {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+[data-yuktione-panel="customer"] :where(.avatar-preview img) {
+    border: 2px solid var(--yk-eucalyptus);
+    border-radius: 999px;
+    height: 3.5rem;
+    object-fit: cover;
+    width: 3.5rem;
+}
+
+[data-yuktione-panel="customer"] :where(.form-actions) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1.25rem;
+}
+
+[data-yuktione-panel="customer"] :where(.form-actions .btn-primary, .form-actions .btn-secondary) {
+    align-items: center;
+    border-radius: 0.75rem;
+    display: inline-flex;
+    font-weight: 700;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.65rem 1.1rem;
+    text-decoration: none;
+}
+
+[data-yuktione-panel="customer"] :where(.form-actions .btn-primary) {
+    background: var(--yk-primary);
+    color: white;
+}
+
+[data-yuktione-panel="customer"] :where(.form-actions .btn-secondary) {
+    background: var(--yk-surface);
+    border: 1px solid var(--yk-border);
+    color: var(--yk-heading);
+}
+
+[data-yuktione-panel="customer"] :where(.custom-calendar-day-header, .custom-calendar-day) {
+    border-radius: 0.65rem;
+}
+
+[data-yuktione-panel="customer"] :where(.custom-calendar-day) {
+    border-color: var(--yk-border);
+}
+
+[data-yuktione-panel="customer"] :where(.custom-calendar-nav, .custom-calendar-day.available) {
+    background: var(--yk-mint);
+    color: var(--yk-primary);
+}
+
+[data-yuktione-panel="customer"] :where(.custom-calendar-day.selected, .custom-calendar-day.available:hover) {
+    background: var(--yk-primary);
+    color: white;
+}
+
+[data-yuktione-panel="customer"] :where(.custom-calendar-month-year) {
+    color: var(--yk-heading);
+}
+
+[data-yuktione-panel="customer"] :where(.custom-time-slot-option.selected, .custom-time-slot-option:hover) {
+    background: var(--yk-mint);
+    border-color: var(--yk-primary);
+    color: var(--yk-primary);
+}
+
+[data-yuktione-panel="customer"] :where(.bg_gray) {
+    background-color: var(--yk-background);
+}
+
+[data-yuktione-panel="customer"] :where(.box_booking_2) {
+    background: var(--yk-surface);
+    border: 1px solid var(--yk-border);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+}
+
+[data-yuktione-panel="customer"] :where(.box_booking_2 .head, .box_booking_2 .main) {
+    padding: clamp(1rem, 3vw, 1.5rem);
+}
+
+[data-yuktione-panel="customer"] :where(.box_booking_2 .head) {
+    background: var(--yk-mint);
+    border-bottom: 1px solid var(--yk-border);
+}
+
+[data-yuktione-panel="customer"] :where(.payment-failure-popup) {
+    border-radius: 1.25rem;
+}
+
+[data-yuktione-panel="customer"] :where(.payment-failure-confirm) {
+    background: var(--yk-primary);
+}
+
+[data-yuktione-panel="customer"] :where(.payment-failure-confirm:hover) {
+    background: var(--yk-primary-hover);
+}
+
+[data-yuktione-panel="customer"].customer-registration-page {
+    --yk-primary: #168a80;
+    --yk-primary-hover: #11776f;
+    --yk-primary-light: #eaf8f5;
+    --yk-heading: #263238;
+    --yk-body: #475569;
+    --yk-muted: #64748b;
+    --yk-background: #eaf8f5;
+    --yk-surface: #ffffff;
+    --yk-border: #e0e9f0;
+    --yk-eucalyptus: #d5f0eb;
+    --yk-soft-blue: #eaf8f5;
+    --yk-lavender: #eaf8f5;
+    --yk-mint: #eaf8f5;
+    --yk-success: #168a80;
+    --yk-danger: #b42318;
+
+    --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    --color-brand-50: #eaf8f5;
+    --color-brand-100: #d5f0eb;
+    --color-brand-200: #b2e3db;
+    --color-brand-300: #86d0c4;
+    --color-brand-400: #51b7a8;
+    --color-brand-500: #168a80;
+    --color-brand-600: #11776f;
+    --color-brand-700: #11776f;
+    --color-brand-800: #11776f;
+    --color-brand-900: #155a55;
+    --color-brand-950: #263238;
+    --color-brand-primary: #168a80;
+    --color-brand-secondary: #263238;
+    --color-brand-accent: #168a80;
+    --color-background: #eaf8f5;
+    --color-surface: #ffffff;
+    --color-surface-muted: #f5fbf9;
+    --color-text-primary: #263238;
+    --color-text-secondary: #475569;
+    --color-text-muted: #64748b;
+    --color-border: #e0e9f0;
+    --color-divider: #e0e9f0;
+    --color-success: #168a80;
+    --color-success-surface: #eaf8f5;
+    --color-error: #b42318;
+    --color-error-surface: #fef3f2;
+    --color-warning: #a16207;
+    --color-warning-surface: #fffbeb;
+    --color-info: #168a80;
+    --color-info-surface: #eaf8f5;
+    --color-focus-ring: #168a80;
+    --shadow-card: 0 1px 2px rgb(38 50 56 / 0.04), 0 12px 32px -20px rgb(38 50 56 / 0.2);
+    --shadow-popover: 0 16px 40px -24px rgb(38 50 56 / 0.24);
+
+    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+}
+
+body.customer-registration-page {
+    background: #eaf8f5;
+    color: #475569;
+    --yk-feedback-primary: #168a80;
+    --yk-feedback-cyan: #168a80;
+    --yk-feedback-navy: #263238;
+    --yk-feedback-background: #eaf8f5;
+    --yk-feedback-text: #263238;
+    --yk-feedback-muted: #64748b;
+    --yk-feedback-border: #e0e9f0;
+    --yk-feedback-success: #168a80;
+    --yk-feedback-warning: #a16207;
+    --yk-feedback-shadow: 0 18px 50px rgb(38 50 56 / 0.16);
+}
+
+body.customer-registration-page :where(h1, h2, h3, h4, h5, h6) {
+    color: #263238;
+}
+
+body.customer-registration-page [data-yuktione-feedback] :where(.yk-toast, .yk-inline-alert, .yk-dialog) {
+    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+}
+
+@media (min-width: 40rem) {
+    [data-yuktione-panel="customer"] :where(.form-grid) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    [data-yuktione-panel="customer"] :where(.edit-hero-illustration) {
+        display: inline-flex;
+    }
+}
+
+@media (min-width: 48rem) {
+    [data-yuktione-panel="customer"] :where(.row > .col-md-6) {
+        width: 50%;
+    }
+}
+
+@media (min-width: 62rem) {
+    [data-yuktione-panel="customer"] :where(.row > .col-lg-8) {
+        width: 66.666667%;
+    }
+
+    [data-yuktione-panel="customer"] :where(.row > .col-lg-4) {
+        width: 33.333333%;
+    }
+
+    [data-yuktione-panel="customer"] :where(.row > .col-lg-6) {
+        width: 50%;
+    }
+}
+
+@media (max-width: 39.99rem) {
+    [data-yuktione-panel="customer"] :where(.page-header) {
+        display: grid;
+    }
+
+    [data-yuktione-panel="customer"] :where(.booking-header, .booking-actions, .form-actions) {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    [data-yuktione-panel="customer"] :where(.booking-actions .btn, .form-actions > *) {
+        width: 100%;
+    }
+
+    [data-yuktione-panel="customer"] :where(.card-header, .card-body) {
+        padding: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-yuktione-panel="customer"] *,
+    [data-yuktione-panel="customer"] *::before,
+    [data-yuktione-panel="customer"] *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}

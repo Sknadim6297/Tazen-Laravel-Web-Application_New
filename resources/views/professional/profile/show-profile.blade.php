@@ -33,7 +33,7 @@
                                         $photoPath = asset('img/default-avatar.jpg');
                                     }
                                 @endphp
-                                <img src="{{ $photoPath }}" alt="{{ $profile->professional->name ?? $profile->name ?? 'Profile photo' }}">
+                                <img src="{{ $photoPath }}" alt="{{ $profile->professional?->name ?? $profile->name ?? 'Profile photo' }}">
                             </div>
                             <div class="profile-card__sidebar-block">
                                 <div class="profile-card__status">
@@ -64,8 +64,8 @@
                                 <div class="detail-grid grid gap-3 sm:grid-cols-2">
                                     <div class="detail-tile flex flex-col gap-1 rounded-control border border-divider bg-surface-muted p-4">
                                         <span class="detail-tile__label text-xs font-semibold uppercase tracking-wide text-text-muted">Full Name</span>
-                                        <span class="detail-tile__value break-words font-medium text-text-primary">{{ $profile->name ?? ($profile->professional->name ?? 'Not provided') }}</span>
-                                        @if(!$profile->name && !$profile->professional->name)
+                                        <span class="detail-tile__value break-words font-medium text-text-primary">{{ $profile->name ?? ($profile->professional?->name ?? 'Not provided') }}</span>
+                                        @if(!$profile->name && !$profile->professional?->name)
                                             <span class="badge-warning inline-flex items-center gap-1 rounded-full bg-warning-surface px-2.5 py-1 text-xs font-medium text-warning"><i class="ri-alert-line"></i>Required</span>
                                         @endif
                                     </div>
@@ -134,9 +134,9 @@
                                     </div>
                                 </div>
                                 @php
-                                    $serviceRequestMargin = $profile->professional->service_request_margin ?? 10.00;
-                                    $negotiationOffset = $profile->professional->service_request_offset ?? 20.00;
-                                    $mainMargin = $profile->professional->margin ?? 20.00;
+                                    $serviceRequestMargin = $profile->professional?->service_request_margin ?? 10.00;
+                                    $negotiationOffset = $profile->professional?->service_request_offset ?? 20.00;
+                                    $mainMargin = $profile->professional?->margin ?? 20.00;
                                 @endphp
                                 <div class="commission-grid">
                                     <div class="commission-pill">
@@ -325,7 +325,9 @@
                                                 if (str_starts_with($img, 'gallery/')) {
                                                     $imagePath = asset('storage/'.$img);
                                                 } elseif (str_starts_with($img, 'uploads/')) {
-                                                    $imagePath = asset($img);
+                                                    $imagePath = file_exists(storage_path('app/public/'.$img))
+                                                        ? asset('storage/'.$img)
+                                                        : asset($img);
                                                 } else {
                                                     $imagePath = asset('uploads/professionals/gallery/'.$img);
                                                 }
@@ -349,12 +351,8 @@
         @else
             <div class="profile-empty-state">
                 <i class="ri-user-smile-line"></i>
-                <h3>No profiles yet</h3>
-                <p>Build your professional presence by creating your first profile. Clients are more likely to reach out when your profile is complete and polished.</p>
-                <a href="{{ route('professional.profile.create') }}" class="btn-pill btn-pill--primary inline-flex items-center justify-center gap-2 rounded-full bg-brand-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-800">
-                    <i class="ri-add-line"></i>
-                    Create Profile
-                </a>
+                <h3>Profile information is unavailable</h3>
+                <p>Your professional profile has not been set up yet. Please contact support so it can be linked to your account.</p>
             </div>
         @endif
     </div>

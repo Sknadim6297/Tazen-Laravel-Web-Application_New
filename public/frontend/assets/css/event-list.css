@@ -3471,8 +3471,6 @@ div:hover > .ttm-box-view-overlay:before, div:hover > .ttm-box-view-content-inne
 .calendar.small table td { height: 80px; font-size: 20px; }
 .calendar.small thead th { padding: 14px 0; font-size: 15px; line-height: 1; }
 .calendar.small .calendar-frame tbody td::after { content: unset; }
-
-
 .calender-widget .calendar header .header-label {
     font-size: 11px;
     font-weight: 500;
@@ -3968,19 +3966,6 @@ ul.payment_methods {
     background-color: #005c65;
     font-weight: 500;
     color: #fff;
-}
-footer{
-    position: relative;
-}
-footer:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: #764979ba;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
 }
 
 
@@ -4663,7 +4648,8 @@ width: 200px;
 .ttm-bgcolor-grey, .ttm-bgcolor-grey > .ttm-bg-layer, 
 .ttm-bgcolor-grey > .ttm-bg-layer > .ttm-col-wrapper-bg-layer-inner, .ttm-btn-style-fill.ttm-btn-color-grey, 
 .ttm-icon_element-fill.ttm-icon_element-color-grey, .ttm-toggle-title-bgcolor-grey .toggle-title,  
-nav.main-menu ul.menu li > ul.mega-submenu li a:hover, .ttm-toggle-title-bgcolor-grey, 
+.ttm-toggle-title-bgcolor-grey,
+nav.main-menu ul.menu li > ul.mega-submenu li a:hover,
 .ttm-team-member-single-content .ttm-social-links-wrapper ul li a,  
 .calendar .calendar-frame tbody td:last-child,
 .ttm-blog-single .ttm-blog-single-content .ttm-social-share-wrapper .social-icons li a, 
@@ -4878,5 +4864,3 @@ ul.campain-upper-list li:hover {
     background:#039d99;
    
 }
-
-

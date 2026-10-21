@@ -261,7 +261,7 @@
                             $serviceName = $data['service_name'] ?? 'Additional Service';
                             $type = $data['type'] ?? 'update';
                             $icon = $data['icon'] ?? 'fas fa-bell';
-                            $color = $data['color'] ?? '#3498db';
+                            $color = $data['color'] ?? '#168a80';
                         @endphp
                         <div class="notification-item service-notification rounded-control border border-border bg-surface-muted p-4" data-notification-id="{{ $notification->id }}">
                             <div class="notification-icon-wrapper mb-2 text-brand-primary">
