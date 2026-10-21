@@ -52,22 +52,34 @@
                 <label class="visually-hidden" for="tazen-header-search">Search services</label>
                 <input id="tazen-header-search" type="search" name="query" placeholder="Search anything..." autocomplete="off" required>
                 <button type="submit" aria-label="Search">
-                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <circle cx="10.8" cy="10.8" r="6.8"></circle>
+                        <path d="m16 16 4.2 4.2"></path>
+                    </svg>
                 </button>
                 <span class="tazen-header__search-status" role="status" aria-live="polite" data-search-status></span>
             </form>
 
             <div class="tazen-header__actions">
                 <button class="tazen-header__utility-button" type="button" aria-label="Notifications unavailable" disabled>
-                    <i class="fas fa-bell" aria-hidden="true"></i>
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                        <path d="M10 21h4"></path>
+                    </svg>
                 </button>
                 @if ($messagesUrl)
                     <a class="tazen-header__utility-button" href="{{ $messagesUrl }}" aria-label="Messages">
-                        <i class="fas fa-comment-dots" aria-hidden="true"></i>
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-6.5A7.5 7.5 0 1 1 20 11.5Z"></path>
+                            <path d="M8 11.5h.01M12.5 11.5h.01M17 11.5h.01"></path>
+                        </svg>
                     </a>
                 @else
                     <button class="tazen-header__utility-button" type="button" aria-label="Messages unavailable" disabled>
-                        <i class="fas fa-comment-dots" aria-hidden="true"></i>
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-6.5A7.5 7.5 0 1 1 20 11.5Z"></path>
+                            <path d="M8 11.5h.01M12.5 11.5h.01M17 11.5h.01"></path>
+                        </svg>
                     </button>
                 @endif
 
@@ -79,7 +91,9 @@
                                 <span class="tazen-header__account-name">{{ $account->name }}</span>
                                 <span class="tazen-header__account-role">{{ $accountRole }}</span>
                             </span>
-                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                            <svg class="tazen-header__account-chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
                         </button>
                         <div class="tazen-header__account-menu" id="tazen-account-menu" hidden>
                             <span class="tazen-header__account-label">{{ $accountRole }}</span>
@@ -112,4 +126,4 @@
     </div>
 </header>
 
-<script src="{{ asset('frontend/assets/js/public-chrome.js') }}" defer></script>
+<script src="{{ asset('frontend/assets/js/public-chrome.js') }}?v={{ filemtime(public_path('frontend/assets/js/public-chrome.js')) }}" defer></script>

@@ -5,7 +5,7 @@ document.querySelectorAll('[data-public-header]').forEach((header) => {
     const accountToggle = header.querySelector('[data-account-toggle]');
     const accountMenu = header.querySelector('[data-account-menu]');
     const searchForm = header.querySelector('[data-header-search]');
-    const desktopBreakpoint = window.matchMedia('(min-width: 64rem)');
+    const desktopBreakpoint = window.matchMedia('(min-width: 68.75rem)');
 
     const setMobileNavigation = (isOpen) => {
         if (!mobileToggle || !mobileNav || !mobileBackdrop) {

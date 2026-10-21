@@ -11,7 +11,8 @@
 .tazen-header,
 .tazen-footer {
     color: var(--tazen-chrome-navy);
-    font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif;
+    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 400;
 }
 
 .tazen-header *,
@@ -468,6 +469,7 @@
 .tazen-footer__social a:nth-child(3):hover { background: #0a66c2; border-color: #0a66c2; color: #fff; }
 .tazen-footer__social a:nth-child(4):hover { background: #e62117; border-color: #e62117; color: #fff; }
 .tazen-footer__social a:nth-child(5):hover { background: #111; border-color: #111; color: #fff; }
+.tazen-footer__social a:nth-child(6):hover { background: #25d366; border-color: #25d366; color: #fff; }
 
 .tazen-footer__column h2 {
     margin: .2rem 0 1rem;
@@ -909,8 +911,12 @@ html.tazen-public-nav-open {
     gap: clamp(1rem, 2vw, 2rem);
 }
 
-.tazen-header__brand img {
-    width: clamp(138px, 12vw, 170px);
+.tazen-header__brand img,
+.tazen-footer__logo img {
+    width: auto;
+    height: 56px;
+    max-width: min(100%, 170px);
+    object-fit: contain;
 }
 
 .tazen-header__content {
@@ -1064,10 +1070,39 @@ html.tazen-public-nav-open {
     border-radius: 50%;
     background: transparent;
     color: var(--tazen-chrome-navy);
-    font-size: 1rem;
     text-decoration: none;
     cursor: pointer;
     transition: background-color .18s ease, color .18s ease;
+}
+
+.tazen-header__utility-button svg,
+.tazen-header__search > button svg,
+.tazen-header__account-chevron {
+    display: block;
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.tazen-header__search > button svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2;
+}
+
+.tazen-header__account-chevron {
+    width: 15px;
+    height: 15px;
+    flex: 0 0 15px;
+    transition: transform .18s ease;
+}
+
+.tazen-header__account-toggle[aria-expanded="true"] .tazen-header__account-chevron {
+    transform: rotate(180deg);
 }
 
 .tazen-header__utility-button:hover,
@@ -1136,6 +1171,59 @@ html.tazen-public-nav-open {
     outline-offset: 2px;
 }
 
+.tazen-header,
+.tazen-header *,
+.tazen-footer,
+.tazen-footer * {
+    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+}
+
+.tazen-footer__social a:nth-child(1) { color: #1877f2; }
+.tazen-footer__social a:nth-child(2) { color: #c13584; }
+.tazen-footer__social a:nth-child(3) { color: #0a66c2; }
+.tazen-footer__social a:nth-child(4) { color: #e62117; }
+.tazen-footer__social a:nth-child(5) { color: #111; }
+.tazen-footer__social a:nth-child(6) { color: #25d366; }
+
+.tazen-footer__social a:nth-child(2) svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+}
+
+.tazen-footer__social .tazen-footer__social-dot {
+    fill: currentColor;
+    stroke: none;
+}
+
+.tazen-footer__social a:nth-child(4) .tazen-footer__social-play {
+    fill: #fff;
+}
+
+.tazen-footer__social a svg {
+    display: block;
+    width: 19px;
+    height: 19px;
+    fill: currentColor;
+}
+
+.tazen-footer__contact > a svg,
+.tazen-footer__contact-form button svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.tazen-footer__contact > a svg {
+    color: var(--tazen-chrome-teal);
+}
+
 @media (max-width: 1200px) {
     .tazen-header__inner {
         width: min(100% - 2rem, 1440px);
@@ -1160,13 +1248,9 @@ html.tazen-public-nav-open {
     }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1100px) {
     .tazen-header__inner {
         min-height: 72px;
-    }
-
-    .tazen-header__brand img {
-        width: 150px;
     }
 
     .tazen-header__mobile-toggle {
@@ -1273,8 +1357,10 @@ html.tazen-public-nav-open {
         gap: .5rem;
     }
 
-    .tazen-header__brand img {
-        width: 132px;
+    .tazen-header__brand img,
+    .tazen-footer__logo img {
+        height: 48px;
+        max-width: 150px;
     }
 
     .tazen-header__content {

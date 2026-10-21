@@ -305,7 +305,7 @@
 		<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 		@vite('resources/css/customer-panel.css')
 	@endif
-	<link href="{{ asset('frontend/assets/css/tazen-public-chrome.css') }}" rel="stylesheet">
+	<link href="{{ asset('frontend/assets/css/tazen-public-chrome.css') }}?v={{ filemtime(public_path('frontend/assets/css/tazen-public-chrome.css')) }}" rel="stylesheet">
 </head>
 
 <body>
