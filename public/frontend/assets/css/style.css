@@ -12370,30 +12370,8 @@ a.social_bt.google {
     margin-top: 0px;
     margin-left: 5px ;
 }
-.full-row .container .thumb-blog-overlay {
-    height: 553px;
-    border-radius: 15px;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    padding-top : 12px;
-}
 .full-row .container .heading {
     margin-bottom: 20px;
-}
-.full-row .container .thumb-blog-overlay .post-content{ 
-    margin: 0px 35px;
-    margin-top: 50px;
-    cursor: pointer;
-}
-
-.full-row .container .thumb-blog-overlay .post-image {
-    padding:0px 8px;
-   
-}
-.full-row .container .thumb-blog-overlay .post-image img {
-    height: 200px;
-    border-radius: 15px;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-   
 }
 
 /* fun facts card edit  */
@@ -12789,4 +12767,3 @@ background: url(../img/professionals_photos/Interior\ Designer\ consultant.jpg) 
     -moz-background-size: cover;
     -o-background-size: cover;
 }
-

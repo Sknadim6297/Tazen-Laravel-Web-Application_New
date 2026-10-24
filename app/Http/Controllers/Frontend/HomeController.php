@@ -51,7 +51,14 @@ class HomeController extends Controller
         $testimonials = Testimonial::latest()->get();
         $homeblogs = HomeBlog::latest()->get();
         $howworks = Howworks::latest()->get();
-        $blogPosts = BlogPost::with('blog')->latest()->take(3)->get();
+        $blogPosts = BlogPost::with('blog')
+            ->whereHas('blog', function ($query) {
+                $query->where('status', 'active');
+            })
+            ->orderByDesc('published_at')
+            ->orderByDesc('id')
+            ->take(3)
+            ->get();
         $mcqs = DB::table('service_m_c_q_s')->get();
         $serviceId = 1; // Change this based on which service you're targeting (dynamic or static)
         $mcqs = ServiceMCQ::where('service_id', $serviceId)->get();
@@ -67,7 +74,6 @@ class HomeController extends Controller
                       ->where('show_on_homepage', true);
             })
             ->latest()
-            ->take(6)
             ->get();
         
         // Fetch approved professional events (AllEvent) that are also set to show on homepage
@@ -76,7 +82,6 @@ class HomeController extends Controller
             ->where('status', 'approved')
             ->where('show_on_homepage', true)
             ->latest()
-            ->take(6)
             ->get();
         
         // Combine both admin and professional events, then take only 6 most recent
@@ -84,17 +89,33 @@ class HomeController extends Controller
         
         // Add admin events with creator type
         foreach ($adminEvents as $adminEvent) {
+            $adminBannerImages = $adminEvent->banner_image;
+            if (is_string($adminBannerImages)) {
+                $decodedBannerImages = json_decode($adminBannerImages, true);
+                if (is_array($decodedBannerImages)) {
+                    $adminBannerImages = $decodedBannerImages;
+                }
+            }
+
             $allEvents->push((object)[
                 'id' => $adminEvent->id,
                 'event_id' => $adminEvent->event_id,
                 'event' => $adminEvent->event,
-                'banner_image' => $adminEvent->banner_image,
+                'banner_image' => is_array($adminBannerImages)
+                    ? ($adminBannerImages[0] ?? null)
+                    : $adminBannerImages,
                 'starting_date' => $adminEvent->starting_date,
                 'starting_fees' => $adminEvent->starting_fees,
                 'city' => $adminEvent->city,
                 'event_mode' => $adminEvent->event_mode,
                 'created_at' => $adminEvent->created_at,
-                'creator_type' => 'admin'
+                'creator_type' => 'admin',
+                'event_date' => ($adminEvent->event?->date || $adminEvent->starting_date)
+                    ? Carbon::parse($adminEvent->event?->date ?: $adminEvent->starting_date)
+                    : null,
+                'event_type' => $adminEvent->event?->mini_heading ?: $adminEvent->event_type,
+                'description' => $adminEvent->event?->short_description,
+                'organizer_name' => null,
             ]);
         }
         
@@ -111,12 +132,28 @@ class HomeController extends Controller
                 'event_mode' => null,
                 'created_at' => $proEvent->created_at,
                 'creator_type' => 'professional',
-                'professional' => $proEvent->professional
+                'professional' => $proEvent->professional,
+                'event_date' => $proEvent->date ? Carbon::parse($proEvent->date) : null,
+                'event_type' => $proEvent->mini_heading,
+                'description' => $proEvent->short_description,
+                'organizer_name' => $proEvent->professional?->name,
             ]);
         }
         
-        // Sort by created_at descending and take only 6
-        $eventDetails = $allEvents->sortByDesc('created_at')->take(6)->values();
+        $today = Carbon::today();
+        $eventDetails = $allEvents
+            ->sortBy(function ($eventDetail) use ($today) {
+                if (!$eventDetail->event_date) {
+                    return [2, 0];
+                }
+
+                $eventDay = $eventDetail->event_date->copy()->startOfDay();
+                $isPast = $eventDay->lt($today);
+
+                return [$isPast ? 1 : 0, $isPast ? -$eventDay->timestamp : $eventDay->timestamp];
+            })
+            ->take(6)
+            ->values();
         
         $homepageCategories = CategoryBox::query()
             ->where('status', true)

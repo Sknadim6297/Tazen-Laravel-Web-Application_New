@@ -3,9 +3,10 @@
 @section('meta')
 @php
     // Get meta title and description from related blog, with fallbacks
+    $hasCustomMetaTitle = filled($relatedBlog->meta_title ?? null);
     $metaTitle = $relatedBlog->meta_title ?? $relatedBlog->title;
     $metaDescription = $relatedBlog->meta_description ?? \Illuminate\Support\Str::limit(strip_tags($blogPost->content), 150);
-    $pageTitle = $relatedBlog->meta_title ? $relatedBlog->meta_title . ' | Tazen.in Blog' : $relatedBlog->title . ' | Tazen.in Blog';
+    $pageTitle = $hasCustomMetaTitle ? $metaTitle . ' | Tazen.in Blog' : $relatedBlog->title . ' | Tazen.in Blog';
 @endphp
 
 <!-- Blog-specific Meta Tags -->

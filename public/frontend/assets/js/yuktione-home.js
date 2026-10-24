@@ -131,3 +131,107 @@ if (searchInput && searchResults && searchButton) {
         }
     });
 }
+
+document.querySelectorAll('.yk-home-blog-card__image img').forEach((image) => {
+    image.addEventListener('error', () => {
+        image.hidden = true;
+        const fallback = image.parentElement?.querySelector('[data-blog-image-fallback]');
+        if (fallback) {
+            fallback.hidden = false;
+        }
+    }, { once: true });
+});
+
+document.querySelectorAll('[data-testimonial-avatar]').forEach((image) => {
+    image.addEventListener('error', () => {
+        image.hidden = true;
+        const fallback = image.parentElement?.querySelector('.yk-home-testimonial-card__avatar-fallback');
+        if (fallback) {
+            fallback.hidden = false;
+        }
+    }, { once: true });
+});
+
+document.querySelectorAll('[data-event-image], [data-how-image]').forEach((image) => {
+    image.addEventListener('error', () => {
+        image.hidden = true;
+        const fallback = image.parentElement?.querySelector('.yk-home-event-card__image-fallback, .yk-home-how-card__image-fallback');
+        if (fallback) {
+            fallback.hidden = false;
+        }
+    }, { once: true });
+});
+
+document.querySelectorAll('[data-testimonial-carousel]').forEach((carousel) => {
+    const track = carousel.querySelector('[data-testimonial-track]');
+    const previous = carousel.querySelector('[data-testimonial-previous]');
+    const next = carousel.querySelector('[data-testimonial-next]');
+
+    if (!(track instanceof HTMLElement) || !(previous instanceof HTMLButtonElement) || !(next instanceof HTMLButtonElement)) {
+        return;
+    }
+
+    const updateControls = () => {
+        const maxScrollLeft = track.scrollWidth - track.clientWidth;
+        previous.disabled = track.scrollLeft <= 1;
+        next.disabled = track.scrollLeft >= maxScrollLeft - 1;
+    };
+
+    const scrollByCard = (direction) => {
+        const card = track.querySelector('.yk-home-testimonial-card');
+        if (!(card instanceof HTMLElement)) {
+            return;
+        }
+
+        const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
+        track.scrollBy({
+            left: direction * (card.getBoundingClientRect().width + gap),
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        });
+    };
+
+    previous.addEventListener('click', () => scrollByCard(-1));
+    next.addEventListener('click', () => scrollByCard(1));
+    track.addEventListener('scroll', updateControls, { passive: true });
+    window.addEventListener('resize', updateControls);
+    updateControls();
+});
+
+document.querySelectorAll('[data-home-faq]').forEach((faq) => {
+    faq.addEventListener('click', (event) => {
+        if (!(event.target instanceof Element)) {
+            return;
+        }
+
+        const toggle = event.target.closest('[data-home-faq-toggle]');
+        if (!toggle || !faq.contains(toggle)) {
+            return;
+        }
+
+        const panelId = toggle.getAttribute('aria-controls');
+        const panel = panelId ? document.getElementById(panelId) : null;
+        if (!panel) {
+            console.error('The FAQ answer panel could not be found.');
+            return;
+        }
+
+        const shouldExpand = toggle.getAttribute('aria-expanded') !== 'true';
+        faq.querySelectorAll('[data-home-faq-toggle][aria-expanded="true"]').forEach((openToggle) => {
+            if (openToggle === toggle) {
+                return;
+            }
+
+            const openPanelId = openToggle.getAttribute('aria-controls');
+            const openPanel = openPanelId ? document.getElementById(openPanelId) : null;
+            openToggle.setAttribute('aria-expanded', 'false');
+            openPanel?.setAttribute('aria-hidden', 'true');
+            if (openPanel) {
+                openPanel.inert = true;
+            }
+        });
+
+        toggle.setAttribute('aria-expanded', String(shouldExpand));
+        panel.setAttribute('aria-hidden', String(!shouldExpand));
+        panel.inert = !shouldExpand;
+    });
+});
