@@ -8,18 +8,45 @@ use App\Models\SubCategory;
 use App\Models\SubService;
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryBoxController extends Controller
 {
+    private const ICON_OPTIONS = [
+        'ri-mental-health-line',
+        'ri-psychotherapy-line',
+        'ri-brain-line',
+        'ri-heart-pulse-line',
+        'ri-user-heart-line',
+        'ri-empathize-line',
+        'ri-hand-heart-line',
+        'ri-stethoscope-line',
+        'ri-briefcase-line',
+        'ri-graduation-cap-line',
+        'ri-restaurant-line',
+        'ri-leaf-line',
+        'ri-money-dollar-circle-line',
+        'ri-home-4-line',
+        'ri-scales-3-line',
+        'ri-palette-line',
+        'ri-code-line',
+        'ri-chat-smile-3-line',
+        'ri-parent-line',
+        'ri-star-line',
+        'ri-sparkling-2-line',
+        'ri-compass-3-line',
+    ];
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categoryBoxes = CategoryBox::with('subCategories')->get();
+        $categoryBoxes = CategoryBox::with('subCategories')->orderBy('order')->orderBy('id')->get();
         $services = \App\Models\Service::all();
-        return view('admin.categorybox.index', compact('categoryBoxes', 'services'));
+        $iconOptions = self::ICON_OPTIONS;
+        return view('admin.categorybox.index', compact('categoryBoxes', 'services', 'iconOptions'));
     }
 
     /**
@@ -37,6 +64,9 @@ class CategoryBoxController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'icon_name' => ['nullable', 'string', 'max:100', Rule::in(self::ICON_OPTIONS)],
+            'category_icon' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+            'order' => 'nullable|integer|min:0',
             'status' => 'required|boolean',
             'main_service_id' => 'required|exists:services,id',
             'subcategories' => 'nullable|array',
@@ -48,8 +78,16 @@ class CategoryBoxController extends Controller
         // Create main category
         $categoryBox = CategoryBox::create([
             'name' => $request->name,
-            'status' => $request->status
+            'icon_name' => $request->hasFile('category_icon') ? null : $request->input('icon_name'),
+            'status' => $request->status,
+            'order' => (int) $request->input('order', 0),
         ]);
+
+        if ($request->hasFile('category_icon')) {
+            $categoryBox->update([
+                'icon_path' => $request->file('category_icon')->store('category-icons', 'public'),
+            ]);
+        }
 
         // Handle main service image (always create if image is provided)
         if ($request->hasFile('service_image')) {
@@ -121,7 +159,8 @@ class CategoryBoxController extends Controller
     {
         $categoryBox = CategoryBox::with('subCategories')->findOrFail($id);
         $services = Service::all();
-        return view('admin.categorybox.edit', compact('categoryBox', 'services'));
+        $iconOptions = self::ICON_OPTIONS;
+        return view('admin.categorybox.edit', compact('categoryBox', 'services', 'iconOptions'));
     }
 
     /**
@@ -129,8 +168,18 @@ class CategoryBoxController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $categoryBox = CategoryBox::findOrFail($id);
+        $iconNameRules = ['nullable', 'string', 'max:100'];
+        if ($request->has('icon_name') && $request->input('icon_name') !== $categoryBox->icon_name) {
+            $iconNameRules[] = Rule::in(self::ICON_OPTIONS);
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
+            'icon_name' => $iconNameRules,
+            'category_icon' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+            'remove_icon' => 'nullable|boolean',
+            'order' => 'nullable|integer|min:0',
             'status' => 'required|boolean',
             'main_service_id' => 'nullable|exists:services,id',
             'existing_subcategories' => 'nullable|array',
@@ -142,13 +191,33 @@ class CategoryBoxController extends Controller
             'deleted_subcategories' => 'nullable|string'
         ]);
 
-        $categoryBox = CategoryBox::findOrFail($id);
-        
+        $oldIconPath = $categoryBox->icon_path;
+        $newIconPath = $oldIconPath;
+        $iconName = $categoryBox->icon_name;
+
+        if ($request->boolean('remove_icon')) {
+            $newIconPath = null;
+            $iconName = null;
+        } elseif ($request->hasFile('category_icon')) {
+            $newIconPath = $request->file('category_icon')->store('category-icons', 'public');
+            $iconName = null;
+        } elseif ($request->has('icon_name') && $request->input('icon_name') !== $categoryBox->icon_name) {
+            $iconName = $request->input('icon_name');
+            $newIconPath = null;
+        }
+
         // Update main category
         $categoryBox->update([
             'name' => $request->name,
-            'status' => $request->status
+            'icon_name' => $iconName,
+            'icon_path' => $newIconPath,
+            'status' => $request->status,
+            'order' => (int) $request->input('order', 0),
         ]);
+
+        if ($oldIconPath && $oldIconPath !== $newIconPath) {
+            Storage::disk('public')->delete($oldIconPath);
+        }
 
         // Handle deleted subcategories
         if ($request->filled('deleted_subcategories')) {
@@ -243,6 +312,10 @@ class CategoryBoxController extends Controller
     public function destroy(string $id)
     {
         $categoryBox = CategoryBox::findOrFail($id);
+
+        if ($categoryBox->icon_path) {
+            Storage::disk('public')->delete($categoryBox->icon_path);
+        }
         
         // Delete subcategory images
         foreach ($categoryBox->subCategories as $subcategory) {

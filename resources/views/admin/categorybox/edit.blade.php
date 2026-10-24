@@ -46,13 +46,13 @@
                                     @enderror
                                 </div>
                                 
-                                {{-- Main Category Icon --}}
+                                @include('admin.categorybox.partials.icon-picker', ['pickerId' => 'edit-category-icon'])
+
                                 <div class="col-xl-6">
-                                    <label for="icon_name" class="form-label">Icon Name</label>
-                                    <input type="text" class="form-control" id="icon_name" name="icon_name" 
-                                           value="{{ old('icon_name', $categoryBox->icon_name) }}" 
-                                           placeholder="Enter Icon Name">
-                                    @error('icon_name')
+                                    <label for="category-order" class="form-label">Display Order</label>
+                                    <input type="number" class="form-control" id="category-order" name="order"
+                                           min="0" value="{{ old('order', $categoryBox->order) }}">
+                                    @error('order')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>

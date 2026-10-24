@@ -52,12 +52,13 @@
                                                         <input type="text" class="form-control" id="name" name="name" placeholder="Enter Main Category Name" required>
                                                     </div>
                                     
-                                                    {{-- Main Category Icon --}}
+                                                    @include('admin.categorybox.partials.icon-picker', ['categoryBox' => null, 'pickerId' => 'create-category-icon'])
+
                                                     <div class="col-xl-6">
-                                                        <label for="icon_name" class="form-label">Icon Name</label>
-                                                        <input type="text" class="form-control" id="icon_name" name="icon_name" placeholder="Enter Icon Name">
+                                                        <label for="create-category-order" class="form-label">Display Order</label>
+                                                        <input type="number" class="form-control" id="create-category-order" name="order" min="0" value="0">
                                                     </div>
-                                    
+
                                                     {{-- Status --}}
                                                     <div class="col-xl-12">
                                                         <label for="status" class="form-label">Status</label>
@@ -138,6 +139,7 @@
                                         <th>Icon</th>
                                         <th>Subcategories</th>
                                         <th>Status</th>
+                                        <th>Order</th>
                                         <th>Created At</th>
                                         <th>Actions</th>
                                     </tr>
@@ -150,10 +152,12 @@
                                                 <td>{{ $key + 1 }}</td>
                                                 <td>{{ $categoryBox->name }}</td>
                                                 <td>
-                                                    @if($categoryBox->icon_name)
+                                                    @if($categoryBox->icon_path)
+                                                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($categoryBox->icon_path) }}" alt="" width="32" height="32" style="object-fit: contain;">
+                                                    @elseif($categoryBox->icon_name)
                                                         <i class="{{ $categoryBox->icon_name }}"></i> {{ $categoryBox->icon_name }}
                                                     @else
-                                                        N/A
+                                                        <i class="ri-shapes-line" aria-label="Fallback icon"></i>
                                                     @endif
                                                 </td>
                                                 <td>
@@ -170,6 +174,7 @@
                                                         <span class="badge bg-danger">Inactive</span>
                                                     @endif
                                                 </td>
+                                                <td>{{ $categoryBox->order }}</td>
                                                 <td>{{ $categoryBox->created_at->format('d-m-Y') }}</td>
                                                 <td>
                                                     <a href="{{ route('admin.categorybox.edit', $categoryBox->id) }}" class="btn btn-sm btn-primary">Edit</a>
@@ -183,7 +188,7 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="7" class="text-center">No categories found</td>
+                                            <td colspan="8" class="text-center">No categories found</td>
                                         </tr>
                                     @endif
                                 </tbody>

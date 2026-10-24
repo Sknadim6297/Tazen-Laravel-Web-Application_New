@@ -13,6 +13,8 @@ class CategoryBox extends Model
         'name',
         'description',
         'image',
+        'icon_name',
+        'icon_path',
         'status',
         'order'
     ];

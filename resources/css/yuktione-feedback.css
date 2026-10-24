@@ -1,17 +1,17 @@
 :root {
-    --yk-feedback-primary: var(--color-brand-primary, #026fd8);
-    --yk-feedback-cyan: var(--color-brand-accent, #15b1fe);
-    --yk-feedback-navy: var(--color-brand-secondary, #082b58);
-    --yk-feedback-background: var(--color-background, #eff9ff);
-    --yk-feedback-text: var(--color-text-primary, #102a43);
-    --yk-feedback-muted: var(--color-text-secondary, #415a77);
-    --yk-feedback-border: var(--color-border, #c9dfef);
-    --yk-feedback-danger: var(--color-error, #b42318);
-    --yk-feedback-success: var(--color-success, #166534);
-    --yk-feedback-warning: var(--color-warning, #854d0e);
-    --yk-feedback-info: var(--color-info, #175cd3);
+    --yk-feedback-primary: #168a80;
+    --yk-feedback-cyan: #168a80;
+    --yk-feedback-navy: #263238;
+    --yk-feedback-background: #eaf8f5;
+    --yk-feedback-text: #263238;
+    --yk-feedback-muted: #475569;
+    --yk-feedback-border: #e0e9f0;
+    --yk-feedback-danger: #b42318;
+    --yk-feedback-success: #166534;
+    --yk-feedback-warning: #854d0e;
+    --yk-feedback-info: #168a80;
     --yk-feedback-surface: #fff;
-    --yk-feedback-shadow: 0 18px 50px rgb(8 43 88 / 20%);
+    --yk-feedback-shadow: 0 18px 50px rgb(38 50 56 / 18%);
 }
 
 .yk-feedback,
@@ -181,46 +181,57 @@
 }
 
 .yk-dialog {
-    width: min(30rem, calc(100vw - 2rem));
-    max-width: none;
-    max-height: min(90dvh, 42rem);
+    position: fixed;
+    inset: 0;
+    width: min(28.75rem, calc(100vw - 2rem - env(safe-area-inset-left) - env(safe-area-inset-right)));
+    max-width: 28.75rem;
+    max-height: min(42rem, calc(100vh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)));
+    margin: auto;
     padding: 0;
     overflow: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     border: 1px solid var(--yk-feedback-border);
-    border-radius: 1rem;
+    border-radius: 0.875rem;
     background: var(--yk-feedback-surface);
     box-shadow: var(--yk-feedback-shadow);
 }
 
+@supports (height: 100dvh) {
+    .yk-dialog {
+        max-height: min(42rem, calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)));
+    }
+}
+
 .yk-dialog::backdrop {
-    background: rgb(8 43 88 / 48%);
+    background: rgb(38 50 56 / 52%);
     backdrop-filter: blur(2px);
 }
 
 .yk-dialog__panel {
-    padding: clamp(1.25rem, 5vw, 1.75rem);
+    padding: clamp(1rem, 4vw, 1.5rem);
 }
 
 .yk-dialog__icon {
-    width: 2.75rem;
-    height: 2.75rem;
-    margin-block-end: 1rem;
-    font-size: 1.25rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-block-end: 0.75rem;
+    font-size: 1.1rem;
 }
 
 .yk-dialog__title {
     margin: 0;
     color: var(--yk-feedback-navy);
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 600;
     line-height: 1.35;
 }
 
 .yk-dialog__message {
-    margin: 0.65rem 0 0;
+    margin: 0.55rem 0 0;
     color: var(--yk-feedback-muted);
-    font-size: 0.95rem;
-    line-height: 1.65;
+    font-size: 0.9rem;
+    line-height: 1.55;
     white-space: pre-wrap;
 }
 
@@ -229,7 +240,7 @@
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: 0.75rem;
-    margin-block-start: 1.5rem;
+    margin-block-start: 1.15rem;
 }
 
 .yk-dialog__button {
@@ -269,8 +280,8 @@
 }
 
 .yk-dialog__button--primary:hover:not(:disabled) {
-    border-color: var(--yk-feedback-navy);
-    background: var(--yk-feedback-navy);
+    border-color: #11776f;
+    background: #11776f;
 }
 
 .yk-dialog__button--danger {

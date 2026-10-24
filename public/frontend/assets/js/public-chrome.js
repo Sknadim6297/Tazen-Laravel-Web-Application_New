@@ -5,6 +5,7 @@ document.querySelectorAll('[data-public-header]').forEach((header) => {
     const mobileClose = header.querySelector('[data-mobile-nav-close]');
     const accountToggle = header.querySelector('[data-account-toggle]');
     const accountMenu = header.querySelector('[data-account-menu]');
+    const searchToggle = header.querySelector('[data-home-search-toggle]');
     const searchForm = header.querySelector('[data-header-search]');
     const desktopBreakpoint = window.matchMedia('(min-width: 68.75rem)');
 
@@ -18,6 +19,7 @@ document.querySelectorAll('[data-public-header]').forEach((header) => {
         mobileNav.classList.toggle('is-open', isOpen);
         mobileBackdrop.hidden = !isOpen;
         document.documentElement.classList.toggle('tazen-public-nav-open', isOpen);
+        document.body.classList.toggle('tazen-public-nav-open', isOpen);
 
         if (isOpen) {
             mobileClose?.focus();
@@ -31,6 +33,20 @@ document.querySelectorAll('[data-public-header]').forEach((header) => {
     });
     mobileClose?.addEventListener('click', () => setMobileNavigation(false));
     mobileBackdrop?.addEventListener('click', () => setMobileNavigation(false));
+
+    searchToggle?.addEventListener('click', () => {
+        if (!searchForm) {
+            return;
+        }
+
+        const isOpen = searchToggle.getAttribute('aria-expanded') === 'true';
+        searchToggle.setAttribute('aria-expanded', String(!isOpen));
+        searchForm.classList.toggle('is-open', !isOpen);
+
+        if (!isOpen) {
+            searchForm.querySelector('input[name="query"]')?.focus();
+        }
+    });
 
     accountToggle?.addEventListener('click', () => {
         if (!accountMenu) {
@@ -118,7 +134,11 @@ document.querySelectorAll('[data-public-header]').forEach((header) => {
 
     header.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
-            if (accountMenu && !accountMenu.hidden) {
+            if (searchForm?.classList.contains('is-open')) {
+                searchForm.classList.remove('is-open');
+                searchToggle?.setAttribute('aria-expanded', 'false');
+                searchToggle?.focus();
+            } else if (accountMenu && !accountMenu.hidden) {
                 accountMenu.hidden = true;
                 accountToggle?.setAttribute('aria-expanded', 'false');
                 accountToggle?.focus();
@@ -140,6 +160,13 @@ document.querySelectorAll('[data-public-header]').forEach((header) => {
                 event.preventDefault();
                 first?.focus();
             }
+        }
+    });
+
+    document.addEventListener('click', (event) => {
+        if (searchForm?.classList.contains('is-open') && !header.contains(event.target)) {
+            searchForm.classList.remove('is-open');
+            searchToggle?.setAttribute('aria-expanded', 'false');
         }
     });
 

@@ -1,4 +1,5 @@
 @php
+    $isHomePage = request()->routeIs('home');
     $user = Auth::guard('user')->user();
     $professional = Auth::guard('professional')->user();
     $account = $user ?? $professional;
@@ -26,7 +27,7 @@
         : ($professional ? route('professional.admin-chat.index') : null);
 @endphp
 
-<header class="tazen-header" id="tazen-public-header" data-public-header>
+<header @class(['tazen-header', 'tazen-header--home' => $isHomePage]) id="tazen-public-header" data-public-header>
     <div class="tazen-header__bar tazen-header__inner">
         <a class="tazen-header__brand" href="{{ route('home') }}" aria-label="Yuktione home">
             <img src="{{ asset('frontend/assets/Yuktione_logo.png') }}" alt="Yuktione" width="155" height="52">
@@ -56,6 +57,15 @@
                 </ul>
             </nav>
 
+            @if ($isHomePage)
+                <button class="tazen-header__search-toggle" type="button" aria-label="Open search" aria-expanded="false" aria-controls="tazen-header-search" data-home-search-toggle>
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <circle cx="10.8" cy="10.8" r="6.8"></circle>
+                        <path d="m16 16 4.2 4.2"></path>
+                    </svg>
+                </button>
+            @endif
+
             <form class="tazen-header__search" action="{{ route('search.services') }}" method="get" data-header-search data-search-endpoint="{{ route('search.services') }}" data-service-url="{{ url('/service') }}">
                 <label class="visually-hidden" for="tazen-header-search">Search services</label>
                 <input id="tazen-header-search" type="search" name="query" placeholder="Search anything..." autocomplete="off" required>
@@ -69,26 +79,28 @@
             </form>
 
             <div class="tazen-header__actions">
-                <button class="tazen-header__utility-button" type="button" aria-label="Notifications unavailable" disabled>
-                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
-                        <path d="M10 21h4"></path>
-                    </svg>
-                </button>
-                @if ($messagesUrl)
-                    <a class="tazen-header__utility-button" href="{{ $messagesUrl }}" aria-label="Messages">
+                @if ($account)
+                    <button class="tazen-header__utility-button" type="button" aria-label="Notifications unavailable" disabled>
                         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-6.5A7.5 7.5 0 1 1 20 11.5Z"></path>
-                            <path d="M8 11.5h.01M12.5 11.5h.01M17 11.5h.01"></path>
-                        </svg>
-                    </a>
-                @else
-                    <button class="tazen-header__utility-button" type="button" aria-label="Messages unavailable" disabled>
-                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-6.5A7.5 7.5 0 1 1 20 11.5Z"></path>
-                            <path d="M8 11.5h.01M12.5 11.5h.01M17 11.5h.01"></path>
+                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                            <path d="M10 21h4"></path>
                         </svg>
                     </button>
+                    @if ($messagesUrl)
+                        <a class="tazen-header__utility-button" href="{{ $messagesUrl }}" aria-label="Messages">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-6.5A7.5 7.5 0 1 1 20 11.5Z"></path>
+                                <path d="M8 11.5h.01M12.5 11.5h.01M17 11.5h.01"></path>
+                            </svg>
+                        </a>
+                    @else
+                        <button class="tazen-header__utility-button" type="button" aria-label="Messages unavailable" disabled>
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-6.5A7.5 7.5 0 1 1 20 11.5Z"></path>
+                                <path d="M8 11.5h.01M12.5 11.5h.01M17 11.5h.01"></path>
+                            </svg>
+                        </button>
+                    @endif
                 @endif
 
                 @if ($account)
@@ -126,6 +138,9 @@
                     </div>
                 @else
                     <a class="tazen-header__login" href="{{ route('login') }}">Login</a>
+                    @if ($isHomePage)
+                        <a class="tazen-header__get-started" href="{{ route('register') }}">Get Started</a>
+                    @endif
                 @endif
             </div>
         </div>

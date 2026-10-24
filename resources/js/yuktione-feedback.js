@@ -185,9 +185,14 @@ function createDialog(config = {}, mode = 'confirm') {
 
     return new Promise((resolve) => {
         let settled = false;
+        let finished = false;
         let resultValue = false;
         const returnFocus = document.activeElement;
         const finish = () => {
+            if (finished) {
+                return;
+            }
+            finished = true;
             dialog.remove();
             if (returnFocus instanceof HTMLElement && returnFocus.isConnected) {
                 returnFocus.focus();
@@ -202,9 +207,8 @@ function createDialog(config = {}, mode = 'confirm') {
             resultValue = value;
             if (dialog.open) {
                 dialog.close();
-            } else {
-                finish();
             }
+            finish();
         };
 
         cancel.hidden = mode === 'alert';

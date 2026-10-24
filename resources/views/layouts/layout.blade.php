@@ -306,6 +306,13 @@
 		@vite('resources/css/customer-panel.css')
 	@endif
 	<link href="{{ asset('frontend/assets/css/tazen-public-chrome.css') }}?v={{ filemtime(public_path('frontend/assets/css/tazen-public-chrome.css')) }}" rel="stylesheet">
+	@if (request()->routeIs('home'))
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+		<link href="{{ asset('frontend/assets/css/yuktione-home.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-home.css')) }}" rel="stylesheet">
+		<link href="{{ asset('admin/assets/css/icons.css') }}" rel="stylesheet">
+	@endif
 </head>
 
 <body>
@@ -343,7 +350,6 @@
 
 	<!-- Project JS -->
 	<script src="{{ asset('frontend/assets/js/common_scripts.min.js') }}"></script>
-	<script src="{{ asset('frontend/assets/js/video_header.min.js') }}"></script>
 	<script src="{{ asset('frontend/assets/js/isotope.pkgd.min.js') }}"></script>
 	<script src="{{ asset('frontend/assets/js/common_func.js') }}"></script>
 	<script src="{{ asset('frontend/assets/validate.js') }}"></script>
@@ -406,21 +412,6 @@
 	</script>
 
 
-	<script>
-		// Video Header - only init if script and elements exist
-		if (typeof HeaderVideo !== 'undefined' && $('.header-video--media').length) {
-			try {
-				HeaderVideo.init({
-					container: $('.header-video'),
-					header: $('.header-video--media'),
-					videoTrigger: $("#video-trigger"),
-					autoPlayVideo: true,
-				});
-			} catch (e) {
-				console.warn('HeaderVideo init failed:', e);
-			}
-		}
-	</script>
 	<script type="text/javascript">
 		function openmodal(val) {
 
@@ -571,7 +562,9 @@ function checkSlides(slider, currentSlide) {
 		$(document).ready(function() {
 			'use strict';
 			$.cookieBar({
-				fixed: true
+				fixed: true,
+				zindex: 999,
+				autoEnable: false
 			});
 		});
 	</script>
@@ -753,6 +746,10 @@ $(document).ready(function () {
 	</script>
 	
 	
+	@if (request()->routeIs('home'))
+		<script src="{{ asset('frontend/assets/js/yuktione-home.js') }}?v={{ filemtime(public_path('frontend/assets/js/yuktione-home.js')) }}"></script>
+		<script src="{{ asset('frontend/assets/js/home-category-slider.js') }}?v={{ filemtime(public_path('frontend/assets/js/home-category-slider.js')) }}"></script>
+	@endif
 	@vite('resources/js/yuktione-feedback.js')
 </body>
 </html>

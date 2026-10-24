@@ -400,7 +400,7 @@
                     message: 'Another active session was detected. Would you like to sign out of your other sessions and continue on this device?',
                     cancelText: 'Cancel',
                     confirmText: 'Continue Here',
-                    variant: 'danger',
+                    variant: 'warning',
                 });
                 if (confirmed) {
                     loginRequestInProgress = false;

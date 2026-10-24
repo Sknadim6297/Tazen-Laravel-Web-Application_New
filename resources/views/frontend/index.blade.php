@@ -16,21 +16,6 @@
             overflow-x: hidden;
         }
 
-        /* Hide video and show image on mobile */
-        @media (max-width: 992px) {
-            .header-video--media {
-                display: none !important;
-            }
-            .mobile-video-fallback {
-                display: block !important;
-                width: 100%;
-                height: auto;
-            }
-        }
-        .mobile-video-fallback {
-            display: none;
-        }
-
 		@media only screen and (min-width: 768px) and (max-width: 1024px) {
 
 			.fun-facts-cards .container .card-two {
@@ -50,336 +35,7 @@
 		
     </style>
 	<style>
-    .header-video {
-        position: relative;
-        height: 430px !important; /* Adjusted to comfortable height */
-        max-height: 430px !important;
-        min-height: 430px !important;
-        overflow: hidden;
-        margin-top: 20px; /* Add space at top of banner */
-        tbackground: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4));
-    }
-    
-    #hero_video {
-        height: 100% !important;
-        max-height: 430px !important;
-    }
-    
-    .opacity-mask {
-        height: 100% !important;
-        max-height: 430px !important;
-    }
-    
-    .header-video--media {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    /* Fiverr-style Banner Styling */
-    .fiverr-style-headline {
-        font-size: 2.4rem !important;
-        font-weight: 700;
-        color: white;
-        margin-bottom: 1.5rem;
-        line-height: 1.2;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    }
-    
-    .header-video h1 {
-        font-size: 2.4rem !important;
-    }
-
-    .fiverr-style-subtitle {
-        font-size: 1.4rem;
-        color: rgba(255,255,255,0.9);
-        margin-bottom: 2.5rem;
-        font-weight: 300;
-    }
-
-    .fiverr-search-container {
-        max-width: 700px;
-        margin: 0 0 2rem 0;
-        position: relative;
-    }
-
-    .fiverr-search-box {
-        display: flex;
-        background: white;
-        border-radius: 8px;
-        overflow: visible;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        height: 60px;
-    }
-
-    .search-input-wrapper {
-        flex: 1;
-        position: relative;
-        border-radius: 8px 0 0 8px;
-        overflow: hidden;
-    }
-
-    .fiverr-search-input {
-        width: 100%;
-        height: 60px;
-        border: none;
-        padding: 0 25px;
-        font-size: 1.1rem;
-        background: transparent;
-        outline: none;
-        color: #333;
-    }
-
-    .fiverr-search-input::placeholder {
-        color: #999;
-        font-weight: 400;
-    }
-
-    /* Search Results Dropdown Styling */
-    #searchResults {
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        max-height: 400px;
-        overflow-y: auto;
-        margin-top: 5px;
-        z-index: 9999 !important;
-        position: absolute;
-        width: 100%;
-        top: calc(100% + 5px);
-        left: 0;
-    }
-
-    #searchResults .list-group {
-        border-radius: 8px;
-        border: none;
-    }
-
-    #searchResults .list-group-item {
-        border: none;
-        border-bottom: 1px solid #f0f0f0;
-        padding: 12px 20px;
-        color: #333;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-    #searchResults .list-group-item:last-child {
-        border-bottom: none;
-    }
-
-    #searchResults .list-group-item:hover {
-        background: #f8f9fa;
-        color: #152a70;
-        padding-left: 25px;
-    }
-
-    #searchResults .list-group-item.text-muted {
-        cursor: default;
-    }
-
-    #searchResults .list-group-item.text-muted:hover {
-        background: white;
-        padding-left: 20px;
-    }
-
-    .fiverr-search-btn {
-        background: linear-gradient(135deg, #152a70, #c51010, #f39c12);
-        border: none;
-        width: 80px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1.2rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .fiverr-search-btn:hover {
-        background: linear-gradient(135deg, #1a3585, #e01515, #ffa726);
-        transform: scale(1.02);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-
-    .fiverr-categories {
-        margin-top: 2rem;
-        width: 100%;
-        overflow: visible;
-    }
-
-    .category-row {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        flex-wrap: nowrap;
-        overflow: visible;
-    }
-
-    .trending-text {
-        color: rgba(255,255,255,0.8);
-        font-size: 0.95rem;
-        font-weight: 500;
-        margin: 0;
-        flex-shrink: 0;
-        white-space: nowrap;
-        position: sticky;
-        left: 0;
-        background: inherit;
-        z-index: 1;
-    }
-
-    .category-buttons {
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        gap: 8px;
-        align-items: center;
-        overflow-x: auto;
-        flex: 1;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    .category-buttons::-webkit-scrollbar {
-        display: none;
-    }
-
-    .category-btn {
-        background: rgba(255,255,255,0.1);
-        color: white;
-        padding: 8px 14px;
-        border-radius: 5px;
-        text-decoration: none;
-        font-size: 0.85rem;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        transition: all 0.3s ease;
-        border: 1px solid rgba(255,255,255,0.2);
-        backdrop-filter: blur(10px);
-        flex-shrink: 0;
-        white-space: nowrap;
-    }
-
-    .category-btn:hover {
-        background: rgba(255,255,255,0.2);
-        color: white;
-        text-decoration: none;
-        transform: translateY(-2px);
-    }
-
-    .category-btn i {
-        font-size: 0.8rem;
-        opacity: 0.7;
-    }
-
-    /* Mobile Responsive */
     @media (max-width: 768px) {
-        .header-video {
-            height: 350px !important;
-            max-height: 350px !important;
-            min-height: 350px !important;
-			top: -17px;
-        }
-        
-        #hero_video,
-        .opacity-mask {
-            max-height: 350px !important;
-        }
-        
-        .fiverr-style-headline {
-            font-size: 1.7rem !important;
-        }
-        
-        .header-video h1 {
-            font-size: 1.7rem !important;
-			padding-top: 74px;
-        }
-        
-        .fiverr-style-subtitle {
-            font-size: 1.2rem;
-        }
-        
-        .fiverr-search-container {
-            max-width: 100%;
-            margin: 0 0 2rem 0;
-            position: relative;
-        }
-        
-        .fiverr-search-box {
-            height: 55px;
-            overflow: visible;
-        }
-        
-        .fiverr-search-input {
-            height: 55px;
-            font-size: 1rem;
-            padding: 0 20px;
-        }
-        
-        .fiverr-search-btn {
-            width: 70px;
-            height: 55px;
-        }
-
-        /* Mobile Search Results */
-        #searchResults {
-            margin-top: 3px;
-            max-height: 300px;
-        }
-
-        #searchResults .list-group-item {
-            padding: 10px 15px;
-            font-size: 0.95rem;
-        }
-        
-        .fiverr-categories {
-            margin-top: 1rem; /* Reduced from 2rem */
-        }
-        
-        .category-row {
-            gap: 8px; /* Reduced from 15px */
-            flex-wrap: nowrap;
-            overflow: visible; /* Keep row overflow visible */
-        }
-        
-        .trending-text {
-            font-size: 0.8rem; /* Reduced from 0.9rem */
-            margin: 0;
-            position: sticky;
-            left: 0;
-            background: inherit;
-            z-index: 1;
-        }
-        
-        .category-buttons {
-            gap: 4px; /* Reduced from 8px */
-            flex-wrap: nowrap;
-            overflow-x: auto; /* Only buttons scroll */
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        
-        .category-buttons::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .category-btn {
-            padding: 6px 10px; /* Reduced from 10px 16px */
-            font-size: 0.8rem; /* Reduced from 0.9rem */
-            border-radius: 4px; /* Slightly smaller radius */
-        }
-        
-        .category-btn i {
-            font-size: 0.7rem; /* Reduced from 0.8rem */
-        }
-        
         /* Popular Services Mobile */
         .popular-services-main-section {
             padding: 40px 0;
@@ -413,16 +69,6 @@
             font-size: 1rem;
         }
     }
-    .mobile-video-fallback {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: none;
-    }
-
     /* Popular Services Section Styles */
     .popular-services-main-section {
         background-color: white;
@@ -980,15 +626,6 @@
         background: #87CEEB;
         border-radius: 1px;
     }
-    @media (max-width: 992px) {
-        .header-video--media {
-            display: none;
-        }
-        .mobile-video-fallback {
-            display: block;
-        }
-    }
-
 	.btn-custom{
 		    background: linear-gradient(135deg, #152a70, #c51010, #f39c12);
 			border: none;
@@ -997,41 +634,6 @@
 	.text{
 		color: white;
 	}
-	/* Updated Search Results Styling */
-#searchResults {
-    max-height: 250px;
-    overflow-y: auto;
-    border-radius: 0.25rem;
-    left: 0; /* Align to the left */
-    right: auto; /* Override any right alignment */
-    width: 100%; /* Full width of parent */
-}
-
-.search-container {
-    position: relative; /* Ensure proper positioning context */
-    width: 100%;
-}
-
-#searchResults .list-group-item {
-    border-left: none;
-    border-right: none;
-    text-align: left; /* Left-align text */
-    padding-left: 15px;
-}
-
-#searchResults .list-group-item:first-child {
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
-}
-
-#searchResults .list-group-item:last-child {
-    border-bottom-left-radius: 0.25rem;
-    border-bottom-right-radius: 0.25rem;
-}
-
-#searchResults .list-group-item:hover {
-    background-color: #f8f9fa;
-}
 .login-popup-title {
         font-size: 1.5rem !important;
         color: white !important;
@@ -1609,10 +1211,6 @@
     }
 
     /* Service Sections */
-    .categories-section {
-        margin-bottom: 40px;
-    }
-
     .popular-services-section {
         margin-top: 20px;
     }
@@ -1623,63 +1221,6 @@
         color: #333;
         margin-bottom: 30px;
         text-align: left;
-    }
-
-    /* Service Category Boxes Styling */
-    .service-category-box {
-        background: white;
-        border-radius: 8px;
-        padding: 10px;
-        margin-top: 10px;
-        margin-left: 5px;
-        margin-right: 5px;
-        text-align: center;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 -2px 8px rgba(0,0,0,0.1), 2px 0 8px rgba(0,0,0,0.1), -2px 0 8px rgba(0,0,0,0.1);
-        cursor: pointer;
-        width: 120px;
-        height: 90px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        flex-shrink: 0;
-    }
-
-    .category-icon {
-        font-size: 1.5rem;
-        color: #000000;
-        margin-bottom: 6px;
-    }
-
-    .category-text {
-        font-size: 0.7rem;
-        font-weight: 500;
-        color: #333;
-        margin: 0;
-        line-height: 1.1;
-        text-align: center;
-    }
-
-    .scroll-container {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .scroll-wrapper {
-        display: flex;
-        gap: 20px;
-        overflow-x: auto;
-        scroll-behavior: smooth;
-        padding-bottom: 10px;
-    }
-
-    .scroll-wrapper::-webkit-scrollbar {
-        display: none;
-    }
-
-    .scroll-wrapper {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
     }
 
     .popular-service-card {
@@ -1717,52 +1258,8 @@
         color: white;
     }
 
-    .scroll-arrow {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: white;
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        z-index: 10;
-    }
-
-    .scroll-arrow:hover {
-        background: #f0f0f0;
-        transform: translateY(-50%) scale(1.1);
-    }
-
-    .scroll-arrow i {
-        color: #4CAF50;
-        font-size: 1.2rem;
-    }
-
     /* Responsive Design */
     @media (max-width: 768px) {
-        .service-category-box {
-            padding: 8px;
-            width: 100px;
-            height: 80px;
-        }
-        
-        .category-icon {
-            font-size: 1.3rem;
-            margin-bottom: 4px;
-        }
-        
-        .category-text {
-            font-size: 0.65rem;
-        }
-        
         .section-title {
             font-size: 1.5rem;
         }
@@ -1786,21 +1283,6 @@
     }
 
     @media (max-width: 576px) {
-        .service-category-box {
-            padding: 6px;
-            width: 85px;
-            height: 70px;
-        }
-        
-        .category-icon {
-            font-size: 1.1rem;
-            margin-bottom: 3px;
-        }
-        
-        .category-text {
-            font-size: 0.6rem;
-        }
-        
         .popular-service-card {
             min-width: 160px;
         }
@@ -2120,12 +1602,6 @@
         }
     }
 
-    /* Explore Categories Section Styling */
-    .explore-categories-section {
-        background-color: white !important;
-        padding: 80px 0 !important;
-    }
-
     .section-header .section-title {
         font-size: 1.8rem;
         font-weight: 500;
@@ -2164,455 +1640,6 @@
         height: 2px;
         background: linear-gradient(to right, #5d4037, transparent);
         z-index: 1;
-    }
-
-    .category-card {
-        background: white;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-        height: 100%;
-        cursor: pointer;
-    }
-
-    .category-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-    }
-
-    .category-image {
-        height: 200px;
-        overflow: hidden;
-        position: relative;
-    }
-
-    .category-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-    }
-
-    .category-card:hover .category-image img {
-        transform: scale(1.05);
-    }
-
-    .category-content {
-        padding: 25px 20px;
-        text-align: center;
-    }
-
-    .category-title {
-        font-size: 1.4rem;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 10px;
-    }
-
-    .category-description {
-        font-size: 0.95rem;
-        color: #666;
-        margin: 0;
-        line-height: 1.5;
-    }
-
-    /* Custom 5-column layout for categories with auto-sliding - Desktop */
-    @media (min-width: 992px) {
-        .top-services-section .row {
-            display: flex !important;
-            flex-wrap: nowrap !important;
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-            overflow-x: auto !important;
-            overflow-y: hidden !important;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            position: relative;
-            /* Hide scrollbar completely */
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        
-        .top-services-section .row::-webkit-scrollbar {
-            display: none;
-            width: 0;
-            height: 0;
-        }
-        
-        .col-lg-custom-5 {
-            flex: 0 0 20% !important;
-            max-width: 20% !important;
-            width: 20% !important;
-            min-width: 20% !important;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            box-sizing: border-box;
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-        }
-        
-        .auto-slide-container .col-lg-custom-5:first-child {
-            padding-left: 0 !important;
-            margin-left: 0 !important;
-        }
-        
-        .auto-slide-container .col-lg-custom-5:last-child {
-            padding-right: 0 !important;
-            margin-right: 0 !important;
-        }
-    }
-    
-    /* Mobile: 2 cards per row with smaller size */
-    @media (max-width: 991px) {
-        .top-services-section .row.auto-slide-container {
-            display: flex !important;
-            flex-wrap: nowrap !important;
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-            overflow-x: auto !important;
-            overflow-y: hidden !important;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            position: relative;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        
-        .top-services-section .row.auto-slide-container::-webkit-scrollbar {
-            display: none;
-            width: 0;
-            height: 0;
-        }
-        
-        .auto-slide-container .col-lg-custom-5 {
-            flex: 0 0 50% !important;
-            max-width: 50% !important;
-            width: 50% !important;
-            min-width: 50% !important;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            box-sizing: border-box;
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-        }
-        
-        .auto-slide-container .col-lg-custom-5:first-child {
-            padding-left: 0 !important;
-            margin-left: 0 !important;
-        }
-        
-        .auto-slide-container .col-lg-custom-5:last-child {
-            padding-right: 0 !important;
-            margin-right: 0 !important;
-        }
-        
-        /* Make cards smaller on mobile */
-        .auto-slide-container .category-card-square,
-        .auto-slide-container .launch-card-square,
-        .auto-slide-container .discover-card-square,
-        .auto-slide-container .top-services-card-square,
-        .auto-slide-container .popular-picks-card-square {
-            transform: scale(0.85);
-            transform-origin: center;
-        }
-        
-        .auto-slide-container .category-image-square,
-        .auto-slide-container .launch-image-square,
-        .auto-slide-container .discover-image-square,
-        .auto-slide-container .top-services-image-square,
-        .auto-slide-container .popular-picks-image-square {
-            aspect-ratio: 1;
-        }
-        
-        .auto-slide-container .category-title-outside,
-        .auto-slide-container .launch-title-outside,
-        .auto-slide-container .discover-title-outside,
-        .auto-slide-container .top-services-title-outside,
-        .auto-slide-container .popular-picks-title-outside {
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-        }
-    }
-    
-    /* Ensure row doesn't wrap and auto-slides */
-    .top-services-section .row.justify-content-center {
-        flex-wrap: nowrap !important;
-        display: flex !important;
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-    
-    .top-services-section .row.justify-content-center::-webkit-scrollbar {
-        display: none;
-        width: 0;
-        height: 0;
-    }
-
-    /* Square Category Cards */
-    .category-wrapper {
-        text-align: center;
-        padding: 0 5px;
-        display: block;
-        transition: transform 0.3s ease;
-    }
-    
-    .category-wrapper:hover {
-        transform: translateY(-3px);
-    }
-
-    .category-card-square {
-        background: linear-gradient(135deg, #152a70, #1a3585);
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-        margin-bottom: 10px;
-        width: 75%;
-        margin-left: auto;
-        margin-right: auto;
-        transition: all 0.3s ease;
-    }
-    
-    .category-card-square:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 20px rgba(21, 42, 112, 0.3);
-    }
-
-    .category-image-square {
-        width: 100%;
-        aspect-ratio: 1;
-        overflow: hidden;
-        position: relative;
-    }
-
-    .category-image-square img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .category-title-outside {
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #333;
-        margin: 0;
-        line-height: 1.2;
-        text-align: center;
-    }
-
-    /* Launch Cards - Same size as Category Cards */
-    .launch-wrapper {
-        text-align: center;
-        padding: 0 5px;
-        display: block;
-        transition: transform 0.3s ease;
-    }
-    
-    .launch-wrapper:hover {
-        transform: translateY(-3px);
-    }
-
-    .launch-card-square {
-        background: linear-gradient(135deg, #c51010, #e01515);
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-        margin-bottom: 10px;
-        width: 75%;
-        margin-left: auto;
-        margin-right: auto;
-        transition: all 0.3s ease;
-    }
-    
-    .launch-card-square:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 20px rgba(197, 16, 16, 0.3);
-    }
-
-    .launch-image-square {
-        width: 100%;
-        aspect-ratio: 1;
-        overflow: hidden;
-        position: relative;
-    }
-
-    .launch-image-square img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .launch-title-outside {
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #333;
-        margin: 0;
-        line-height: 1.2;
-        text-align: center;
-    }
-
-    /* Discover More Section Styling - Same size as Category Cards */
-    .discover-more-section {
-        background-color: white !important;
-        padding: 80px 0 !important;
-    }
-
-    .discover-wrapper {
-        text-align: center;
-        padding: 0 5px;
-        display: block;
-        transition: transform 0.3s ease;
-    }
-    
-    .discover-wrapper:hover {
-        transform: translateY(-3px);
-    }
-
-    .discover-card-square {
-        background: linear-gradient(135deg, #f39c12, #ffa726);
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-        margin-bottom: 10px;
-        width: 75%;
-        margin-left: auto;
-        margin-right: auto;
-        transition: all 0.3s ease;
-    }
-    
-    .discover-card-square:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 20px rgba(243, 156, 18, 0.3);
-    }
-
-    .discover-image-square {
-        width: 100%;
-        aspect-ratio: 1;
-        overflow: hidden;
-        position: relative;
-    }
-
-    .discover-image-square img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .discover-title-outside {
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #333;
-        margin: 0;
-        line-height: 1.2;
-        text-align: center;
-    }
-
-    /* Top Services Section Styling - Same size as other cards */
-    .top-services-wrapper {
-        text-align: center;
-        padding: 0 5px;
-        display: block;
-        transition: transform 0.3s ease;
-    }
-    
-    .top-services-wrapper:hover {
-        transform: translateY(-3px);
-    }
-
-    .top-services-card-square {
-        background: linear-gradient(135deg, #152a70, #c51010);
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-        margin-bottom: 10px;
-        width: 75%;
-        margin-left: auto;
-        margin-right: auto;
-        transition: all 0.3s ease;
-    }
-    
-    .top-services-card-square:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 20px rgba(21, 42, 112, 0.3);
-    }
-
-    .top-services-image-square {
-        width: 100%;
-        aspect-ratio: 1;
-        overflow: hidden;
-        position: relative;
-    }
-
-    .top-services-image-square img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .top-services-title-outside {
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #333;
-        margin: 0;
-        line-height: 1.2;
-        text-align: center;
-    }
-
-    /* Popular Picks Section Styling - Same size as other cards */
-    .popular-picks-wrapper {
-        text-align: center;
-        padding: 0 5px;
-        display: block;
-        transition: transform 0.3s ease;
-    }
-    
-    .popular-picks-wrapper:hover {
-        transform: translateY(-3px);
-    }
-
-    .popular-picks-card-square {
-        background: linear-gradient(135deg, #c51010, #f39c12);
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-        margin-bottom: 10px;
-        width: 75%;
-        margin-left: auto;
-        margin-right: auto;
-        transition: all 0.3s ease;
-    }
-    
-    .popular-picks-card-square:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 20px rgba(197, 16, 16, 0.3);
-    }
-
-    .popular-picks-image-square {
-        width: 100%;
-        aspect-ratio: 1;
-        overflow: hidden;
-        position: relative;
-    }
-
-    .popular-picks-image-square img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .popular-picks-title-outside {
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #333;
-        margin: 0;
-        line-height: 1.2;
-        text-align: center;
     }
 
     /* Events Section - Exact Fiverr Style */
@@ -3136,20 +2163,6 @@
         }
     }
 
-    /* Legacy styles for old structure (can be removed later) */
-    .category-content-square {
-        padding: 15px 10px;
-        text-align: center;
-    }
-
-    .category-title-square {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #333;
-        margin: 0;
-        line-height: 1.3;
-    }
-
     /* New Launches Section Styling */
     .new-launches-section {
         background-color: #f8f9fa !important;
@@ -3226,9 +2239,8 @@
         opacity: 1;
     }
 
-    /* Responsive Design for Categories and Launches */
+    /* Responsive Design */
     @media (max-width: 768px) {
-        .explore-categories-section,
         .new-launches-section {
             padding: 60px 0 !important;
         }
@@ -3241,46 +2253,8 @@
             font-size: 1.5rem;
         }
         
-        .category-card,
-        .category-card-square,
         .launch-card {
             margin-bottom: 20px;
-        }
-        
-        .category-image {
-            height: 160px;
-        }
-        
-        .category-title-square {
-            font-size: 1rem;
-        }
-        
-        .category-title-outside {
-            font-size: 1rem;
-        }
-        
-        .category-card-square {
-            width: 65%;
-        }
-        
-        .launch-card-square {
-            width: 65%;
-        }
-        
-        .launch-title-outside {
-            font-size: 1rem;
-        }
-        
-        .discover-more-section {
-            padding: 60px 0 !important;
-        }
-        
-        .discover-card-square {
-            width: 65%;
-        }
-        
-        .discover-title-outside {
-            font-size: 1rem;
         }
         
         .events-section {
@@ -3311,25 +2285,15 @@
             height: 150px;
         }
         
-        .category-content {
-            padding: 20px 15px;
-        }
-        
         .launch-content {
             padding: 18px 15px;
         }
-        
-        .category-title {
-            font-size: 1.2rem;
-        }
-        
         .launch-title {
             font-size: 1.1rem;
         }
     }
 
     @media (max-width: 576px) {
-        .explore-categories-section,
         .new-launches-section {
             padding: 40px 0 !important;
         }
@@ -3346,59 +2310,13 @@
             padding-right: 15px;
         }
         
-        .category-image {
-            height: 140px;
-        }
-        
         .launch-image {
             height: 130px;
-        }
-        
-        .category-content {
-            padding: 18px 12px;
         }
         
         .launch-content {
             padding: 15px 12px;
         }
-        
-        .category-title {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-        
-        .category-title-square {
-            font-size: 0.9rem;
-        }
-        
-        .category-title-outside {
-            font-size: 0.9rem;
-        }
-        
-        .category-card-square {
-            width: 70%;
-        }
-        
-        .launch-card-square {
-            width: 70%;
-        }
-        
-        .launch-title-outside {
-            font-size: 0.9rem;
-        }
-        
-        .discover-more-section {
-            padding: 40px 0 !important;
-        }
-        
-        .discover-card-square {
-            width: 70%;
-        }
-        
-        .discover-title-outside {
-            font-size: 0.9rem;
-        }
-        
         .events-section {
             padding: 40px 0 !important;
         }
@@ -3433,7 +2351,6 @@
             margin-bottom: 6px;
         }
         
-        .category-description,
         .launch-description {
             font-size: 0.85rem;
         }
@@ -3781,61 +2698,115 @@
 			</div>
 		@endif
 		
-		<div class="header-video">
-			<div id="hero_video">
-				<div class="opacity-mask d-flex align-items-center justify-content-start" data-opacity-mask="rgba(0, 0, 0, 0.3)">
-					<div class="container">
-						@foreach($banners as $banner)
-						<div class="row justify-content-start text-start">
-							<div class="col-xl-8 col-lg-10 col-md-10">
-								<h1 class="fiverr-style-headline">{{ $banner->heading }}</h1>
-								<p class="fiverr-style-subtitle">{{ $banner->sub_heading }}</p>
-								
-								<!-- Fiverr-style Search Bar -->
-								<div class="fiverr-search-container">
-									<div class="fiverr-search-box">
-										<div class="search-input-wrapper">
-											<input class="fiverr-search-input" type="text" id="serviceSearch" placeholder="Search for any service..." autocomplete="off">
-										</div>
-										<button type="submit" id="searchButton" class="fiverr-search-btn">
-											<i class="fas fa-search"></i>
-										</button>
-									</div>
-									<div id="searchResults" class="d-none" style="z-index: 9999;">
-										<!-- Search results will appear here -->
-									</div>
-								</div>
-								
-								<!-- Fiverr-style Category Buttons -->
-								<div class="fiverr-categories">
-									<div class="category-row">
-									
-										<div class="category-buttons">
-											@foreach($services->take(5) as $service)
-											<a href="{{ url('/service/' . $service->slug) }}" class="category-btn">
-												{{ $service->name }}
-												<i class="fas fa-arrow-right"></i>
-											</a>
-											@endforeach
-										</div>
-									</div>
-								</div>
-							</div>
-							@endforeach
-						</div>
+		<section class="yuktione-home-hero" aria-labelledby="yuktione-home-title">
+			<div class="yuktione-home-hero__stage">
+				<div class="yuktione-home-hero__copy">
+					<h1 class="yuktione-home-hero__title" id="yuktione-home-title">
+						<span>Real people.</span>
+						<span>Practical guidance.</span>
+						<em>Real progress.</em>
+					</h1>
+					<p class="yuktione-home-hero__description">Expert support, tools and programmes for your mental wellbeing, career, nutrition, finance and more.</p>
+
+					<div class="yuktione-home-hero__search">
+						<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+							<circle cx="10.8" cy="10.8" r="6.8"></circle>
+							<path d="m16 16 4.2 4.2"></path>
+						</svg>
+						<label class="visually-hidden" for="serviceSearch">Search experts, tools or topics</label>
+						<input type="search" id="serviceSearch" placeholder="Search experts, tools or topics..." autocomplete="off">
+						<button type="button" id="searchButton" aria-label="Search services">
+							<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+								<circle cx="10.8" cy="10.8" r="6.8"></circle>
+								<path d="m16 16 4.2 4.2"></path>
+							</svg>
+						</button>
+						<div id="searchResults" class="d-none" role="listbox" aria-label="Search results"></div>
 					</div>
+				</div>
+
+				<div class="yuktione-home-hero__media">
+					<img class="yuktione-home-hero__photo" src="{{ asset('frontend/assets/img/slides/slide_home_2.jpg') }}" alt="A smiling woman holding a cup in a bright indoor setting" fetchpriority="high">
+					<div class="yuktione-home-hero__note" aria-hidden="true">A calmer,<br>happier you</div>
+					<svg class="yuktione-home-hero__leaves" viewBox="0 0 240 210" aria-hidden="true" focusable="false">
+						<path d="M111 207c-2-52 3-112 48-174" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+						<path d="M137 130c-47-4-69-31-72-75 39 9 65 33 72 75Z" fill="currentColor" opacity=".78"/>
+						<path d="M144 106c-4-40 15-67 54-86 4 37-14 67-54 86Z" fill="currentColor" opacity=".92"/>
+						<path d="M113 171c-48 1-79-19-95-60 42-1 76 18 95 60Z" fill="currentColor" opacity=".7"/>
+						<path d="M119 164c6-40 31-63 75-70-8 39-32 64-75 70Z" fill="currentColor" opacity=".86"/>
+						<path d="M111 202c-39 11-71 1-98-31 35-12 69-2 98 31Z" fill="currentColor" opacity=".68"/>
+					</svg>
+					<a class="yuktione-home-hero__journey" href="{{ route('register') }}">
+						<span class="yuktione-home-hero__journey-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" focusable="false"><path d="M12 21s-7.5-4.5-7.5-11a4.2 4.2 0 0 1 7.5-2.6A4.2 4.2 0 0 1 19.5 10c0 6.5-7.5 11-7.5 11Z"/><path d="M12 6c.7-2 2.2-3 4.5-3"/></svg>
+						</span>
+						<span>Your journey to a brighter you starts here.</span>
+						<span class="yuktione-home-hero__journey-arrow" aria-hidden="true">
+							<svg viewBox="0 0 24 24" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+						</span>
+					</a>
 				</div>
 			</div>
 
-			<!-- Video Tag to Add the Video -->
-	    <video class="header-video--media" autoplay loop muted playsinline preload="auto">
-        <source src="{{ asset('frontend/assets/video/hero-video.mp4') }}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    <!-- Fallback image for mobile -->
-    <img src="{{ asset('frontend/assets/img/slides/slide_home_2.jpg') }}" class="mobile-video-fallback" loading="eager">
-		</div>
-		<!-- /header-video -->
+			@if ($services->isNotEmpty())
+				<nav class="yuktione-home-hero__services" aria-label="Explore services">
+					@foreach ($services->take(5) as $service)
+						<a class="yuktione-home-hero__service" href="{{ url('/service/' . $service->slug) }}">
+							<span class="yuktione-home-hero__service-icon" aria-hidden="true">
+								<svg viewBox="0 0 40 40" focusable="false">
+									<path d="M20 34V15M20 23c-8 0-12-4-12-11 7 0 12 4 12 11Zm0-4c0-7 4-11 12-11 0 7-4 11-12 11Z"/>
+								</svg>
+							</span>
+							<span>{{ $service->name }}</span>
+							<span class="yuktione-home-hero__service-arrow" aria-hidden="true">
+								<svg viewBox="0 0 24 24" focusable="false"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+							</span>
+						</a>
+					@endforeach
+				</nav>
+			@endif
+		</section>
+
+		@if($homepageCategories->isNotEmpty())
+			<section class="homepage-category-slider" aria-label="Browse service categories">
+				<div class="homepage-category-slider__inner">
+					<div class="homepage-category-slider__heading">
+						<h2>Explore categories</h2>
+						<div class="homepage-category-slider__controls">
+							<button type="button" class="homepage-category-slider__arrow" data-category-slide-prev aria-label="Scroll to previous categories" disabled>
+								<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg>
+							</button>
+							<button type="button" class="homepage-category-slider__arrow" data-category-slide-next aria-label="Scroll to next categories">
+								<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg>
+							</button>
+						</div>
+					</div>
+					<div class="homepage-category-slider__track" data-category-slider-track tabindex="0" aria-label="Service categories; use left and right arrow keys to scroll">
+						@foreach($homepageCategories as $categoryBox)
+							@php
+								$categoryService = $categoryBox->subCategories->first()?->service;
+								$categoryUrl = route('gridlisting', $categoryService ? ['service' => $categoryService->slug] : []);
+							@endphp
+							<a class="homepage-category-card" href="{{ $categoryUrl }}" aria-label="Explore {{ $categoryBox->name }}">
+								<span class="homepage-category-card__icon" aria-hidden="true">
+									@if($categoryBox->icon_path)
+										<img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($categoryBox->icon_path) }}" alt="" loading="lazy">
+									@elseif($categoryBox->icon_name)
+										<i class="{{ $categoryBox->icon_name }}"></i>
+									@else
+										<svg viewBox="0 0 24 24" focusable="false"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8m0-12.8L5.6 18.4"/></svg>
+									@endif
+								</span>
+								<span class="homepage-category-card__name">{{ $categoryBox->name }}</span>
+								<span class="homepage-category-card__arrow" aria-hidden="true">
+									<svg viewBox="0 0 24 24" focusable="false"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+								</span>
+							</a>
+						@endforeach
+					</div>
+				</div>
+			</section>
+		@endif
 		
 		<!-- Popular Services Section -->
 		<section class="popular-services-main-section py-5" style="background-color: white;">
@@ -3940,182 +2911,6 @@
 		</section>
 
 
-	<!-- Dynamic Category Sections - Loop through all CategoryBoxes -->
-	@if(isset($categoryBoxes) && $categoryBoxes->count() > 0)
-		@php
-			// Sort category boxes: "trending" sections first, then others
-			$sortedCategoryBoxes = $categoryBoxes->sortBy(function($categoryBox) {
-				$name = strtolower(trim($categoryBox->name));
-				// Return 0 for "trending" (appears first), 1 for others
-				return $name === 'trending' ? 0 : 1;
-			})->values(); // Reset keys to get sequential index
-			$displayIndex = 0; // Counter for styling classes
-		@endphp
-		@foreach($sortedCategoryBoxes as $categoryBox)
-			@if($categoryBox->subCategories->count() > 0)
-				@php
-					// Determine wrapper class based on display index
-					$wrapperClasses = ['category-wrapper', 'launch-wrapper', 'discover-wrapper', 'top-services-wrapper', 'popular-picks-wrapper'];
-					$cardClasses = ['category-card-square', 'launch-card-square', 'discover-card-square', 'top-services-card-square', 'popular-picks-card-square'];
-					$imageClasses = ['category-image-square', 'launch-image-square', 'discover-image-square', 'top-services-image-square', 'popular-picks-image-square'];
-					$titleClasses = ['category-title-outside', 'launch-title-outside', 'discover-title-outside', 'top-services-title-outside', 'popular-picks-title-outside'];
-					
-					$currentIndex = $displayIndex; // Store current index before incrementing
-					$wrapperClass = $wrapperClasses[$currentIndex % count($wrapperClasses)];
-					$cardClass = $cardClasses[$currentIndex % count($cardClasses)];
-					$imageClass = $imageClasses[$currentIndex % count($imageClasses)];
-					$titleClass = $titleClasses[$currentIndex % count($titleClasses)];
-					$displayIndex++; // Increment for next iteration
-				@endphp
-				<section class="top-services-section py-3" style="background-color: white;">
-					<div class="container" style="width: 90%; max-width: 1400px; margin: 0 auto; padding-left: 0; padding-right: 0;">
-						<div class="section-header text-start mb-3">
-							<h2 class="section-title-with-line">
-								<span class="title-content">
-									@if($categoryBox->icon_name)
-										<i class="{{ $categoryBox->icon_name }} me-2"></i>
-									@else
-										<i class="fas fa-star me-2"></i>
-									@endif
-									{{ $categoryBox->name }}
-								</span>
-								<span class="title-line"></span>
-							</h2>
-						</div>
-						
-						<div class="row justify-content-center g-3 auto-slide-container" data-category-index="{{ $currentIndex }}" data-slide-index="0" style="display: flex; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; scroll-behavior: smooth; position: relative; scrollbar-width: none; -ms-overflow-style: none; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;">
-							@foreach($categoryBox->subCategories as $subCategory)
-								@php
-									// Find matching SubService by name for filtering with flexible matching
-									$subService = null;
-									if ($subCategory->service_id) {
-										// Try exact match first
-										$subService = \App\Models\SubService::where('service_id', $subCategory->service_id)
-											->where('name', $subCategory->name)
-											->first();
-										
-										// If no exact match, try LIKE match
-										if (!$subService) {
-											$subService = \App\Models\SubService::where('service_id', $subCategory->service_id)
-												->where('name', 'LIKE', '%' . $subCategory->name . '%')
-												->first();
-										}
-										
-										// If still no match, try reverse matching (subservice name contains category name)
-										if (!$subService) {
-											$subService = \App\Models\SubService::where('service_id', $subCategory->service_id)
-												->whereRaw('? LIKE CONCAT("%", name, "%")', [$subCategory->name])
-												->first();
-										}
-									}
-									
-									// Build URL with filters using slug-based params
-									$urlParams = [];
-									if ($subCategory->service_id) {
-										$service = \App\Models\Service::find($subCategory->service_id);
-										if ($service) {
-											$urlParams['service'] = $service->slug;
-										}
-									}
-									if ($subService) {
-										$urlParams['sub_service'] = \Illuminate\Support\Str::slug($subService->name);
-									}
-								@endphp
-								<div class="col-lg-custom-5 col-md-4 col-sm-6 mb-3">
-									<a href="{{ count($urlParams) > 0 ? route('gridlisting', $urlParams) : route('gridlisting') }}" style="text-decoration: none; color: inherit;" class="{{ $wrapperClass }}">
-										<div class="{{ $cardClass }}">
-											<div class="{{ $imageClass }}">
-												@if($subCategory->image)
-													<img src="{{ asset('storage/' . $subCategory->image) }}" alt="{{ $subCategory->name }}" class="img-fluid">
-												@else
-													<img src="{{ asset('frontend/assets/img/6.png') }}" alt="{{ $subCategory->name }}" class="img-fluid">
-												@endif
-											</div>
-										</div>
-										<h3 class="{{ $titleClass }}">{{ $subCategory->name }}</h3>
-									</a>
-								</div>
-							@endforeach
-						</div>
-					</div>
-				</section>
-			@endif
-		@endforeach
-	@endif
-
-	<!-- Fallback Static Section (Only shown if no CategoryBoxes exist) -->
-	@if(!isset($categoryBoxes) || $categoryBoxes->count() == 0)
-	<section class="top-services-section py-3" style="background-color: white;">
-		<div class="container" style="width: 90%; max-width: 1400px; margin: 0 auto;">
-			<div class="section-header text-start mb-3">
-				<h2 class="section-title-with-line">
-					<span class="title-content">
-						<i class="fas fa-star me-2"></i>
-						Astrology
-					</span>
-					<span class="title-line"></span>
-				</h2>
-			</div>
-			
-			<div class="row justify-content-center g-3">
-			<div class="col-lg-custom-5 col-md-4 col-sm-6 mb-3">
-				<a href="{{ route('gridlisting') }}" style="text-decoration: none; color: inherit;" class="discover-wrapper">
-					<div class="discover-card-square">
-						<div class="discover-image-square">
-							<img src="{{ asset('frontend/assets/img/1.png') }}" alt="Tarot Reading" class="img-fluid">
-						</div>
-					</div>
-					<h3 class="discover-title-outside">Tarot Reading</h3>
-				</a>
-			</div>
-			
-			<div class="col-lg-custom-5 col-md-4 col-sm-6 mb-3">
-				<a href="{{ route('gridlisting') }}" style="text-decoration: none; color: inherit;" class="discover-wrapper">
-					<div class="discover-card-square">
-						<div class="discover-image-square">
-							<img src="{{ asset('frontend/assets/img/13.png') }}" alt="Vedic Astrology" class="img-fluid">
-						</div>
-					</div>
-					<h3 class="discover-title-outside">Vedic Astrology</h3>
-				</a>
-			</div>
-			
-			<div class="col-lg-custom-5 col-md-4 col-sm-6 mb-3">
-				<a href="{{ route('gridlisting') }}" style="text-decoration: none; color: inherit;" class="discover-wrapper">
-					<div class="discover-card-square">
-						<div class="discover-image-square">
-							<img src="{{ asset('frontend/assets/img/14.png') }}" alt="Numerology" class="img-fluid">
-						</div>
-					</div>
-					<h3 class="discover-title-outside">Numerology</h3>
-				</a>
-			</div>
-			
-			<div class="col-lg-custom-5 col-md-4 col-sm-6 mb-3">
-				<a href="{{ route('gridlisting') }}" style="text-decoration: none; color: inherit;" class="discover-wrapper">
-					<div class="discover-card-square">
-						<div class="discover-image-square">
-							<img src="{{ asset('frontend/assets/img/15.png') }}" alt="Palmistry" class="img-fluid">
-						</div>
-					</div>
-					<h3 class="discover-title-outside">Palmistry</h3>
-				</a>
-			</div>
-			
-			<div class="col-lg-custom-5 col-md-4 col-sm-6 mb-3">
-				<a href="{{ route('gridlisting') }}" style="text-decoration: none; color: inherit;" class="discover-wrapper">
-					<div class="discover-card-square">
-						<div class="discover-image-square">
-							<img src="{{ asset('frontend/assets/img/16.png') }}" alt="Crystal Ball Reading" class="img-fluid">
-						</div>
-					</div>
-					<h3 class="discover-title-outside">Crystal Ball Reading</h3>
-				</a>
-			</div>
-			</div>
-		</div>
-	</section>
-@endif
 		<!-- second popups  -->
 
 		
@@ -4859,182 +3654,6 @@ function selectServiceAndRedirect(serviceId, serviceName) {
 }
 </script>
 		
-	<script>
-		// Combined Live Search and Find Button functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('serviceSearch');
-    const searchResults = document.getElementById('searchResults');
-    const searchButton = document.getElementById('searchButton');
-    const searchForm = searchInput.closest('form');
-    let searchTimeout;
-    let currentResults = [];
-
-    // Prevent form submission
-    if (searchForm) {
-        searchForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            handleSearchButtonClick();
-        });
-    }
-
-    // Find button click event
-    searchButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        handleSearchButtonClick();
-    });
-
-    // Function to handle Find button click
-    function handleSearchButtonClick() {
-        const query = searchInput.value.trim();
-        
-        // Changed from query.length < 2 to query.length < 1
-        if (query.length < 1) {
-            toastr.warning('Please enter at least 1 character to search');
-            return;
-        }
-        
-        // If we already have results from typing, use the first result
-        if (currentResults.length > 0) {
-            window.location.href = `/service/${currentResults[0].slug}`;
-            return;
-        }
-        
-        // Otherwise, perform a search and navigate to first result
-        searchButton.disabled = true;
-        searchButton.value = 'Searching...';
-        
-        fetch(`/search-services?query=${encodeURIComponent(query)}`)
-            .then(response => response.json())
-            .then(data => {
-                searchButton.disabled = false;
-                searchButton.value = 'Find';
-                
-                if (data.services && data.services.length > 0) {
-                    // If there's an exact match, go to that
-                    const exactMatch = data.services.find(service => 
-                        service.name.toLowerCase() === query.toLowerCase());
-                    
-                    if (exactMatch) {
-                        window.location.href = `/service/${exactMatch.slug}`;
-                    } else {
-                        // Otherwise go to first result
-                       window.location.href = `/service/${data.services[0].slug}`;
-                    }
-                } else {
-                    toastr.error('No matching services found. Please try a different search term.');
-                }
-            })
-            .catch(error => {
-                console.error('Error searching:', error);
-                searchButton.disabled = false;
-                searchButton.value = 'Find';
-                toastr.error('An error occurred while searching. Please try again.');
-            });
-    }
-
-    // Function to fetch search results for the dropdown
-    function fetchSearchResults(query) {
-        // Changed from query.length < 2 to query.length < 1
-        if (query.length < 1) {
-            searchResults.classList.add('d-none');
-            searchResults.style.display = 'none';
-            searchResults.innerHTML = '';
-            currentResults = [];
-            return;
-        }
-
-        fetch(`/search-services?query=${encodeURIComponent(query)}`)
-            .then(response => response.json())
-            .then(data => {
-                // Store results for later use by the Find button
-                currentResults = data.services || [];
-                
-                if (currentResults.length > 0) {
-                    // Display search results
-                    searchResults.classList.remove('d-none');
-                    searchResults.style.display = 'block';
-                    searchResults.innerHTML = `
-                        <div class="list-group shadow">
-                            ${currentResults.map(service => `
-                                <a href="/service/${service.slug}" class="list-group-item list-group-item-action">
-                                    ${service.name}
-                                </a>
-                            `).join('')}
-                        </div>
-                    `;
-                    console.log('Search results displayed:', currentResults.length, 'results');
-                } else {
-                    // No results found
-                    searchResults.classList.remove('d-none');
-                    searchResults.style.display = 'block';
-                    searchResults.innerHTML = `
-                        <div class="list-group shadow">
-                            <div class="list-group-item text-muted">No result found</div>
-                        </div>
-                    `;
-                    console.log('No results found for query');
-                }
-                
-                // Ensure proper positioning
-                searchResults.style.left = '0';
-                searchResults.style.right = 'auto';
-                searchResults.style.width = '100%';
-            })
-            .catch(error => {
-                console.error('Error fetching search results:', error);
-                currentResults = [];
-                searchResults.classList.add('d-none');
-            });
-    }
-
-    // Search input event for live results
-    searchInput.addEventListener('input', function() {
-        const query = this.value.trim();
-        
-        // Clear previous timeout
-        clearTimeout(searchTimeout);
-
-        // Set new timeout for debounce
-        searchTimeout = setTimeout(() => {
-            fetchSearchResults(query);
-        }, 300);
-    });
-
-    // Handle keyboard navigation in search results
-    searchInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !searchResults.classList.contains('d-none')) {
-            e.preventDefault();
-            
-            // Find the first result link and navigate to it
-            const firstResult = searchResults.querySelector('.list-group-item');
-            if (firstResult && firstResult.href) {
-                window.location.href = firstResult.href;
-            } else {
-                // If no results are visible, trigger the Find button
-                handleSearchButtonClick();
-            }
-        }
-    });
-
-    // Hide results when clicking outside
-    document.addEventListener('click', function(event) {
-        if (!searchInput.contains(event.target) && !searchResults.contains(event.target)) {
-            searchResults.classList.add('d-none');
-            searchResults.style.display = 'none';
-        }
-    });
-
-    // Show results when input is focused
-    searchInput.addEventListener('focus', function() {
-        // Changed from this.value.trim().length >= 2 to this.value.trim().length >= 1
-        if (this.value.trim().length >= 1) {
-            fetchSearchResults(this.value.trim());
-        }
-    });
-});
-
-	</script>
-
 	<!-- FAQ Accordion JavaScript -->
 	<script>
 	document.addEventListener('DOMContentLoaded', function() {
@@ -5062,24 +3681,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	
 	<script>
-		// Categories scroll functionality
-		function scrollCategories(direction) {
-			const scrollContainer = document.querySelector('#categoriesScroll');
-			const scrollAmount = 300;
-			
-			if (direction === 'right') {
-				scrollContainer.scrollBy({
-					left: scrollAmount,
-					behavior: 'smooth'
-				});
-			} else if (direction === 'left') {
-				scrollContainer.scrollBy({
-					left: -scrollAmount,
-					behavior: 'smooth'
-				});
-			}
-		}
-
 		// Popular Services scroll functionality
 		function scrollPopularServices(direction) {
 			const scrollContainer = document.querySelector('#popularServicesScroll');
@@ -5142,187 +3743,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.addEventListener('DOMContentLoaded', function() {
 			// Auto scroll every 3 seconds
 			setInterval(autoScrollServices, 3000);
-			
-			// Auto-slide category sections - wait a bit longer for mobile layout
-			setTimeout(() => {
-				initCategoryAutoSlide();
-			}, 300);
 		});
-		
-		// Also reinitialize on window resize to handle mobile/desktop switching
-		let resizeTimer;
-		window.addEventListener('resize', function() {
-			clearTimeout(resizeTimer);
-			resizeTimer = setTimeout(() => {
-				// Reinitialize auto-slide on resize
-				initCategoryAutoSlide();
-			}, 500);
-		});
-		
-		// Store intervals for cleanup
-		const slideIntervals = new Map();
-		
-		// Auto-slide function for category sections with infinite loop
-		function initCategoryAutoSlide() {
-			// Clear any existing intervals first
-			slideIntervals.forEach((interval, container) => {
-				clearInterval(interval);
-			});
-			slideIntervals.clear();
-			
-			const categoryContainers = document.querySelectorAll('.auto-slide-container');
-			
-			// Remove any existing cloned cards first
-			categoryContainers.forEach(container => {
-				const clonedCards = container.querySelectorAll('.cloned-card');
-				clonedCards.forEach(clone => clone.remove());
-			});
-			
-			categoryContainers.forEach((container, containerIndex) => {
-				// Wait for layout to be ready - increased delay for mobile
-				setTimeout(() => {
-					// Function to check if mobile - check dynamically
-					function checkIsMobile() {
-						return window.innerWidth < 992;
-					}
-					
-					const cards = container.querySelectorAll('.col-lg-custom-5:not(.cloned-card)');
-					const totalCards = cards.length;
-					
-					if (totalCards === 0) {
-						console.log('No cards found in container', containerIndex);
-						return;
-					}
-					
-					// Determine cards per view based on screen size
-					const isMobile = checkIsMobile();
-					const cardsPerView = isMobile ? 2 : 5;
-					
-					// For mobile: start sliding only if MORE than 2 cards (3+ cards)
-					// For desktop: start sliding only if MORE than 5 cards (6+ cards)
-					if (totalCards <= cardsPerView) {
-						// Ensure first cards are visible but don't slide
-						container.scrollLeft = 0;
-						return; // No need to slide if not enough cards
-					}
-					
-					// Duplicate cards multiple times for seamless infinite loop
-					const cardsArray = Array.from(cards);
-					// Duplicate 2 times to ensure smooth continuous loop
-					for (let i = 0; i < 2; i++) {
-						cardsArray.forEach(card => {
-							const clone = card.cloneNode(true);
-							clone.classList.add('cloned-card');
-							container.appendChild(clone);
-						});
-					}
-					
-					// Ensure we start at the beginning (first card visible)
-					container.scrollLeft = 0;
-					
-					// Calculate card width including gap more accurately
-					const firstCard = cards[0];
-					if (!firstCard) return;
-					
-					// Get computed styles for accurate width
-					const cardStyle = window.getComputedStyle(firstCard);
-					const cardWidth = firstCard.offsetWidth;
-					const marginLeft = parseFloat(cardStyle.marginLeft) || 0;
-					const marginRight = parseFloat(cardStyle.marginRight) || 0;
-					const paddingLeft = parseFloat(cardStyle.paddingLeft) || 0;
-					const paddingRight = parseFloat(cardStyle.paddingRight) || 0;
-					
-					// Calculate total width per card including margins and padding
-					const totalCardWidth = cardWidth + marginLeft + marginRight + paddingLeft + paddingRight;
-					
-					// Calculate original content width (before duplication)
-					const originalWidth = totalCardWidth * totalCards;
-					
-					// Auto-slide function - slide 1 card at a time continuously
-					function slideNext() {
-						// Get current scroll position
-						const currentScroll = container.scrollLeft;
-						
-						// Calculate next scroll position (move by 1 card width)
-						let nextScroll = currentScroll + totalCardWidth;
-						
-						// If we've scrolled past the original content, reset seamlessly
-						if (nextScroll >= originalWidth) {
-							// Calculate how far past we've gone
-							const excess = nextScroll - originalWidth;
-							// Reset to start instantly (no animation) but maintain the excess
-							container.style.scrollBehavior = 'auto';
-							container.scrollLeft = excess;
-							// Wait a bit then continue with smooth scrolling
-							setTimeout(() => {
-								container.style.scrollBehavior = 'smooth';
-							}, 50);
-						} else {
-							// Slide to next card smoothly (1 card at a time)
-							container.style.scrollBehavior = 'smooth';
-							container.scrollLeft = nextScroll;
-						}
-					}
-					
-					// Pause on hover
-					let slideInterval;
-					function startSliding() {
-						// Clear existing interval if any
-						if (slideInterval) {
-							clearInterval(slideInterval);
-						}
-						slideInterval = setInterval(slideNext, 3000);
-						// Store interval for cleanup
-						slideIntervals.set(container, slideInterval);
-					}
-					
-					function stopSliding() {
-						if (slideInterval) {
-							clearInterval(slideInterval);
-							slideIntervals.delete(container);
-							slideInterval = null;
-						}
-					}
-					
-					// Start auto-sliding after a short delay to ensure initial position is set
-					setTimeout(() => {
-						container.scrollLeft = 0; // Ensure we start at the beginning
-						startSliding();
-					}, 200);
-					
-					// Pause on hover
-					container.addEventListener('mouseenter', stopSliding);
-					container.addEventListener('mouseleave', startSliding);
-					
-					// Also pause when user manually interacts
-					let userInteracting = false;
-					container.addEventListener('touchstart', function() {
-						userInteracting = true;
-						stopSliding();
-					});
-					
-					container.addEventListener('touchend', function() {
-						setTimeout(() => {
-							userInteracting = false;
-							startSliding();
-						}, 5000);
-					});
-					
-					// Handle scroll event to detect when user manually scrolls
-					let isScrolling = false;
-					container.addEventListener('scroll', function() {
-						if (!isScrolling) {
-							stopSliding();
-							isScrolling = true;
-							setTimeout(() => {
-								isScrolling = false;
-								startSliding();
-							}, 5000);
-						}
-					});
-				}, 100);
-			});
-		}
 	</script>
  @endsection
 
@@ -5339,17 +3760,6 @@ document.addEventListener('DOMContentLoaded', function() {
     .carousel-arrow.right-arrow { right: 0; }
 }
 
-/* Hide scrollbar for auto-slide containers */
-.auto-slide-container {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.auto-slide-container::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
-}
 </style>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

@@ -118,12 +118,20 @@ class HomeController extends Controller
         // Sort by created_at descending and take only 6
         $eventDetails = $allEvents->sortByDesc('created_at')->take(6)->values();
         
-        $categoryBoxes = CategoryBox::with(['subCategories' => function($query) {
-            $query->where('status', true)
-                  ->select('id', 'category_box_id', 'service_id', 'name', 'image', 'status');
-        }])->where('status', true)->get();
+        $homepageCategories = CategoryBox::query()
+            ->where('status', true)
+            ->with([
+                'subCategories' => function ($query) {
+                    $query->where('status', true)
+                        ->select('id', 'category_box_id', 'service_id', 'name', 'image', 'status');
+                },
+                'subCategories.service:id,name,slug',
+            ])
+            ->orderBy('order')
+            ->orderBy('id')
+            ->get();
         $faqs = FAQ::where('status', true)->orderBy('order')->get();
-        return view('frontend.index', compact('services', 'banners', 'about_us', 'whychooses', 'testimonials', 'homeblogs', 'howworks', 'mcqs', 'blogPosts', 'eventDetails', 'categoryBoxes', 'faqs'));
+        return view('frontend.index', compact('services', 'banners', 'about_us', 'whychooses', 'testimonials', 'homeblogs', 'howworks', 'mcqs', 'blogPosts', 'eventDetails', 'homepageCategories', 'faqs'));
     }
 
     //     public function getServiceQuestions($serviceId)

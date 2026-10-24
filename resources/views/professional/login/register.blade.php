@@ -15,21 +15,21 @@
 </head>
 <body class="yuktione-auth-page min-h-screen bg-background font-sans text-text-primary antialiased">
     <main class="flex min-h-screen items-center justify-center bg-linear-to-br from-brand-50 via-background to-white px-3 py-5 sm:px-5">
-        <section class="w-full max-w-xl rounded-panel border border-divider bg-surface p-5 shadow-card sm:p-8" aria-labelledby="registration-title">
-            <header class="mb-7">
-                <div class="mb-6 flex items-center justify-between gap-3">
+        <section class="w-full max-w-xl rounded-panel border border-divider bg-surface p-4 shadow-card sm:p-6 md:p-8" aria-labelledby="registration-title">
+            <header class="mb-5 sm:mb-7">
+                <div class="mb-4 flex items-center justify-between gap-3 sm:mb-6">
                     <a href="{{ route('home') }}" aria-label="Yuktione home" class="inline-flex items-center">
-                        <img src="{{ asset('frontend/assets/Yuktione_logo.png') }}" alt="Yuktione" class="h-9 w-auto max-w-36 object-contain">
+                        <img src="{{ asset('frontend/assets/Yuktione_logo.png') }}" alt="Yuktione" class="h-8 w-auto max-w-36 object-contain sm:h-9">
                     </a>
-                    <span class="rounded-full bg-brand-50 px-3 py-1 text-[10px] font-semibold tracking-wide text-brand-800">PROFESSIONAL ONBOARDING</span>
+                    <span class="rounded-full bg-brand-50 px-2.5 py-1 text-[9px] font-semibold tracking-wide text-brand-800 sm:px-3 sm:text-[10px]">PROFESSIONAL ONBOARDING</span>
                 </div>
 
-                <div class="mb-2 flex items-center justify-between gap-3">
-                    <h1 id="registration-title" class="text-2xl font-semibold leading-tight tracking-tight text-brand-950 sm:text-3xl">Create your account</h1>
+                <div class="mb-1.5 flex items-center justify-between gap-3">
+                    <h1 id="registration-title" class="text-xl font-semibold leading-tight tracking-tight text-brand-950 sm:text-2xl md:text-3xl">Create your account</h1>
                     <span class="shrink-0 text-xs font-medium text-text-muted" data-registration-step-label>Step 1 of 3</span>
                 </div>
-                <p class="mt-2 text-sm leading-6 text-text-muted">Join Yuktione and grow your professional practice.</p>
-                <div class="mt-4 h-1.5 overflow-hidden rounded-full bg-brand-100" role="progressbar" aria-label="Registration progress" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
+                <p class="mt-1.5 text-sm leading-6 text-text-muted">Join Yuktione and grow your professional practice.</p>
+                <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-brand-100" role="progressbar" aria-label="Registration progress" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
                     <div class="h-full w-1/3 rounded-full bg-brand-primary transition-[width] duration-300" data-registration-progress></div>
                 </div>
             </header>
@@ -45,7 +45,7 @@
             >
                 @csrf
 
-                <section class="space-y-4" data-registration-step="1" aria-labelledby="email-step-title">
+                <section class="space-y-3.5 sm:space-y-4" data-registration-step="1" aria-labelledby="email-step-title">
                     <div>
                         <h2 id="email-step-title" class="text-[17px] font-semibold text-brand-950">Verify your email</h2>
                         <p class="mt-1 text-[13px] leading-5 text-text-muted">We’ll send a one-time code to confirm your email address.</p>
@@ -347,7 +347,7 @@
                 </div>
             </div>
 
-            <p class="mt-5 text-center text-[11px] text-text-muted">© {{ date('Y') }} Yuktione</p>
+            <p class="mt-4 text-center text-[11px] text-text-muted sm:mt-5">© {{ date('Y') }} Yuktione</p>
         </section>
     </main>
 

@@ -75,6 +75,11 @@ body.yuktione-auth-page {
     color: #11776f;
 }
 
+.yuktione-auth-page [data-registration-step] h2:focus {
+    outline: none;
+    box-shadow: none;
+}
+
 .yuktione-auth-page .login-hero {
     background: linear-gradient(135deg, #11776f 0%, #168a80 56%, #23a99a 100%);
 }
