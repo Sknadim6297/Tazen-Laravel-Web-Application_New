@@ -235,3 +235,19 @@ document.querySelectorAll('[data-home-faq]').forEach((faq) => {
         panel.inert = !shouldExpand;
     });
 });
+
+const revealTargets = document.querySelectorAll('[data-home-reveal]');
+if (revealTargets.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('yk-home-reveal-enabled');
+
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -24px 0px' });
+
+    revealTargets.forEach((target) => revealObserver.observe(target));
+}

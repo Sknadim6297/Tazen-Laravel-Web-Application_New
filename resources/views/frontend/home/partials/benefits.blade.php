@@ -1,55 +1,69 @@
-<section class="yk-home-benefits" aria-labelledby="yk-home-benefits-title">
-    <div class="yk-home-container">
-        <header class="yk-home-benefits__heading">
-            <p class="yk-home-benefits__eyebrow">Why Choose Yuktione</p>
-            <h2 id="yk-home-benefits-title">Expert Guidance, Made Simple.</h2>
-            <p>Find the right professional support for your goals.</p>
-        </header>
+@if(isset($whychooses) && $whychooses->isNotEmpty())
+    @php
+        $whychoose = $whychooses->first();
+        $whyChooseItems = [
+            ['heading' => $whychoose->card1_heading, 'description' => $whychoose->card1_description],
+            ['heading' => $whychoose->card2_heading, 'description' => $whychoose->card2_description],
+            ['heading' => $whychoose->card3_heading, 'description' => $whychoose->card3_description],
+            ['heading' => $whychoose->card4_heading, 'description' => $whychoose->card4_description],
+        ];
+    @endphp
 
-        <div class="yk-home-benefits__grid">
-            <article class="yk-home-benefit-card">
-                <span class="yk-home-benefit-card__icon" aria-hidden="true">
-                    <svg viewBox="0 0 32 32" focusable="false">
-                        <circle cx="12" cy="11" r="4"/>
-                        <path d="M4 26v-2a8 8 0 0 1 16 0v2H4Zm19-16a4 4 0 0 1 0 8m2 3a7 7 0 0 1 3 6v1h-5"/>
-                    </svg>
-                </span>
-                <h3>Explore Experts</h3>
-                <p>Discover professionals across different fields.</p>
-            </article>
+    <section class="yk-home-why" aria-labelledby="yk-home-why-title">
+        <div class="yk-home-why__layout yk-home-container">
+            <div class="yk-home-why__visual" data-home-reveal>
+                <div class="yk-home-why__image-frame">
+                    <img
+                        src="{{ asset('frontend/assets/img/professionals_photos/about-work-section.jpeg') }}"
+                        alt="Professionals sharing ideas around a table"
+                        width="2000"
+                        height="1333"
+                        loading="lazy"
+                        decoding="async"
+                    >
+                </div>
+                <div class="yk-home-why__image-accent" aria-hidden="true"></div>
+                <div class="yk-home-why__image-note">
+                    <span class="yk-home-why__note-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M12 3 4 6v5c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V6l-8-3Z"/>
+                            <path d="m8.5 12 2.2 2.2 4.8-5"/>
+                        </svg>
+                    </span>
+                    <span>Support for your next step</span>
+                </div>
+            </div>
 
-            <article class="yk-home-benefit-card">
-                <span class="yk-home-benefit-card__icon" aria-hidden="true">
-                    <svg viewBox="0 0 32 32" focusable="false">
-                        <path d="m7 4 18 13-8 1.5L13 26 7 4Z"/>
-                        <path d="m20 24 3 3 6-7"/>
-                    </svg>
-                </span>
-                <h3>Simple Experience</h3>
-                <p>Find services and connect with ease.</p>
-            </article>
+            <div class="yk-home-why__content">
+                <header class="yk-home-why__heading" data-home-reveal>
+                    <p class="yk-home-why__eyebrow">Why Choose Yuktione</p>
+                    <h2 id="yk-home-why-title">{{ str_ireplace('Tazen', 'Yuktione', $whychoose->section_heading) }}</h2>
+                    <p>{{ $whychoose->section_sub_heading }}</p>
+                </header>
 
-            <article class="yk-home-benefit-card">
-                <span class="yk-home-benefit-card__icon" aria-hidden="true">
-                    <svg viewBox="0 0 32 32" focusable="false">
-                        <path d="M4 10h24v16H4zM4 15h24M10 10V6h12v4"/>
-                        <path d="M12 21h8"/>
-                    </svg>
-                </span>
-                <h3>Flexible Options</h3>
-                <p>Explore services suited to your needs.</p>
-            </article>
-
-            <article class="yk-home-benefit-card">
-                <span class="yk-home-benefit-card__icon" aria-hidden="true">
-                    <svg viewBox="0 0 32 32" focusable="false">
-                        <path d="M5 5h16v14H5zM11 13h16v14H11z"/>
-                        <path d="M9 10h8m-3 7h8"/>
-                    </svg>
-                </span>
-                <h3>Multiple Services</h3>
-                <p>Access different kinds of professional guidance in one place.</p>
-            </article>
+                <div class="yk-home-why__list">
+                    @foreach($whyChooseItems as $item)
+                        <article class="yk-home-why-item" data-home-reveal>
+                            <span class="yk-home-why-item__number" aria-hidden="true">{{ sprintf('%02d', $loop->iteration) }}</span>
+                            <span class="yk-home-why-item__icon" aria-hidden="true">
+                                @if($loop->first)
+                                    <svg viewBox="0 0 24 24" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+                                @elseif($loop->iteration === 2)
+                                    <svg viewBox="0 0 24 24" focusable="false"><path d="M4 5h16v14H4zM4 9h16m-12 4h8m-8 3h5"/></svg>
+                                @elseif($loop->iteration === 3)
+                                    <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16 9"/></svg>
+                                @else
+                                    <svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4m8-4v4M4 10h16m-11 4h6"/></svg>
+                                @endif
+                            </span>
+                            <div class="yk-home-why-item__copy">
+                                <h3>{{ $item['heading'] }}</h3>
+                                <p>{{ $item['description'] }}</p>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+@endif
