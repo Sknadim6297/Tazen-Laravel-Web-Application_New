@@ -14,15 +14,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 @endpush
 
-@push('styles')
-    @vite('resources/css/customer-panel.css')
-    @vite('resources/css/auth-theme.css')
-@endpush
-
 @section('content')
-<div id="loginPanel" data-yuktione-auth class="yuktione-auth-page mx-auto grid min-h-dvh w-full max-w-[1600px] bg-background lg:grid-cols-2">
-    <section class="flex min-w-0 items-center justify-center px-5 py-5 sm:px-8 sm:py-6 lg:px-10 lg:py-4 xl:px-16" aria-labelledby="login-heading">
-        <div class="w-full max-w-md">
+<main id="loginPanel" data-yuktione-auth class="yuktione-auth-page flex min-h-dvh w-full items-center justify-center bg-background px-4 py-8 sm:px-6">
+    <section class="w-full max-w-md rounded-panel border border-border bg-surface p-5 shadow-popover sm:p-8" aria-labelledby="login-heading">
+        <div class="mx-auto w-full max-w-md">
             <a href="{{ route('home') }}" class="inline-flex items-center rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus-ring" aria-label="Yuktione home">
                 <img src="{{ asset('frontend/assets/Yuktione_logo.png') }}" alt="Yuktione" width="155" height="50" class="h-10 w-auto object-contain object-left">
             </a>
@@ -59,7 +54,7 @@
                         inputmode="email"
                         required
                         aria-describedby="email-error"
-                        class="min-h-11 w-full rounded-control border border-border bg-surface px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus-visible:border-brand-primary"
+                        class="min-h-11 w-full rounded-control border border-border bg-surface px-3.5 py-2.5 text-base text-text-primary placeholder:text-text-muted focus-visible:border-brand-primary sm:text-sm"
                     >
                     <p id="email-error" class="hidden text-xs font-medium text-error" role="alert"></p>
                 </div>
@@ -74,7 +69,7 @@
                             placeholder="Enter your password"
                             autocomplete="current-password"
                             required
-                            class="min-h-11 w-full rounded-control border border-border bg-surface py-2.5 pl-3.5 pr-12 text-sm text-text-primary placeholder:text-text-muted focus-visible:border-brand-primary"
+                            class="min-h-11 w-full rounded-control border border-border bg-surface py-2.5 pl-3.5 pr-12 text-base text-text-primary placeholder:text-text-muted focus-visible:border-brand-primary sm:text-sm"
                         >
                         <button
                             type="button"
@@ -132,33 +127,7 @@
             </form>
         </div>
     </section>
-
-    <aside class="login-hero relative hidden overflow-hidden px-10 py-8 text-white lg:flex lg:items-center xl:px-16" aria-label="About Yuktione consultations">
-        <div aria-hidden="true" class="absolute -right-24 -top-24 size-96 rounded-full border border-white/10"></div>
-        <div aria-hidden="true" class="absolute -bottom-40 -left-24 size-[30rem] rounded-full border border-white/10"></div>
-        <div aria-hidden="true" class="absolute right-16 top-1/4 size-40 rounded-full bg-brand-accent/20 blur-3xl"></div>
-        <div class="relative mx-auto max-w-lg">
-            <div class="mb-7 inline-flex size-14 items-center justify-center rounded-2xl border border-white/20 bg-white/10 shadow-popover backdrop-blur">
-                <svg class="size-7 text-brand-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3.75 13.9 9.1l5.35 1.9-5.35 1.9L12 18.25l-1.9-5.35-5.35-1.9 5.35-1.9L12 3.75Z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 15.75.9 2.35 2.35.9-2.35.9L19 22.25l-.9-2.35-2.35-.9 2.35-.9.9-2.35Z" />
-                </svg>
-            </div>
-            <h2 class="mt-3 font-display text-4xl font-semibold leading-tight xl:text-5xl">Expert Guidance,<br>Just a Click Away.</h2>
-            <p class="mt-4 max-w-md text-sm leading-6 text-white/80">
-                Connect with trusted professionals and manage your consultations in one place.
-            </p>
-            <div class="mt-7 flex items-center gap-3 border-t border-white/20 pt-5 text-sm text-white/75">
-                <span class="inline-flex size-9 items-center justify-center rounded-full bg-white/10">
-                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m5.25 12.75 4.5 4.5 9-9" />
-                    </svg>
-                </span>
-                A simpler way to stay connected with your experts
-            </div>
-        </div>
-    </aside>
-</div>
+</main>
 
 <dialog id="termsDialog" @if($initialRole === 'customer') data-yuktione-panel="customer" @endif aria-labelledby="termsDialogTitle" class="m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-panel border border-border bg-surface p-0 text-text-primary shadow-popover backdrop:bg-brand-950/50">
     <div class="flex items-center justify-between gap-4 border-b border-divider px-4 py-3 sm:px-6">

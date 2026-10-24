@@ -36,7 +36,27 @@
 		<title>@yield('title', isset($metaTitle) ? $metaTitle : 'Tazen.in | Find Verified Experts for Career, Health & Finance')</title>
 	@endif
 	@stack('head')
+	@php
+		$isAuthenticationRoute = request()->routeIs('login', 'professional.login');
+		$isCustomerPanelFlow = request()->routeIs(
+			'user.booking',
+			'user.booking.summary',
+			'user.booking.success',
+			'user.booking.retry',
+			'user.customer.booking.retry',
+			'user.event.booking.success',
+			'event.booking.success',
+			'user.my-bookings'
+		);
+	@endphp
 
+	@if ($isAuthenticationRoute)
+		@vite([
+			'resources/css/tazen.css',
+			'resources/css/auth-theme.css',
+			'resources/css/yuktione-feedback.css',
+		])
+	@else
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.6.0/css/all.css">
 
@@ -289,18 +309,6 @@
 	<!-- Schema Markup -->
 	@yield('schema')
 	@vite('resources/css/yuktione-feedback.css')
-	@php
-		$isCustomerPanelFlow = request()->routeIs(
-			'user.booking',
-			'user.booking.summary',
-			'user.booking.success',
-			'user.booking.retry',
-			'user.customer.booking.retry',
-			'user.event.booking.success',
-			'event.booking.success',
-			'user.my-bookings'
-		);
-	@endphp
 	@if ($isCustomerPanelFlow)
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -315,11 +323,12 @@
 		<link href="{{ asset('frontend/assets/css/yuktione-home.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-home.css')) }}" rel="stylesheet">
 		<link href="{{ asset('admin/assets/css/icons.css') }}" rel="stylesheet">
 	@endif
+	@endif
 </head>
 
 <body class="@yield('body_class')">
 
-	@if (!request()->routeIs('login'))
+	@if (!$isAuthenticationRoute)
 		@include('frontend.sections.header')
 	@endif
 
@@ -331,14 +340,14 @@
 		@yield('content')
 	@endif
 	
-	@if (!request()->routeIs('login') && (!isset($showFooter) || $showFooter))
+	@if (!$isAuthenticationRoute && (!isset($showFooter) || $showFooter))
 		@include('frontend.sections.footer')
 	@endif
 
 	<x-yuktione.feedback />
 
 	<!-- WhatsApp Floating Button -->
-	@if (!request()->routeIs('login'))
+	@if (!$isAuthenticationRoute)
 		<a href="https://wa.me/+919147421560?text=Hello%20Tazen!%20I%20need%20assistance%20with%20your%20services." target="_blank" class="whatsapp-float">
 			<i class="fab fa-whatsapp"></i>
 			<span class="tooltip-text">Chat with us on WhatsApp</span>
@@ -347,6 +356,7 @@
 
 	<!-- view-specific scripts will be injected later (after libraries) -->
 
+	@if (!$isAuthenticationRoute)
 	<!-- External JS -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
@@ -755,6 +765,7 @@ $(document).ready(function () {
 	@if (request()->routeIs('home'))
 		<script src="{{ asset('frontend/assets/js/yuktione-home.js') }}?v={{ filemtime(public_path('frontend/assets/js/yuktione-home.js')) }}"></script>
 		<script src="{{ asset('frontend/assets/js/home-category-slider.js') }}?v={{ filemtime(public_path('frontend/assets/js/home-category-slider.js')) }}"></script>
+	@endif
 	@endif
 	@stack('scripts')
 	@vite('resources/js/yuktione-feedback.js')
