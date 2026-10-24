@@ -43,9 +43,9 @@
                                 : $cleanImagePath;
 
                             if (\Illuminate\Support\Facades\Storage::disk('public')->exists($storagePath)) {
-                                $stepImageUrl = '/storage/' . $storagePath;
+                                $stepImageUrl = asset('storage/' . $storagePath);
                             } elseif (file_exists(public_path($cleanImagePath))) {
-                                $stepImageUrl = '/' . $cleanImagePath;
+                                $stepImageUrl = asset($cleanImagePath);
                             }
                         }
                     @endphp

@@ -35,7 +35,7 @@ use App\Models\BlogPost;
 use App\Models\EventDetail;
 use App\Models\Review;
 use App\Models\CategoryBox;
-use App\Models\FAQ;
+use App\Models\Help;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -160,6 +160,7 @@ class HomeController extends Controller
             ->with([
                 'subCategories' => function ($query) {
                     $query->where('status', true)
+                        ->orderBy('id')
                         ->select('id', 'category_box_id', 'service_id', 'name', 'image', 'status');
                 },
                 'subCategories.service:id,name,slug',
@@ -167,7 +168,13 @@ class HomeController extends Controller
             ->orderBy('order')
             ->orderBy('id')
             ->get();
-        $faqs = FAQ::where('status', true)->orderBy('order')->get();
+        $faqs = Help::query()
+            ->where('status', 'active')
+            ->orderBy('category')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->limit(6)
+            ->get();
         return view('frontend.index', compact('services', 'banners', 'about_us', 'whychooses', 'testimonials', 'homeblogs', 'howworks', 'mcqs', 'blogPosts', 'eventDetails', 'homepageCategories', 'faqs'));
     }
 

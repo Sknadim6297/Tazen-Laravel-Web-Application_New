@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const track = document.querySelector('[data-category-slider-track]');
     if (!track) return;
 
+    const controls = document.querySelector('.homepage-category-slider__controls');
     const previous = document.querySelector('[data-category-slide-prev]');
     const next = document.querySelector('[data-category-slide-next]');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -9,9 +10,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateControls() {
         const maxScroll = track.scrollWidth - track.clientWidth;
+        const canScroll = maxScroll > 1;
+        controls.hidden = !canScroll;
+        track.classList.toggle('is-single-category', track.children.length === 1);
+        if (!canScroll) {
+            previous.disabled = true;
+            next.disabled = true;
+            return;
+        }
+
         previous.disabled = track.scrollLeft <= 1;
         next.disabled = track.scrollLeft >= maxScroll - 1;
     }
+
+    function showImageFallback(image) {
+        image.hidden = true;
+        const fallback = image.parentElement.querySelector('.homepage-category-card__fallback');
+        if (fallback) fallback.removeAttribute('hidden');
+    }
+
+    track.querySelectorAll('.homepage-category-card__art img').forEach(function (image) {
+        image.addEventListener('error', function () {
+            showImageFallback(image);
+        }, { once: true });
+
+        if (image.complete && image.naturalWidth === 0) {
+            showImageFallback(image);
+        }
+    });
 
     function scrollTrack(direction) {
         const card = track.querySelector('.homepage-category-card');
