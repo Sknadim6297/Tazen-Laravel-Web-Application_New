@@ -1,8 +1,8 @@
 <footer class="tazen-footer" id="tazen-public-footer">
     <div class="tazen-footer__main">
         <div class="tazen-footer__brand">
-            <a class="tazen-footer__logo" href="{{ url('/') }}" aria-label="Tazen home">
-                <img src="{{ asset('customer-css/assets/images/tazen_logo.png') }}" alt="Tazen" width="200" height="54" loading="lazy">
+            <a class="tazen-footer__logo" href="{{ url('/') }}" aria-label="Yuktione home">
+                <img src="{{ asset('frontend/assets/Yuktione_logo.png') }}" alt="Yuktione" width="155" height="52" loading="lazy">
             </a>
             <p>Discover trusted professionals and services for your next step.</p>
             <nav class="tazen-footer__social" aria-label="Tazen on social media">

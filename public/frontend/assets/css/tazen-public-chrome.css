@@ -49,8 +49,9 @@
 .tazen-header__brand img,
 .tazen-footer__logo img {
     display: block;
-    width: clamp(132px, 14vw, 180px);
-    height: auto;
+    width: auto;
+    height: 48px;
+    max-width: min(100%, 180px);
     object-fit: contain;
 }
 
@@ -618,10 +619,6 @@ html.tazen-public-nav-open {
         font-size: .8rem;
     }
 
-    .tazen-header__brand img {
-        width: 145px;
-    }
-
     .tazen-footer__main {
         grid-template-columns: minmax(210px, 1.25fr) repeat(2, minmax(135px, .85fr)) minmax(190px, 1fr);
         gap: 1.5rem;
@@ -807,10 +804,6 @@ html.tazen-public-nav-open {
         gap: .5rem;
     }
 
-    .tazen-header__brand img {
-        width: 132px;
-    }
-
     .tazen-header__actions {
         gap: .45rem;
     }
@@ -909,14 +902,6 @@ html.tazen-public-nav-open {
     width: min(100% - 3rem, 1440px);
     min-height: 80px;
     gap: clamp(1rem, 2vw, 2rem);
-}
-
-.tazen-header__brand img,
-.tazen-footer__logo img {
-    width: auto;
-    height: 56px;
-    max-width: min(100%, 170px);
-    object-fit: contain;
 }
 
 .tazen-header__content {
@@ -1161,6 +1146,10 @@ html.tazen-public-nav-open {
     display: none;
 }
 
+.tazen-header__mobile-heading {
+    display: none;
+}
+
 .tazen-header__backdrop {
     display: none;
 }
@@ -1290,16 +1279,18 @@ html.tazen-public-nav-open {
 
     .tazen-header__content {
         position: fixed;
-        inset: 72px 0 0;
+        inset: 72px 0 0 auto;
         z-index: 1002;
         display: none;
         align-items: stretch;
         flex-direction: column;
         justify-content: flex-start;
         gap: 1.1rem;
+        width: min(440px, 100%);
         overflow-y: auto;
         padding: 1rem 1.25rem 2rem;
         border-top: 1px solid var(--tazen-chrome-border);
+        border-left: 1px solid var(--tazen-chrome-border);
         background: var(--tazen-chrome-white);
         box-shadow: 0 18px 32px rgb(11 27 80 / 10%);
     }
@@ -1310,6 +1301,36 @@ html.tazen-public-nav-open {
 
     .tazen-header__navigation {
         flex: 0 0 auto;
+    }
+
+    .tazen-header__mobile-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--tazen-chrome-navy);
+        font-size: .95rem;
+        font-weight: 600;
+    }
+
+    .tazen-header__mobile-close {
+        display: inline-grid;
+        width: 38px;
+        height: 38px;
+        place-items: center;
+        border: 1px solid var(--tazen-chrome-border);
+        border-radius: 50%;
+        background: var(--tazen-chrome-white);
+        color: var(--tazen-chrome-navy);
+        cursor: pointer;
+    }
+
+    .tazen-header__mobile-close svg {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
     }
 
     .tazen-header__navigation-list {
@@ -1359,8 +1380,8 @@ html.tazen-public-nav-open {
 
     .tazen-header__brand img,
     .tazen-footer__logo img {
-        height: 48px;
-        max-width: 150px;
+        height: 40px;
+        max-width: 140px;
     }
 
     .tazen-header__content {

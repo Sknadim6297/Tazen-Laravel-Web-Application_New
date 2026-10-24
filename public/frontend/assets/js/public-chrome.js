@@ -2,6 +2,7 @@ document.querySelectorAll('[data-public-header]').forEach((header) => {
     const mobileToggle = header.querySelector('[data-mobile-nav-toggle]');
     const mobileNav = header.querySelector('[data-mobile-nav]');
     const mobileBackdrop = header.querySelector('[data-mobile-nav-backdrop]');
+    const mobileClose = header.querySelector('[data-mobile-nav-close]');
     const accountToggle = header.querySelector('[data-account-toggle]');
     const accountMenu = header.querySelector('[data-account-menu]');
     const searchForm = header.querySelector('[data-header-search]');
@@ -19,7 +20,7 @@ document.querySelectorAll('[data-public-header]').forEach((header) => {
         document.documentElement.classList.toggle('tazen-public-nav-open', isOpen);
 
         if (isOpen) {
-            mobileNav.querySelector('a[href]')?.focus();
+            mobileClose?.focus();
         } else if (document.activeElement !== mobileToggle) {
             mobileToggle.focus();
         }
@@ -28,6 +29,7 @@ document.querySelectorAll('[data-public-header]').forEach((header) => {
     mobileToggle?.addEventListener('click', () => {
         setMobileNavigation(mobileToggle.getAttribute('aria-expanded') !== 'true');
     });
+    mobileClose?.addEventListener('click', () => setMobileNavigation(false));
     mobileBackdrop?.addEventListener('click', () => setMobileNavigation(false));
 
     accountToggle?.addEventListener('click', () => {

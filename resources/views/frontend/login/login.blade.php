@@ -1,25 +1,30 @@
-@extends('tazen-v2.layouts.app')
-
 @php
     $initialRole = request()->is('professional/login') || request('role') === 'professional'
         ? 'professional'
         : 'customer';
 @endphp
 
-@section('title', 'Sign In | Yuktione')
-@section('meta_description', 'Sign in to your Yuktione account to manage consultations and bookings.')
-@section('body_class', 'yuktione-auth-page')
-
-@push('head')
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="Sign in to your Yuktione account to manage consultations and bookings.">
+    <meta name="theme-color" content="#168A80">
+    <title>Sign In | Yuktione</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-@endpush
-
-@push('styles')
-    @vite('resources/css/customer-panel.css')
-    @vite('resources/css/auth-theme.css')
-@endpush
-
-@section('content')
+    @vite([
+        'resources/css/tazen.css',
+        'resources/css/customer-panel.css',
+        'resources/css/auth-theme.css',
+        'resources/css/yuktione-feedback.css',
+        'resources/js/yuktione-feedback.js',
+    ])
+</head>
+<body class="yuktione-auth-page antialiased">
 <div id="loginPanel" data-yuktione-auth class="yuktione-auth-page mx-auto grid min-h-dvh w-full max-w-[1600px] bg-background lg:grid-cols-2">
     <section class="flex min-w-0 items-center justify-center px-5 py-5 sm:px-8 sm:py-6 lg:px-10 lg:py-4 xl:px-16" aria-labelledby="login-heading">
         <div class="w-full max-w-md">
@@ -185,9 +190,8 @@
         </div>
     </div>
 </dialog>
-@endsection
 
-@push('scripts')
+<x-yuktione.feedback />
 <script>
 (() => {
     const form = document.getElementById('loginForm');
@@ -450,4 +454,5 @@
     });
 })();
 </script>
-@endpush
+</body>
+</html>

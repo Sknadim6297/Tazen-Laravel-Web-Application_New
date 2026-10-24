@@ -28,8 +28,8 @@
 
 <header class="tazen-header" id="tazen-public-header" data-public-header>
     <div class="tazen-header__bar tazen-header__inner">
-        <a class="tazen-header__brand" href="{{ route('home') }}" aria-label="Tazen home">
-            <img src="{{ asset('customer-css/assets/images/tazen_logo.png') }}" alt="Tazen" width="200" height="54">
+        <a class="tazen-header__brand" href="{{ route('home') }}" aria-label="Yuktione home">
+            <img src="{{ asset('frontend/assets/Yuktione_logo.png') }}" alt="Yuktione" width="155" height="52">
         </a>
 
         <button class="tazen-header__mobile-toggle" type="button" aria-expanded="false" aria-controls="tazen-header-content" aria-label="Open navigation menu" data-mobile-nav-toggle>
@@ -37,6 +37,14 @@
         </button>
 
         <div class="tazen-header__content" id="tazen-header-content" data-mobile-nav>
+            <div class="tazen-header__mobile-heading">
+                <span>Menu</span>
+                <button class="tazen-header__mobile-close" type="button" aria-label="Close navigation menu" data-mobile-nav-close>
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="m6 6 12 12M18 6 6 18"></path>
+                    </svg>
+                </button>
+            </div>
             <nav class="tazen-header__navigation" aria-label="Main navigation">
                 <ul class="tazen-header__navigation-list">
                     <li><a href="{{ route('home') }}" @class(['is-active' => request()->routeIs('home')])>Home</a></li>
