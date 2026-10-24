@@ -16,7 +16,7 @@
 		@yield('meta')
 	@else
 		<!-- Default Meta Tags -->
-		<meta name="description" content="{{ isset($metaDescription) ? $metaDescription : 'Discover trusted professionals in career counselling, business, health, finance, and more. Book verified experts easily with Tazen.in.' }}">
+		<meta name="description" content="@yield('meta_description', isset($metaDescription) ? $metaDescription : 'Discover trusted professionals in career counselling, business, health, finance, and more. Book verified experts easily with Tazen.in.')">
 		<meta name="keywords" content="career counselling, health experts, finance professionals, business consultants, verified experts, professional consultation, appointment booking, Tazen">
 		
 		<!-- Open Graph Meta Tags for Social Media -->
@@ -33,8 +33,9 @@
 		<meta name="twitter:description" content="{{ isset($metaDescription) ? $metaDescription : 'Discover trusted professionals in career counselling, business, health, finance, and more. Book verified experts easily with Tazen.in.' }}">
 		<meta name="twitter:image" content="{{ asset('frontend/assets/img/tazen-logo.png') }}">
 		
-		<title>{{ isset($metaTitle) ? $metaTitle : 'Tazen.in | Find Verified Experts for Career, Health & Finance' }}</title>
+		<title>@yield('title', isset($metaTitle) ? $metaTitle : 'Tazen.in | Find Verified Experts for Career, Health & Finance')</title>
 	@endif
+	@stack('head')
 
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.6.0/css/all.css">
@@ -66,6 +67,7 @@
 <link rel="stylesheet" href="{{ asset('frontend/assets/css/contacts.css') }}"> --}}
 {{-- <link rel="stylesheet" href="{{ asset('frontend/assets/css/blog.css') }}"> --}}
 @yield('styles')
+@stack('styles')
  
 
 	<!-- slick slider css  -->
@@ -315,9 +317,11 @@
 	@endif
 </head>
 
-<body>
+<body class="@yield('body_class')">
 
-	@include('frontend.sections.header')
+	@if (!request()->routeIs('login'))
+		@include('frontend.sections.header')
+	@endif
 
 	@if ($isCustomerPanelFlow)
 		<div data-yuktione-panel="customer">
@@ -327,17 +331,19 @@
 		@yield('content')
 	@endif
 	
-	@if (!isset($showFooter) || $showFooter)
-	@include('frontend.sections.footer')
+	@if (!request()->routeIs('login') && (!isset($showFooter) || $showFooter))
+		@include('frontend.sections.footer')
 	@endif
 
 	<x-yuktione.feedback />
 
 	<!-- WhatsApp Floating Button -->
-	<a href="https://wa.me/+919147421560?text=Hello%20Tazen!%20I%20need%20assistance%20with%20your%20services." target="_blank" class="whatsapp-float">
-		<i class="fab fa-whatsapp"></i>
-		<span class="tooltip-text">Chat with us on WhatsApp</span>
-	</a>
+	@if (!request()->routeIs('login'))
+		<a href="https://wa.me/+919147421560?text=Hello%20Tazen!%20I%20need%20assistance%20with%20your%20services." target="_blank" class="whatsapp-float">
+			<i class="fab fa-whatsapp"></i>
+			<span class="tooltip-text">Chat with us on WhatsApp</span>
+		</a>
+	@endif
 
 	<!-- view-specific scripts will be injected later (after libraries) -->
 
@@ -750,6 +756,7 @@ $(document).ready(function () {
 		<script src="{{ asset('frontend/assets/js/yuktione-home.js') }}?v={{ filemtime(public_path('frontend/assets/js/yuktione-home.js')) }}"></script>
 		<script src="{{ asset('frontend/assets/js/home-category-slider.js') }}?v={{ filemtime(public_path('frontend/assets/js/home-category-slider.js')) }}"></script>
 	@endif
+	@stack('scripts')
 	@vite('resources/js/yuktione-feedback.js')
 </body>
 </html>

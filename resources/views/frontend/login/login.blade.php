@@ -1,4 +1,4 @@
-@extends('tazen-v2.layouts.app')
+@extends('layouts.layout')
 
 @php
     $initialRole = request()->is('professional/login') || request('role') === 'professional'
