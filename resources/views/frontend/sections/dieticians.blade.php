@@ -319,6 +319,7 @@
             </div>
         </div>
     </section>
+    {{-- Legacy hard-coded sample cards are not live programme records and must not be shown.
     <!-- popular category section  -->
     <section style="background-color: #FFF2E1;">
         <div class="container margin_60_40">
@@ -486,6 +487,7 @@
             <p class="text-center"><a href="event-list.html" class="btn_1 medium">Start Searching</a></p>
         </div>
     </section>
+    --}}
     <!-- /bg_gray -->
     
     <!-- /container -->

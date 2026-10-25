@@ -33,16 +33,16 @@
 
                         <div class="head">
                             <div class="title">
-                                <h3>{{ $bookingData['event_name'] ?? 'Event Booking' }}</h3>
+                                <h3>{{ $bookingData['event_name'] ?? 'Programme Booking' }}</h3>
                                 <p>{{ $bookingData['location'] ?? 'Location N/A' }} ({{ ucfirst($bookingData['type'] ?? '') }})</p>
                             </div>
                         </div>
 
                         <div class="main">
-                            <h6>Event Booking Summary</h6>
+                            <h6>Programme Booking Summary</h6>
                             <ul>
-                                <li>Event Name: <span>{{ $bookingData['event_name'] ?? ($event->heading ?? 'N/A') }}</span></li>
-                                <li>Event Date: <span>{{ isset($bookingData['event_date']) ? \Carbon\Carbon::parse($bookingData['event_date'])->format('d M Y') : 'N/A' }}</span></li>
+                                <li>Programme Name: <span>{{ $bookingData['event_name'] ?? ($event->heading ?? 'N/A') }}</span></li>
+                                <li>Programme Date: <span>{{ isset($bookingData['event_date']) ? \Carbon\Carbon::parse($bookingData['event_date'])->format('d M Y') : 'N/A' }}</span></li>
                                 <li>Total Amount: <span>{{ getCurrencySymbol() }}{{ number_format(convertCurrency($bookingData['total_price'] ?? 0), 2) }}</span></li>
                                 <li>Status: <span>{{ ucfirst($event->status ?? 'Pending') }}</span></li>
                                 <li>Location: <span>{{ $bookingData['location'] ?? ($event->city ?? 'N/A') }}</span></li>
@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'info',
             showCancelButton: true,
             confirmButtonText: '<i class="fa fa-list"></i> View My Bookings',
-            cancelButtonText: '<i class="fa fa-calendar"></i> Browse Events',
+            cancelButtonText: '<i class="fa fa-calendar"></i> Browse Programmes',
             confirmButtonColor: '#17a2b8',
             cancelButtonColor: '#6c757d'
         }).then((result) => {

@@ -59,8 +59,8 @@ document.addEventListener('DOMContentLoaded', function() {
             instruction: "View your appointment history here"
         },
         {
-            title: "Step 7: Events & Workshops 🎪",
-            message: "Explore upcoming events and workshops! Click 'Events' in the sidebar to browse, register, and manage your event bookings.",
+            title: "Step 7: Programmes 🎪",
+            message: "Explore upcoming programmes and workshops! Click 'Programmes' in the sidebar to browse, register, and manage your programme bookings.",
             target: "[href*='event'], .nav-link:contains('Event')",
             position: "right",
             action: "pulse",

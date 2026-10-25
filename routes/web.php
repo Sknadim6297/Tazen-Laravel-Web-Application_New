@@ -243,6 +243,9 @@ Route::get('/eventlist', function (Request $request) {
 
     return view('frontend.sections.eventlist', compact('events', 'services', 'filter', 'categories', 'category', 'price_range', 'cities', 'city', 'event_modes', 'event_mode'));
 })->name('event.list');
+Route::get('/programmes', function (Request $request) {
+    return redirect()->route('event.list', $request->query(), 302);
+})->name('programmes.index');
 Route::get('/allevent/{id}', function ($id) {
     // Try to find in AllEvent (this table has status column)
     $allEvent = AllEvent::where('id', $id)
@@ -298,6 +301,9 @@ Route::get('/allevent/{id}', function ($id) {
 
     return view('frontend.sections.allevent', compact('event', 'services', 'eventfaqs', 'eventDetail'));
 })->name('event.details');
+Route::get('/programmes/{id}', function ($id) {
+    return redirect()->to(url('/allevent/' . $id), 302);
+})->whereNumber('id')->name('programmes.show');
 Route::get('allevent', function ($id) {
     $eventdetails = Eventdetail::with('event')->latest()->get();
     // dd($eventdetails);
@@ -385,7 +391,7 @@ Route::get('/blog-post/{identifier}', function ($identifier) {
     return view('frontend.sections.blog-post', compact('blogPost', 'services', 'relatedBlog', 'latestBlogs', 'categoryCounts', 'comments'));
 })->name('blog.show');
 Route::get('eventdetails', function () {
-    return view('frontend.sections.eventdetails');
+    return redirect()->route('event.list', [], 302);
 });
 Route::get('interiordesign', function () {
     return view('frontend.sections.interiordesign');

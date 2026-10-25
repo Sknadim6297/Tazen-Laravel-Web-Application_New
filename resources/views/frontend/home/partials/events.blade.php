@@ -1,131 +1,100 @@
 @php
-    $hasUpcomingEvents = $eventDetails->contains(
-        fn ($eventDetail) => $eventDetail->event_date && !$eventDetail->event_date->copy()->startOfDay()->lt(\Carbon\Carbon::today())
-    );
+    $hasUpcomingProgrammes = $upcomingProgrammeEvents->isNotEmpty();
+    $activeProgrammeTab = 'upcoming';
 @endphp
 
-<section class="yk-home-events" aria-labelledby="yk-home-events-title">
+<section class="yk-home-events" aria-labelledby="yk-home-events-title" data-programmes>
     <div class="yk-home-container">
-        <header class="yk-home-events__heading">
+        <header class="yk-home-events__heading" data-programme-reveal>
             <div class="yk-home-events__heading-copy">
-                <p class="yk-home-events__eyebrow">Events &amp; Workshops</p>
-                <h2 id="yk-home-events-title">Discover Events &amp; Expert-Led Sessions</h2>
-                <p>Explore workshops, webinars and experiences designed to help you learn and grow.</p>
+                <p class="yk-home-events__eyebrow">Learn, Grow &amp; Connect</p>
+                <h2 id="yk-home-events-title">Discover Programmes Designed for You</h2>
+                <p>Explore expert-led sessions, workshops and learning experiences designed to support your personal and professional growth.</p>
             </div>
-            <a class="yk-home-events__all-link" href="{{ route('event.list') }}">
-                View All Events
+            <a class="yk-home-events__all-link" href="{{ route('programmes.index') }}">
+                View All Programmes
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                     <path d="M4 12h15M13 6l6 6-6 6"/>
                 </svg>
             </a>
         </header>
 
-        @if ($eventDetails->isNotEmpty())
-            @if (!$hasUpcomingEvents)
-                <p class="yk-home-events__archive-label">Past Events</p>
-            @endif
-
-            <div class="yk-home-events__grid">
-                @foreach ($eventDetails as $eventDetail)
-                    @php
-                        $imagePath = is_array($eventDetail->banner_image)
-                            ? ($eventDetail->banner_image[0] ?? null)
-                            : $eventDetail->banner_image;
-                        $imagePath = $imagePath ?: $eventDetail->event->card_image;
-                        $cleanImagePath = ltrim((string) $imagePath, '/');
-                        if (\Illuminate\Support\Str::startsWith($cleanImagePath, ['http://', 'https://'])) {
-                            $imageUrl = $cleanImagePath;
-                        } else {
-                            $storagePath = \Illuminate\Support\Str::startsWith($cleanImagePath, 'storage/')
-                                ? \Illuminate\Support\Str::after($cleanImagePath, 'storage/')
-                                : $cleanImagePath;
-                            $imageUrl = $storagePath ? asset('storage/' . $storagePath) : null;
-                        }
-                        $isPastEvent = $eventDetail->event_date
-                            && $eventDetail->event_date->copy()->startOfDay()->lt(\Carbon\Carbon::today());
-                    @endphp
-
-                    <article class="yk-home-event-card">
-                        <a class="yk-home-event-card__image" href="{{ url('/allevent/' . $eventDetail->event_id) }}" aria-label="View {{ $eventDetail->event->heading }}">
-                            @if ($imageUrl)
-                                <img
-                                    src="{{ $imageUrl }}"
-                                    alt="{{ $eventDetail->event->heading }}"
-                                    loading="lazy"
-                                    decoding="async"
-                                    data-event-image
-                                >
-                            @endif
-                            <span class="yk-home-event-card__image-fallback" aria-hidden="{{ $imageUrl ? 'true' : 'false' }}" @if ($imageUrl) hidden @endif>
-                                <svg viewBox="0 0 64 64" focusable="false">
-                                    <path d="M12 14h40v36H12zM19 9v10m26-10v10M12 24h40"/>
-                                    <path d="m22 40 7-7 6 6 5-5 8 8"/>
-                                    <circle cx="23" cy="31" r="2"/>
-                                </svg>
-                            </span>
-                        </a>
-
-                        <div class="yk-home-event-card__body">
-                            <div class="yk-home-event-card__badges">
-                                @if ($eventDetail->event_type)
-                                    <span class="yk-home-event-card__type">{{ $eventDetail->event_type }}</span>
-                                @endif
-                                @if ($eventDetail->event_date)
-                                    <span class="yk-home-event-card__status {{ $isPastEvent ? 'is-past' : 'is-upcoming' }}">
-                                        {{ $isPastEvent ? 'Past Event' : 'Upcoming' }}
-                                    </span>
-                                @endif
-                            </div>
-                            <h3>{{ $eventDetail->event->heading }}</h3>
-
-                            @if ($eventDetail->description)
-                                <p class="yk-home-event-card__description">{{ $eventDetail->description }}</p>
-                            @endif
-
-                            <dl class="yk-home-event-card__details">
-                                @if ($eventDetail->event_date)
-                                    <div>
-                                        <dt>
-                                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                                <rect x="3" y="5" width="18" height="16" rx="2"/>
-                                                <path d="M16 3v4M8 3v4M3 10h18"/>
-                                            </svg>
-                                            Date
-                                        </dt>
-                                        <dd>{{ $eventDetail->event_date->format('j M Y') }}</dd>
-                                    </div>
-                                @endif
-
-                                @if ($eventDetail->organizer_name)
-                                    <div>
-                                        <dt>
-                                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                                <circle cx="12" cy="8" r="4"/>
-                                                <path d="M4 21a8 8 0 0 1 16 0"/>
-                                            </svg>
-                                            Organizer
-                                        </dt>
-                                        <dd>{{ $eventDetail->organizer_name }}</dd>
-                                    </div>
-                                @endif
-                            </dl>
-
-                            <div class="yk-home-event-card__footer">
-                                <span class="yk-home-event-card__price">{{ formatPrice($eventDetail->starting_fees) }}</span>
-                                <a class="yk-home-event-card__button" href="{{ url('/allevent/' . $eventDetail->event_id) }}">
-                                    View Event
-                                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                        <path d="M4 12h15M13 6l6 6-6 6"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                @endforeach
+        <div class="yk-home-programmes__toolbar" data-programme-reveal>
+            <div class="yk-home-programmes__tabs" role="tablist" aria-label="Programme dates">
+                <button
+                    class="yk-home-programmes__tab {{ $activeProgrammeTab === 'upcoming' ? 'is-active' : '' }}"
+                    id="yk-programmes-upcoming-tab"
+                    type="button"
+                    role="tab"
+                    aria-controls="yk-programmes-upcoming-panel"
+                    aria-selected="{{ $activeProgrammeTab === 'upcoming' ? 'true' : 'false' }}"
+                    tabindex="{{ $activeProgrammeTab === 'upcoming' ? '0' : '-1' }}"
+                    data-programme-tab="upcoming"
+                >Upcoming Programmes <span>{{ $upcomingProgrammeEvents->count() }}</span></button>
+                <button
+                    class="yk-home-programmes__tab {{ $activeProgrammeTab === 'past' ? 'is-active' : '' }}"
+                    id="yk-programmes-past-tab"
+                    type="button"
+                    role="tab"
+                    aria-controls="yk-programmes-past-panel"
+                    aria-selected="{{ $activeProgrammeTab === 'past' ? 'true' : 'false' }}"
+                    tabindex="{{ $activeProgrammeTab === 'past' ? '0' : '-1' }}"
+                    data-programme-tab="past"
+                >Past Programmes <span>{{ $pastProgrammeEvents->count() }}</span></button>
             </div>
-        @else
-            <p class="yk-home-events__empty">No events are available right now. Please check back soon.</p>
-        @endif
+            <div class="yk-home-programmes__carousel-controls" data-programme-controls>
+                <button type="button" data-programme-previous aria-label="Show previous programmes" disabled>
+                    <span aria-hidden="true">←</span>
+                </button>
+                <button type="button" data-programme-next aria-label="Show next programmes" disabled>
+                    <span aria-hidden="true">→</span>
+                </button>
+            </div>
+        </div>
 
+        <div
+            class="yk-home-programmes__panel"
+            id="yk-programmes-upcoming-panel"
+            role="tabpanel"
+            aria-labelledby="yk-programmes-upcoming-tab"
+            data-programme-panel="upcoming"
+            data-programme-reveal
+        >
+            @if ($upcomingProgrammeEvents->isNotEmpty())
+                <div class="yk-home-events__grid" data-programme-track tabindex="0" aria-label="Upcoming programmes; use arrow keys to scroll">
+                    @foreach ($upcomingProgrammeEvents as $programme)
+                        @include('frontend.home.partials.programme-card', ['programme' => $programme])
+                    @endforeach
+                </div>
+            @else
+                <p class="yk-home-events__empty">
+                    No upcoming programmes are scheduled right now.
+                    @if ($pastProgrammeEvents->isNotEmpty())
+                        <button type="button" data-programme-show-past>Browse past programmes</button> to explore previous sessions.
+                    @else
+                        Please check back soon.
+                    @endif
+                </p>
+            @endif
+        </div>
+
+        <div
+            class="yk-home-programmes__panel"
+            id="yk-programmes-past-panel"
+            role="tabpanel"
+            aria-labelledby="yk-programmes-past-tab"
+            data-programme-panel="past"
+            data-programme-reveal
+        >
+            @if ($pastProgrammeEvents->isNotEmpty())
+                <div class="yk-home-events__grid" data-programme-track tabindex="0" aria-label="Past programmes; use arrow keys to scroll">
+                    @foreach ($pastProgrammeEvents as $programme)
+                        @include('frontend.home.partials.programme-card', ['programme' => $programme])
+                    @endforeach
+                </div>
+            @else
+                <p class="yk-home-events__empty">There are no past programmes to show yet.</p>
+            @endif
+        </div>
     </div>
 </section>

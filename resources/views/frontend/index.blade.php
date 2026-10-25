@@ -895,6 +895,8 @@
 					</div>
 				</div>
 			</section>
+
+			@include('frontend.home.partials.featured-experts')
 		
 		{{-- Popular Services temporarily hidden — uncomment to restore.
 		<section class="popular-services-main-section py-5" style="background-color: white;">

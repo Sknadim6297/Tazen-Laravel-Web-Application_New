@@ -72,11 +72,11 @@
                                 <p>A confirmation has been sent to your email address.</p>
                             </div>
                             
-                            <h6>Event Booking Summary</h6>
+                            <h6>Programme Booking Summary</h6>
                             <ul>
                                 @if(isset($booking))
-                                    <li>Event Name: <span>{{ $event->heading ?? $booking->event_name ?? 'N/A' }}</span></li>
-                                    <li>Event Date: <span>{{ \Carbon\Carbon::parse($booking->event_date ?? $booking->booking_date)->format('d M Y') }}</span></li>
+                                    <li>Programme Name: <span>{{ $event->heading ?? $booking->event_name ?? 'N/A' }}</span></li>
+                                    <li>Programme Date: <span>{{ \Carbon\Carbon::parse($booking->event_date ?? $booking->booking_date)->format('d M Y') }}</span></li>
                                     <li>Total Amount: <span>{{ getCurrencySymbol() }}{{ number_format(convertCurrency($booking->amount ?? $booking->total_price ?? 0), 2) }}</span></li>
                                     <li>Status: <span class="text-success">Confirmed</span></li>
                                     <li>Location: <span>{{ $booking->location ?? 'N/A' }}</span></li>
@@ -86,8 +86,8 @@
                                     <li>Your Name: <span>{{ $user->name ?? 'N/A' }}</span></li>
                                     <li>Your Email: <span>{{ $user->email ?? 'N/A' }}</span></li>
                                 @else
-                                    <li>Event Name: <span>{{ $event->heading ?? 'N/A' }}</span></li>
-                                    <li>Event Date: <span>{{ \Carbon\Carbon::parse($bookingData['event_date'])->format('d M Y') ?? 'N/A' }}</span></li>
+                                    <li>Programme Name: <span>{{ $event->heading ?? 'N/A' }}</span></li>
+                                    <li>Programme Date: <span>{{ \Carbon\Carbon::parse($bookingData['event_date'])->format('d M Y') ?? 'N/A' }}</span></li>
                                     <li>Total Amount: <span>{{ getCurrencySymbol() }}{{ number_format(convertCurrency($bookingData['total_price'] ?? $event->starting_fees ?? 0), 2) }}</span></li>
                                     <li>Status: <span class="text-success">Confirmed</span></li>
                                     <li>Location: <span>{{ $bookingData['location'] ?? 'N/A' }}</span></li>
@@ -134,7 +134,7 @@
 
                             <hr>
                             <a href="{{ route('user.customer-event.index') }}" class="btn_1 full-width mb_5">View All Bookings</a>
-                            <a href="{{ route('event.list') }}" class="btn_1 full-width outline mb_25">Browse More Events</a>
+                            <a href="{{ route('programmes.index') }}" class="btn_1 full-width outline mb_25">Browse More Programmes</a>
                         </div>
                     @else
                         <div class="main">

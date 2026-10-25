@@ -84,7 +84,7 @@ class HomeController extends Controller
             ->latest()
             ->get();
         
-        // Combine both admin and professional events, then take only 6 most recent
+        // Combine the existing admin and professional event records for the homepage.
         $allEvents = collect();
         
         // Add admin events with creator type
@@ -151,7 +151,13 @@ class HomeController extends Controller
                 $isPast = $eventDay->lt($today);
 
                 return [$isPast ? 1 : 0, $isPast ? -$eventDay->timestamp : $eventDay->timestamp];
-            })
+            })->values();
+        $upcomingProgrammeEvents = $eventDetails
+            ->filter(fn ($eventDetail) => !$eventDetail->event_date || !$eventDetail->event_date->copy()->startOfDay()->lt($today))
+            ->take(6)
+            ->values();
+        $pastProgrammeEvents = $eventDetails
+            ->filter(fn ($eventDetail) => $eventDetail->event_date && $eventDetail->event_date->copy()->startOfDay()->lt($today))
             ->take(6)
             ->values();
         
@@ -168,6 +174,28 @@ class HomeController extends Controller
             ->orderBy('order')
             ->orderBy('id')
             ->get();
+        $featuredExperts = Professional::query()
+            ->with(['profile', 'professionalServices.service', 'professionalServices.subServices', 'rates'])
+            ->where('status', 'accepted')
+            ->where('active', true)
+            ->whereHas('profile')
+            ->whereHas('professionalServices')
+            ->latest()
+            ->limit(8)
+            ->get();
+        $featuredExpertCategories = $featuredExperts
+            ->flatMap(function ($expert) {
+                $serviceCategories = $expert->professionalServices
+                    ->map(fn ($professionalService) => $professionalService->service?->name)
+                    ->filter();
+
+                return $serviceCategories->isNotEmpty()
+                    ? $serviceCategories
+                    : collect([$expert->profile?->specialization])->filter();
+            })
+            ->unique()
+            ->sort()
+            ->values();
         $faqs = Help::query()
             ->where('status', 'active')
             ->orderBy('category')
@@ -175,7 +203,7 @@ class HomeController extends Controller
             ->orderByDesc('id')
             ->limit(6)
             ->get();
-        return view('frontend.index', compact('services', 'banners', 'about_us', 'whychooses', 'testimonials', 'homeblogs', 'howworks', 'mcqs', 'blogPosts', 'eventDetails', 'homepageCategories', 'faqs'));
+        return view('frontend.index', compact('services', 'banners', 'about_us', 'whychooses', 'testimonials', 'homeblogs', 'howworks', 'mcqs', 'blogPosts', 'upcomingProgrammeEvents', 'pastProgrammeEvents', 'homepageCategories', 'featuredExperts', 'featuredExpertCategories', 'faqs'));
     }
 
     //     public function getServiceQuestions($serviceId)

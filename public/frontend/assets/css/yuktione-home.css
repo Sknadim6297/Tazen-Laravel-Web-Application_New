@@ -1,10 +1,10 @@
 .tazen-header--home {
-    --tazen-chrome-navy: #263238;
-    --tazen-chrome-teal: #168a80;
-    --tazen-chrome-muted: #64748b;
-    --tazen-chrome-border: #e0e9f0;
+    --tazen-chrome-navy: #142B4D;
+    --tazen-chrome-teal: #36877F;
+    --tazen-chrome-muted: #718096;
+    --tazen-chrome-border: #E2E9EE;
     min-height: 92px;
-    box-shadow: 0 3px 14px rgb(38 50 56 / 5%);
+    box-shadow: 0 3px 14px rgb(20 43 77 / 5%);
 }
 
 .tazen-header--home .tazen-header__inner {
@@ -26,7 +26,7 @@
 }
 
 .tazen-header--home .tazen-header__navigation-list a.is-active {
-    color: #263238;
+    color: #142B4D;
 }
 
 .tazen-header--home .tazen-header__search-toggle {
@@ -38,7 +38,7 @@
     border: 1px solid var(--tazen-chrome-border);
     border-radius: 50%;
     background: #fff;
-    color: #263238;
+    color: #142B4D;
     cursor: pointer;
     transition: border-color .18s ease, color .18s ease, background-color .18s ease;
 }
@@ -46,9 +46,9 @@
 .tazen-header--home .tazen-header__search-toggle:hover,
 .tazen-header--home .tazen-header__search-toggle:focus-visible,
 .tazen-header--home .tazen-header__search-toggle[aria-expanded="true"] {
-    border-color: #168a80;
-    background: #eaf8f5;
-    color: #11776f;
+    border-color: #36877F;
+    background: #EAF6F2;
+    color: #245E59;
 }
 
 .tazen-header--home .tazen-header__search-toggle svg {

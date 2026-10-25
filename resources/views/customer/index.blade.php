@@ -316,21 +316,21 @@
         <x-tazen-v2.ui.card>
             <x-slot:heading>
                 <div class="flex items-center justify-between gap-3">
-                    <h2 class="font-display text-card-title font-semibold text-brand-secondary">Upcoming events</h2>
-                    <a href="{{ route('event.list') }}" class="text-sm font-semibold text-brand-primary hover:underline">Browse</a>
+                    <h2 class="font-display text-card-title font-semibold text-brand-secondary">Upcoming programmes</h2>
+                    <a href="{{ route('programmes.index') }}" class="text-sm font-semibold text-brand-primary hover:underline">Browse programmes</a>
                 </div>
             </x-slot:heading>
 
             @if ($dashboardError)
                 <x-tazen-v2.panel.empty-state
-                    title="Events unavailable"
-                    description="We couldn't load upcoming events. Please try again later."
+                    title="Programmes unavailable"
+                    description="We couldn't load upcoming programmes. Please try again later."
                     icon="spark"
                 />
             @elseif ($events->isEmpty())
                 <x-tazen-v2.panel.empty-state
-                    title="No upcoming events"
-                    description="When events are published, they will appear here."
+                    title="No upcoming programmes"
+                    description="When programmes are published, they will appear here."
                     icon="spark"
                 />
             @else

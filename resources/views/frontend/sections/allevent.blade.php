@@ -1,4 +1,5 @@
 @extends('layouts.layout')
+@section('title', (isset($allEvent) ? $allEvent->heading : ($event->heading ?? 'Programme')) . ' | Programmes | Yuktione')
 @section('styles')
    {{-- <link rel="stylesheet" href="{{ asset('admin/css/styles.css') }}" /> --}}
    <link rel="stylesheet" href="{{ asset('frontend/assets/css/responsive2.css') }}" media="screen and (max-width: 992px)">
@@ -39,8 +40,9 @@
     .banner-carousel .item img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         object-position: center;
+        background: #f1f5f6;
     }
     
     .banner-carousel .owl-dots {
@@ -691,9 +693,33 @@
     if (isset($event) && !isset($allEvent) && $event->eventDetails && $event->eventDetails->count() > 0) {
         $eventDetail = $event->eventDetails->first();
     }
+    $programmeImageUrl = static function ($imagePath) {
+        if (!filled($imagePath)) {
+            return null;
+        }
+
+        $imagePath = trim(str_replace('\\/', '/', $imagePath));
+        if (\Illuminate\Support\Str::startsWith($imagePath, ['http://', 'https://'])) {
+            return $imagePath;
+        }
+
+        $imagePath = ltrim($imagePath, '/');
+        $imagePath = \Illuminate\Support\Str::startsWith($imagePath, 'storage/')
+            ? \Illuminate\Support\Str::after($imagePath, 'storage/')
+            : $imagePath;
+
+        return asset('storage/' . $imagePath);
+    };
 @endphp
 
-<main>
+<main class="programme-detail">
+  <nav class="programme-detail__breadcrumbs" aria-label="Breadcrumb">
+    <a href="{{ route('home') }}">Home</a>
+    <span aria-hidden="true">/</span>
+    <a href="{{ route('programmes.index') }}">Programmes</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{{ isset($allEvent) ? $allEvent->heading : ($eventDetail->heading ?? $event->heading ?? 'Programme') }}</span>
+  </nav>
   <!-- Improved Banner Section with Left Banner and Right Details -->
   <div class="hero_single event-slide">
     <div class="container">
@@ -713,14 +739,22 @@
                                     }
                                 @endphp
                                 @foreach($bannerImages as $banner)
+                                    @php $bannerUrl = $programmeImageUrl($banner); @endphp
                                     <div class="item">
-                                        <img src="{{ asset('storage/' . str_replace('\\/', '/', $banner)) }}" alt="{{ $allEvent->heading }}" />
+                                        @if ($bannerUrl)
+                                            <img src="{{ $bannerUrl }}" alt="{{ $allEvent->heading }}" loading="lazy" decoding="async" data-programme-detail-image>
+                                        @endif
+                                        <span class="programme-detail__image-fallback" @if ($bannerUrl) hidden @endif aria-hidden="true">Programme artwork unavailable</span>
                                     </div>
                                 @endforeach
                             @else
                                 {{-- Professional event using card_image as fallback --}}
                                 <div class="item">
-                                    <img src="{{ asset('storage/' . $allEvent->card_image) }}" alt="{{ $allEvent->heading }}" />
+                                    @php $bannerUrl = $programmeImageUrl($allEvent->card_image); @endphp
+                                    @if ($bannerUrl)
+                                        <img src="{{ $bannerUrl }}" alt="{{ $allEvent->heading }}" loading="lazy" decoding="async" data-programme-detail-image>
+                                    @endif
+                                    <span class="programme-detail__image-fallback" @if ($bannerUrl) hidden @endif aria-hidden="true">Programme artwork unavailable</span>
                                 </div>
                             @endif
                         @else
@@ -740,13 +774,17 @@
                             @endphp
                             @if (is_array($banners) && count($banners))
                                 @foreach ($banners as $banner)
+                                    @php $bannerUrl = $programmeImageUrl($banner); @endphp
                                     <div class="item">
-                                        <img src="{{ asset('storage/' . str_replace('\\/', '/', $banner)) }}" alt="{{ $eventDetail->heading ?? $event->heading ?? 'Event' }}" />
+                                        @if ($bannerUrl)
+                                            <img src="{{ $bannerUrl }}" alt="{{ $eventDetail->heading ?? $event->heading ?? 'Programme' }}" loading="lazy" decoding="async" data-programme-detail-image>
+                                        @endif
+                                        <span class="programme-detail__image-fallback" @if ($bannerUrl) hidden @endif aria-hidden="true">Programme artwork unavailable</span>
                                     </div>
                                 @endforeach
                             @else
                                 <div class="item">
-                                    <p>No banner images available.</p>
+                                    <span class="programme-detail__image-fallback" aria-hidden="true">Programme artwork unavailable</span>
                                 </div>
                             @endif
                         @endif
@@ -771,7 +809,7 @@
                             <div class="event-info-item">
                                 <i class="fa-solid fa-calendar-days"></i>
                                 <div class="event-info-content">
-                                    <span class="event-info-label">Date & Time</span>
+                                    <span class="event-info-label">Programme Date &amp; Time</span>
                                     <span class="event-info-value">
                                         @if(isset($allEvent))
                                             {{ \Carbon\Carbon::parse($allEvent->date)->format('d M, Y') }}
@@ -966,7 +1004,7 @@
                     <div class="event-info-btn">
                         <i class="fa-solid fa-calendar-days"></i>
                         <div>
-                            <span class="btn-label">Date & Time</span><br>
+                            <span class="btn-label">Programme Date &amp; Time</span><br>
                             <span class="btn-value">
                                 @if(isset($allEvent))
                                     {{ \Carbon\Carbon::parse($allEvent->date)->format('d M, Y') }}
@@ -1043,7 +1081,7 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="share-content">
-                    <h2>Share this Event</h2>
+                    <h2>Share this Programme</h2>
                     <div class="share-button text-center">
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(Request::url()) }}" 
                            target="_blank" 
@@ -1065,32 +1103,14 @@
                         </button>
                     </div>
                     <div id="copyMessage" class="copy-message" style="display: none;">
-                        Event details copied! You can now paste this into your Instagram story or post.
+                        Programme details copied! You can now paste this into your Instagram story or post.
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
-               <div class="first-portion">
-                    <h2>Click on interested to stay update about this event</h2>
-                    <div class="interest">
-                        <div class="like-text d-flex">
-                            <div class="likes d-flex gap-3 align-items-center">
-                                <a href="#"><i class="fa-regular fa-thumbs-up"></i> <span class="text-dark">230</span></a>
-                            </div>
-                            <a href="#"><button class="btn unique-btn" style="width: 100%;">Interested</button></a>
-                        </div>
-                        <p>People have shown interest recently</p>
-                    </div>
-               </div>
-               <div class="second-portion my-3">
-                   <div class="note-content">
-                    <h2>Note</h2>
-                    <p>Reach the venue 30minute prior</p>
-                   </div>
-               </div>
                <div class="third-portion my-3">
-                <div class="about-content">
-                    <h3>About Event Details</h3>
+                   <div class="about-content">
+                       <h3>Programme Details</h3>
                     @if(isset($allEvent))
                         @if(isset($eventDetail) && $eventDetail)
                             {{-- Professional event with event details --}}
@@ -1190,7 +1210,7 @@
                             @else
                                 <div class="accordion-item">
                                     <div class="accordion-body">
-                                        <p>No FAQs available for this event.</p>
+                                        <p>No FAQs available for this programme.</p>
                                     </div>
                                 </div>
                             @endif
@@ -1256,7 +1276,7 @@
                         {{-- Online Event --}}
                         <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; border: 2px solid #2196f3;">
                             <i class="fas fa-video" style="font-size: 3rem; color: #1976d2; margin-bottom: 1rem;"></i>
-                            <h6 style="color: #1565c0; font-weight: 600; margin-bottom: 0.5rem;">Online Event</h6>
+                            <h6 style="color: #1565c0; font-weight: 600; margin-bottom: 0.5rem;">Online Programme</h6>
                             <p style="color: #1976d2; margin-bottom: 1rem; font-size: 0.9rem;">Join from anywhere in the world!</p>
                             <div style="background: rgba(25, 118, 210, 0.1); padding: 1rem; border-radius: 10px; border-left: 4px solid #1976d2;">
                                 <small style="color: #1565c0; font-weight: 500;">
@@ -1326,7 +1346,7 @@
                             <i class="fas fa-calendar-check fa-2x"></i>
                         </div>
                         <div>
-                            <h5 class="modal-title mb-0 fw-bold">Book Your Event</h5>
+                            <h5 class="modal-title mb-0 fw-bold">Book Your Programme</h5>
                             <small class="opacity-75">Complete your booking details</small>
                         </div>
                     </div>
@@ -1340,11 +1360,11 @@
                     <div class="event-summary-card mb-4 p-3 bg-light rounded-3 border">
                         <div class="d-flex align-items-center mb-2">
                             <i class="fas fa-star text-warning me-2"></i>
-                            <h6 class="mb-0 fw-bold text-primary">Event Details</h6>
+                            <h6 class="mb-0 fw-bold text-primary">Programme Details</h6>
                         </div>
                         <div class="row">
                             <div class="col-6">
-                                <small class="text-muted d-block">Event Name</small>
+                                <small class="text-muted d-block">Programme Name</small>
                                 <span class="fw-semibold" id="modalEventName">-</span>
                             </div>
                             <div class="col-6">

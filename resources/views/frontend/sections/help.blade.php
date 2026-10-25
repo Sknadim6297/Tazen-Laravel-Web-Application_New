@@ -63,7 +63,7 @@
 										<i class="icon_documents_alt"></i>
 								@endswitch
 							</span>
-							<h4>{{ $category }}</h4>
+							<h4>{{ $category === 'Events' ? 'Programmes' : $category }}</h4>
 							<p>{{ $helps->where('category', $category)->count() }} articles available</p>
 						</a>
 					</div>

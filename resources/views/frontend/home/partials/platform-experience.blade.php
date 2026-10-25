@@ -61,8 +61,8 @@
                         <path d="M23 10h3a2 2 0 0 1 2 2v14H10m1-15h7m-7 4h7"/>
                     </svg>
                 </span>
-                <h3>Events &amp; Insights</h3>
-                <p>Discover workshops, events and helpful articles.</p>
+                <h3>Programmes &amp; Insights</h3>
+                <p>Discover workshops, programmes and helpful articles.</p>
                 <span class="yk-home-experience-card__index" aria-hidden="true">04</span>
             </article>
         </div>

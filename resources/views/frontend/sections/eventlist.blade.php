@@ -1,4 +1,5 @@
 @extends('layouts.layout')
+@section('title', 'Programmes | Yuktione')
 @section('styles')
    {{-- <link rel="stylesheet" href="{{ asset('admin/css/styles.css') }}" /> --}}
    <link href="{{ asset('frontend/assets/css/style.css') }}" rel="stylesheet">
@@ -12,13 +13,12 @@
 <link rel="stylesheet" href="{{ asset('frontend/assets/css/responsive2.css') }}" media="screen and (max-width: 992px)">
 
 <style>
-/* Ensure event cards have consistent image sizes and card body heights */
-.event-card .featured-thumbnail { overflow: hidden; }
-.event-card-img { width: 100%; height: 220px; object-fit: cover; display: block; }
-.featured-content-inner { min-height: 140px; }
+/* Keep programme artwork fully visible and card heights consistent. */
+.programmes-listing .event-card .featured-thumbnail { overflow: hidden; }
+.programmes-listing .event-card-img { width: 100%; height: 170px; object-fit: contain; display: block; }
+.programmes-listing .featured-content-inner { min-height: 0; }
 @media (max-width: 768px) {
-    .event-card-img { height: 160px; }
-    .featured-content-inner { min-height: 120px; }
+    .programmes-listing .event-card-img { height: 155px; }
 }
 
 /* Force consistent site font on this page (overrides event-list.css fonts) */
@@ -35,7 +35,7 @@ p, a, button, input, select, textarea, label,
 @endsection
 @section('content')
 
-<main class="bg_color">
+<main class="bg_color programmes-listing">
 
     <div class="hero_single blog-head" style="background-image:{{ asset('frontend/assets/img/event-banner.jpg') }} ;">
         <!-- Content inside the div, if needed -->    
@@ -43,8 +43,8 @@ p, a, button, input, select, textarea, label,
          <div class="container">
              <div class="row">
                  <div class="col-xl-12 col-lg-12">
-                     <h1>Events Page</h1>
-                     <p>Looking for the perfect event? We've got you covered!</p>
+                     <h1>Explore Our Programmes</h1>
+                     <p>Discover learning experiences and expert-led sessions for your growth.</p>
                      
                  </div>
              </div>
@@ -84,16 +84,21 @@ p, a, button, input, select, textarea, label,
     <!-- /filters_full -->
     
     <div class="container margin_30_40">
+        <nav class="programmes-breadcrumb" aria-label="Breadcrumb">
+            <a href="{{ route('home') }}">Home</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">Programmes</span>
+        </nav>
         <div class="page_header">
             <div class="row">
                 <div class="col-lg-3">
-                    <h1>Events</h1><span>: {{ $events->count() }} found</span>
+                    <h1>Programmes</h1><span>: {{ $events->count() }} found</span>
                 </div>
                 <div class="col-lg-9">
                     @if(request('city'))
-                        <h1><span>Events in {{ request('city') }}</span></h1>
+                        <h1><span>Programmes in {{ request('city') }}</span></h1>
                     @else
-                        <h1><span>All Events</span></h1>
+                        <h1><span>All Programmes</span></h1>
                     @endif
                 </div>
             </div>
@@ -142,7 +147,7 @@ p, a, button, input, select, textarea, label,
                     </div>
                     <!-- /filter_type -->
                     <div class="filter_type">
-                        <h4><a href="#filter_4" data-bs-toggle="collapse" class="closed">Event Mode</a></h4>
+                        <h4><a href="#filter_4" data-bs-toggle="collapse" class="closed">Programme Mode</a></h4>
                         <div class="collapse" id="filter_4">
                             <ul>
                                 <li>
@@ -218,8 +223,8 @@ p, a, button, input, select, textarea, label,
                     <li><a href="{{ route('event.list', ['filter' => 'weekend']) }}">This weekend</a></li>
                     <li><a href="{{ route('event.list', ['filter' => 'month']) }}">This month</a></li>
                 </ul>                
-                <div class="row grid_sidebar">
-                    <!-- Display Total Event Count -->
+                <div class="row grid_sidebar programmes-grid">
+                    <!-- Display total programme count -->
                     
                 
                     <!-- Loop through each event and display details -->
@@ -231,10 +236,20 @@ p, a, button, input, select, textarea, label,
                             $isProfessionalEvent = isset($event->event->created_by_type) && $event->event->created_by_type === 'professional';
                             
                             // Get the appropriate image
-                            $eventImage = $event->event->card_image ?? 'default-event.jpg';
+                            $eventImage = $event->event->card_image ?? null;
+                            $eventImage = is_array($eventImage) ? ($eventImage[0] ?? null) : $eventImage;
+                            $eventImage = ltrim((string) $eventImage, '/');
+                            $eventImageUrl = \Illuminate\Support\Str::startsWith($eventImage, ['http://', 'https://'])
+                                ? $eventImage
+                                : ($eventImage
+                                    ? asset('storage/' . (\Illuminate\Support\Str::startsWith($eventImage, 'storage/')
+                                        ? \Illuminate\Support\Str::after($eventImage, 'storage/')
+                                        : $eventImage))
+                                    : null);
                             
                             // Get the appropriate date
-                            $eventDate = $event->event->date ?? ($event->event->starting_date ?? now());
+                            $eventDate = $event->event->date ?? ($event->event->starting_date ?? null);
+                            $isPastProgramme = $eventDate && \Carbon\Carbon::parse($eventDate)->startOfDay()->lt(\Carbon\Carbon::today());
                             
                             // Get the appropriate time
                             $eventTime = $event->event->time ?? null;
@@ -244,26 +259,30 @@ p, a, button, input, select, textarea, label,
                             <div class="featured-imagebox featured-imagebox-blog style2 event-card">
                                 <div class="featured-thumbnail position-relative">
                                     <a href="{{ url('/allevent/' . $event->event->id) }}">
-                                        <img class="event-card-img" src="{{ asset('storage/' . $eventImage) }}" alt="{{ $event->event->heading }}">
+                                        @if ($eventImageUrl)
+                                            <img class="event-card-img" src="{{ $eventImageUrl }}" alt="{{ $event->event->heading }}" width="640" height="360" loading="lazy" decoding="async" data-programme-list-image>
+                                        @endif
+                                        <span class="programme-list-image-fallback" @if ($eventImageUrl) hidden @endif aria-hidden="true">Programme artwork</span>
                                     </a>
                                     <div class="ttm-box-date">
                                         <i class="fa fa-calendar ttm-textcolor-skincolor"></i>
                                         <span class="ttm-entry-date">
-                                            {{ \Carbon\Carbon::parse($eventDate)->format('M d, Y') }}
+                                            @if ($eventDate)
+                                                {{ \Carbon\Carbon::parse($eventDate)->format('M d, Y') }}
+                                            @else
+                                                Programme date not listed
+                                            @endif
                                             @if($eventTime)
                                                 <br><small style="font-size: 11px;"><i class="fa fa-clock"></i> {{ \Carbon\Carbon::parse($eventTime)->format('h:i A') }}</small>
                                             @endif
                                         </span>
                                     </div>
-                                    
-                                    {{-- Badge to show event creator type --}}
+                                    @if ($eventDate)
+                                        <span class="programme-list-status {{ $isPastProgramme ? 'is-past' : 'is-upcoming' }}">{{ $isPastProgramme ? 'Past Programme' : 'Upcoming' }}</span>
+                                    @endif
                                     @if($isProfessionalEvent)
                                         <span class="badge bg-info text-white position-absolute" style="top: 10px; right: 10px; z-index: 10;">
                                             <i class="fa fa-user"></i> {{ $event->event->professional->name ?? 'Professional' }}
-                                        </span>
-                                    @else
-                                        <span class="badge bg-primary text-white position-absolute" style="top: 10px; left: 10px; z-index: 10;">
-                                            <i class="fa fa-shield-alt"></i> Tazen
                                         </span>
                                     @endif
                                 </div>
@@ -276,32 +295,26 @@ p, a, button, input, select, textarea, label,
                                         <p>{{ \Illuminate\Support\Str::words($event->event->short_description, 6, '...') }}</p>
                                     </div>
                                     
-                                    {{-- Show professional name if it's a professional event --}}
                                     @if($isProfessionalEvent && isset($event->event->professional))
                                         <div class="mb-2">
                                             <small class="text-muted">
                                                 <i class="fa fa-user-tie"></i> By {{ $event->event->professional->name }}
                                             </small>
                                         </div>
-                                    @else
-                                        <div class="mb-2">
-                                            <small class="text-muted">
-                                                <i class="fa fa-user-tie"></i> By Tazen
-                                            </small>
-                                        </div>
                                     @endif
                                     
                                     <div class="ttm-blogbox-footer-readmore">
-                                        <span class="ttm-btn btn-inline ttm-btn-size-md ttm-icon-btn-right ttm-btn-color-dark">
-                                            {{ getCurrencySymbol() }} {{ number_format(convertCurrency($event->event->starting_fees), 2) }} onwards
-                                        </span>
+                                        @if (is_numeric($event->event->starting_fees))
+                                            <span class="programme-list-price">{{ formatPrice($event->event->starting_fees) }}</span>
+                                        @endif
+                                        <a class="programme-list-button" href="{{ url('/allevent/' . $event->event->id) }}">View Programme <span aria-hidden="true">→</span></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                     @else
-                    <p>No event available for the selected filter.</p>
+                    <p>No programmes are available for the selected filters.</p>
                     @endif
                 </div>
                 <!-- /row -->

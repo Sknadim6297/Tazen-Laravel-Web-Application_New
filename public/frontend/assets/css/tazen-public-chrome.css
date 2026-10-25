@@ -1188,7 +1188,7 @@ html.tazen-public-nav-open body {
 
 .tazen-header__account-role {
     color: var(--tazen-chrome-muted);
-    font-size: .72rem;
+    font-size: clamp(.78rem, .8vw, .95rem);
     font-weight: 500;
 }
 
@@ -1226,33 +1226,23 @@ html.tazen-public-nav-open body {
     font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
 }
 
-.tazen-footer__social a:nth-child(1) { color: #1877f2; }
-.tazen-footer__social a:nth-child(2) { color: #c13584; }
-.tazen-footer__social a:nth-child(3) { color: #0a66c2; }
-.tazen-footer__social a:nth-child(4) { color: #e62117; }
-.tazen-footer__social a:nth-child(5) { color: #111; }
-.tazen-footer__social a:nth-child(6) { color: #25d366; }
-
 .tazen-footer__social a:nth-child(2) svg {
     fill: none;
-    stroke: currentColor;
+    stroke: #fff;
     stroke-width: 1.8;
 }
 
 .tazen-footer__social .tazen-footer__social-dot {
-    fill: currentColor;
-    stroke: none;
-}
-
-.tazen-footer__social a:nth-child(4) .tazen-footer__social-play {
     fill: #fff;
+    stroke: none;
 }
 
 .tazen-footer__social a svg {
     display: block;
     width: 19px;
     height: 19px;
-    fill: currentColor;
+    color: #fff;
+    fill: #fff;
 }
 
 .tazen-footer__contact > a svg,
@@ -1501,6 +1491,662 @@ html.tazen-public-nav-open body {
     .tazen-header__search > button,
     .tazen-header__utility-button,
     .tazen-header__mobile-toggle span {
+        transition-duration: .01ms;
+    }
+}
+
+.tazen-footer {
+    isolation: isolate;
+    background:
+        radial-gradient(ellipse at 7% 18%, rgb(181 248 244 / 54%), transparent 31rem),
+        radial-gradient(ellipse at 91% 34%, rgb(175 246 241 / 45%), transparent 34rem),
+        linear-gradient(112deg, #f7ffff 0%, #e9fbf9 48%, #f6fffe 100%);
+    color: #173b60;
+}
+
+.tazen-footer::after {
+    position: absolute;
+    z-index: 0;
+    top: 18%;
+    right: 0;
+    width: clamp(100px, 11vw, 220px);
+    height: 44%;
+    background-image: radial-gradient(circle, rgb(80 214 209 / 23%) 4px, transparent 4.5px);
+    background-position: 0 0;
+    background-size: 24px 24px;
+    content: "";
+    mask-image: linear-gradient(to left, #000 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.tazen-footer__wave-art {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.tazen-footer__main,
+.tazen-footer__bottom {
+    position: relative;
+    z-index: 1;
+    width: min(94%, 1920px);
+}
+
+.tazen-footer__main {
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) minmax(0, 1.12fr) minmax(0, 1.45fr);
+    gap: clamp(1.5rem, 4.7vw, 5.8rem);
+    padding: clamp(4.5rem, 5.5vw, 6.9rem) 0 clamp(2.5rem, 2vw, 2.5rem);
+}
+
+.tazen-footer__logo img {
+    width: clamp(220px, 15vw, 300px);
+    height: auto;
+    max-width: 100%;
+}
+
+.tazen-footer__brand p {
+    max-width: 540px;
+    margin: 1.05rem 0 2rem;
+    color: #587493;
+    font-size: clamp(.96rem, 1.2vw, 1.35rem);
+    line-height: 1.55;
+}
+
+.tazen-footer__social {
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: clamp(4px, .7vw, 14px);
+}
+
+.tazen-footer__social a {
+    display: inline-flex;
+    width: auto;
+    height: auto;
+    min-width: 0;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: center;
+    gap: .55rem;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #fff !important;
+    font-size: clamp(.78rem, .8vw, .95rem);
+    line-height: 1.2;
+    text-decoration: none;
+    transition: transform .2s ease;
+}
+
+.tazen-footer__social a:hover {
+    transform: scale(1.04);
+}
+
+.tazen-footer__social a svg {
+    width: clamp(34px, 3.75vw, 54px);
+    height: clamp(34px, 3.75vw, 54px);
+    flex: 0 0 auto;
+    padding: 14px;
+    border-radius: 50%;
+    background: #1877f2;
+    box-shadow: 0 7px 16px rgb(20 43 77 / 15%);
+    color: #fff;
+    fill: #fff;
+    opacity: 1;
+}
+
+.tazen-footer__social a:nth-child(2) svg {
+    background: radial-gradient(circle at 30% 105%, #ffd76e 0 18%, #fa7e1e 38%, #d62976 67%, #962fbf 84%, #4f5bd5 100%);
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1.8;
+}
+
+.tazen-footer__social a:nth-child(1) svg { background: #1877f2; }
+.tazen-footer__social a:nth-child(3) svg { background: #0a66c2; }
+.tazen-footer__social a:nth-child(4) svg { background: #f32f32; }
+.tazen-footer__social a:nth-child(5) svg { background: #101010; }
+.tazen-footer__social a:nth-child(6) svg { background: #05c66b; }
+
+.tazen-footer__social a span {
+    color: #315676;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.tazen-footer__column h2 {
+    position: relative;
+    margin: .05rem 0 1.3rem;
+    color: #081b42;
+    font-size: clamp(1.05rem, 1.35vw, 1.65rem);
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.tazen-footer__column h2::after {
+    display: block;
+    width: 50px;
+    height: 4px;
+    margin-top: .8rem;
+    border-radius: 99px;
+    background: #039d99;
+    content: "";
+}
+
+.tazen-footer__column ul {
+    gap: .8rem;
+}
+
+.tazen-footer__column li a {
+    display: flex;
+    min-height: 1.7rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: .6rem;
+    color: #315676;
+    font-size: clamp(.95rem, 1vw, 1.25rem);
+    line-height: 1.45;
+}
+
+.tazen-footer__column li a::after {
+    color: #039d99;
+    content: "›";
+    font-size: 1.55rem;
+    line-height: 1;
+    transition: transform .18s ease;
+}
+
+.tazen-footer__column li a:hover::after {
+    transform: translateX(3px);
+}
+
+.tazen-footer__contact > a {
+    gap: .75rem;
+    color: #173b60;
+    font-size: clamp(.95rem, 1.1vw, 1.3rem);
+}
+
+.tazen-footer__contact > a svg {
+    width: 28px;
+    height: 24px;
+    flex-basis: 28px;
+    padding: 2px;
+    border-radius: 4px;
+    background: #12cfc9;
+    color: #fff;
+    stroke-width: 2;
+}
+
+.tazen-footer__contact > p {
+    max-width: 100%;
+    margin: .75rem 0 1.15rem;
+    color: #587493;
+    font-size: clamp(.95rem, 1.05vw, 1.25rem);
+    line-height: 1.5;
+}
+
+.tazen-footer__contact-form label {
+    margin-bottom: .6rem;
+    color: #081b42;
+    font-size: clamp(1.05rem, 1.18vw, 1.4rem);
+    font-weight: 700;
+}
+
+.tazen-footer__contact-form > div {
+    min-height: 68px;
+    align-items: center;
+    gap: .8rem;
+    padding-left: 1.25rem;
+    border: 1px solid #e1eaf0;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgb(8 27 66 / 5%);
+}
+
+.tazen-footer__contact-form > div > svg {
+    width: 25px;
+    height: 25px;
+    flex: 0 0 25px;
+    color: #6c86a3;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+}
+
+.tazen-footer__contact-form input {
+    padding: .7rem 0;
+    font-size: clamp(.84rem, .98vw, 1rem);
+}
+
+.tazen-footer__contact-form input::placeholder {
+    color: #8094ad;
+}
+
+.tazen-footer__contact-form button {
+    display: grid;
+    width: 76px;
+    height: 68px;
+    flex: 0 0 76px;
+    place-items: center;
+    align-self: stretch;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #08aaa8, #039d99);
+}
+
+.tazen-footer__contact-form button svg {
+    width: 30px;
+    height: 30px;
+}
+
+.tazen-footer__contact-form > p {
+    margin: .75rem 0 0;
+    color: #587493;
+    font-size: clamp(.82rem, 1vw, 1rem);
+    line-height: 1.55;
+}
+
+.tazen-footer__bottom {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    min-height: 133px;
+    gap: 1rem 2rem;
+    padding: 1.3rem 0 1.5rem;
+    border-color: rgb(3 157 153 / 20%);
+    color: #315676;
+    font-size: clamp(.85rem, .9vw, 1rem);
+}
+
+.tazen-footer__copyright {
+    display: grid;
+    gap: .35rem;
+}
+
+.tazen-footer__copyright > span:first-child {
+    color: #173b60;
+}
+
+.tazen-footer__copyright > span:last-child {
+    color: #587493;
+}
+
+.tazen-footer__preferences {
+    justify-content: center;
+    gap: 1rem;
+}
+
+.tazen-footer__select-wrap {
+    position: relative;
+    display: flex;
+    min-width: 174px;
+    min-height: 60px;
+    align-items: center;
+    gap: .75rem;
+    padding: 0 1rem;
+    border: 1px solid #dce7ef;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgb(8 27 66 / 4%);
+}
+
+.tazen-footer__select-wrap > svg:first-of-type {
+    width: 25px;
+    height: 25px;
+    flex: 0 0 25px;
+    color: #587493;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+}
+
+.tazen-footer__preferences select {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    padding: .5rem 1.1rem .5rem 0;
+    border: 0;
+    appearance: none;
+    background: transparent;
+    color: #081b42;
+    font-size: .88rem;
+    cursor: pointer;
+}
+
+.tazen-footer__select-chevron {
+    position: absolute;
+    right: .85rem;
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+    fill: none;
+    stroke: #315676;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+}
+
+.tazen-footer__currency-form {
+    margin: 0;
+}
+
+.tazen-footer__bottom > nav {
+    justify-content: flex-end;
+    gap: 0;
+    padding-right: clamp(5.5rem, 6vw, 7.5rem);
+}
+
+.tazen-footer__bottom > nav a {
+    padding: 0 .85rem;
+    color: #587493;
+    white-space: nowrap;
+}
+
+.tazen-footer__bottom > nav a + a {
+    border-left: 1px solid rgb(3 157 153 / 30%);
+}
+
+.whatsapp-float {
+    position: fixed;
+    z-index: 1100;
+    right: max(24px, env(safe-area-inset-right));
+    bottom: max(26px, env(safe-area-inset-bottom));
+    display: grid;
+    width: 64px;
+    height: 64px;
+    place-items: center;
+    border-radius: 50%;
+    background: #05c66b !important;
+    box-shadow: 0 8px 25px rgb(5 198 107 / 42%), 0 0 0 7px rgb(5 198 107 / 10%);
+    color: #fff !important;
+    text-decoration: none;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.07);
+    box-shadow: 0 11px 30px rgb(5 198 107 / 48%), 0 0 0 8px rgb(5 198 107 / 12%);
+    color: #fff !important;
+}
+
+.whatsapp-float:focus-visible {
+    outline: 3px solid #081b42;
+    outline-offset: 4px;
+}
+
+.whatsapp-float > svg {
+    display: block;
+    width: 38px;
+    height: 38px;
+}
+
+.whatsapp-float > svg path:first-child {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+}
+
+.whatsapp-float > svg path:last-child {
+    fill: currentColor;
+}
+
+.whatsapp-float .tooltip-text {
+    position: absolute;
+    z-index: 2;
+    right: 0;
+    bottom: calc(100% + 14px);
+    padding: .55rem .75rem;
+    width: max-content;
+    max-width: min(220px, calc(100vw - 2rem));
+    border-radius: 8px;
+    background: #102c3b;
+    box-shadow: 0 5px 16px rgb(8 27 66 / 18%);
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease;
+}
+
+.whatsapp-float .tooltip-text::after {
+    position: absolute;
+    top: 100%;
+    right: 20px;
+    border: 5px solid transparent;
+    border-top-color: #102c3b;
+    content: "";
+}
+
+.whatsapp-float:hover .tooltip-text,
+.whatsapp-float:focus-visible .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+@media (max-width: 1199px) {
+    .tazen-footer__main {
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, .9fr) minmax(0, 1fr) minmax(0, 1.2fr);
+        gap: clamp(.9rem, 2vw, 1.75rem);
+    }
+
+    .tazen-footer__social {
+        gap: clamp(4px, .7vw, 8px);
+    }
+
+    .tazen-footer__social a {
+        font-size: .48rem;
+    }
+
+    .tazen-footer__social a svg {
+        width: clamp(32px, 3.75vw, 44px);
+        height: clamp(32px, 3.75vw, 44px);
+        padding: 11px;
+    }
+
+    .tazen-footer__contact-form > div {
+        min-height: 58px;
+        gap: .45rem;
+        padding-left: .7rem;
+    }
+
+    .tazen-footer__contact-form button {
+        width: 56px;
+        height: 58px;
+        flex-basis: 56px;
+    }
+}
+
+@media (max-width: 1023px) {
+    .tazen-footer__main {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 3rem 2.5rem;
+        padding: 4rem 0;
+    }
+
+    .tazen-footer__social {
+        gap: clamp(4px, .7vw, 7px);
+    }
+
+    .tazen-footer__social a {
+        font-size: .62rem;
+    }
+
+    .tazen-footer__social a svg {
+        width: clamp(32px, 5.5vw, 46px);
+        height: clamp(32px, 5.5vw, 46px);
+        padding: 11px;
+    }
+
+    .tazen-footer__bottom {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .tazen-footer__preferences {
+        justify-content: flex-end;
+    }
+
+    .tazen-footer__bottom > nav {
+        grid-column: 1 / -1;
+        justify-content: center;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .tazen-footer__main {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 2.5rem;
+        padding: 3.5rem 0 3rem;
+    }
+
+    .tazen-footer__brand,
+    .tazen-footer__contact {
+        grid-column: auto;
+    }
+
+    .tazen-footer__brand {
+        text-align: left;
+    }
+
+    .tazen-footer__brand p {
+        margin: 1rem 0 1.5rem;
+    }
+
+    .tazen-footer__social {
+        justify-content: flex-start;
+        gap: clamp(4px, 1.5vw, 7px);
+    }
+
+    .tazen-footer__social a {
+        font-size: clamp(.5rem, 2.1vw, .62rem);
+    }
+
+    .tazen-footer__social a svg {
+        width: clamp(38px, 11.3vw, 46px);
+        height: clamp(38px, 11.3vw, 46px);
+        padding: 11px;
+    }
+
+    .tazen-footer__column h2 {
+        font-size: 1.15rem;
+    }
+
+    .tazen-footer__column li a {
+        font-size: .95rem;
+    }
+
+    .tazen-footer__contact-form > div {
+        min-height: 58px;
+    }
+
+    .tazen-footer__contact-form button {
+        height: 58px;
+    }
+
+    .tazen-footer__bottom {
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: stretch;
+        gap: 1.25rem;
+        padding: 1.25rem 0 6rem;
+    }
+
+    .tazen-footer__preferences {
+        justify-content: flex-start;
+        gap: .65rem;
+    }
+
+    .tazen-footer__select-wrap {
+        min-width: 0;
+        min-height: 54px;
+        flex: 1 1 0;
+        padding: 0 .7rem;
+        gap: .5rem;
+    }
+
+    .tazen-footer__preferences select {
+        font-size: .8rem;
+    }
+
+    .tazen-footer__select-chevron {
+        right: .5rem;
+        width: 15px;
+    }
+
+    .tazen-footer__select-wrap > svg:first-of-type {
+        width: 21px;
+        height: 21px;
+        flex-basis: 21px;
+    }
+
+    .tazen-footer__bottom > nav {
+        grid-column: auto;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        padding-right: 0;
+    }
+
+    .tazen-footer__bottom > nav a {
+        padding: 0 .6rem;
+        font-size: .75rem;
+    }
+
+    .tazen-footer__bottom > nav a:first-child {
+        padding-left: 0;
+    }
+
+    .whatsapp-float {
+        right: max(16px, env(safe-area-inset-right));
+        bottom: max(20px, env(safe-area-inset-bottom));
+        width: 54px;
+        height: 54px;
+    }
+
+    .whatsapp-float > svg {
+        width: 33px;
+        height: 33px;
+    }
+
+    .whatsapp-float .tooltip-text {
+        bottom: calc(100% + 10px);
+    }
+}
+
+@media (max-width: 360px) {
+    .tazen-footer__main,
+    .tazen-footer__bottom {
+        width: calc(100% - 2rem);
+    }
+
+    .tazen-footer__social {
+        gap: 3px;
+    }
+
+    .tazen-footer__social a {
+        font-size: 7px;
+    }
+
+    .tazen-footer__social a svg {
+        width: 36px;
+        height: 36px;
+        padding: 10px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tazen-footer__social a,
+    .tazen-footer__column li a::after,
+    .whatsapp-float {
         transition-duration: .01ms;
     }
 }

@@ -39,7 +39,7 @@
                     'active' => request()->routeIs('user.admin-chat.*'),
                 ],
                 [
-                    'label' => 'Events',
+                    'label' => 'Programmes',
                     'url' => route('user.customer-event.index'),
                     'icon' => 'spark',
                     'active' => request()->routeIs('user.customer-event.*'),

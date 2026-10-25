@@ -1,0 +1,487 @@
+.yk-featured-experts {
+    padding: 2.8rem 1.5rem 3rem;
+    overflow: hidden;
+    background: #F7FAFB;
+    color: #475569;
+    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+}
+
+.yk-featured-experts *,
+.yk-featured-experts *::before,
+.yk-featured-experts *::after {
+    box-sizing: border-box;
+}
+
+.yk-featured-experts__inner {
+    width: min(100%, 1520px);
+    margin-inline: auto;
+}
+
+.yk-featured-experts__topline {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.15rem;
+}
+
+.yk-featured-experts__heading {
+    min-width: 0;
+}
+
+.yk-featured-experts__eyebrow {
+    margin: 0 0 .38rem;
+    color: #36877F;
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .11em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.yk-featured-experts__heading h2 {
+    margin: 0;
+    color: #142B4D;
+    font-size: clamp(1.45rem, 2.2vw, 1.85rem);
+    font-weight: 600;
+    letter-spacing: -.04em;
+    line-height: 1.2;
+}
+
+.yk-featured-experts__description {
+    margin: .42rem 0 0;
+    color: #718096;
+    font-size: .82rem;
+    line-height: 1.5;
+}
+
+.yk-featured-experts__heading-actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 1rem;
+}
+
+.yk-featured-experts__all-link {
+    display: inline-flex;
+    min-height: 2.25rem;
+    align-items: center;
+    gap: .4rem;
+    color: #36877F;
+    font-size: .76rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.yk-featured-experts__all-link span,
+.yk-expert-card__profile span,
+.yk-expert-card__book span {
+    display: inline-block;
+    transition: transform .2s cubic-bezier(.22, 1, .36, 1);
+}
+
+.yk-featured-experts__all-link:hover span,
+.yk-expert-card__profile:hover span,
+.yk-expert-card__book:hover span {
+    transform: translateX(2px);
+}
+
+.yk-featured-experts__carousel-controls {
+    display: flex;
+    gap: .4rem;
+}
+
+.yk-featured-experts__carousel-controls[hidden] {
+    display: none;
+}
+
+.yk-featured-experts__carousel-controls button {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border: 1px solid #E2E9EE;
+    border-radius: 50%;
+    background: #fff;
+    color: #142B4D;
+    cursor: pointer;
+    font: inherit;
+    transition: border-color .2s ease, background-color .2s ease, color .2s ease;
+}
+
+.yk-featured-experts__carousel-controls button:hover:not(:disabled) {
+    border-color: #36877F;
+    background: #EAF6F2;
+    color: #286E67;
+}
+
+.yk-featured-experts__carousel-controls button:disabled {
+    color: #A3AFBA;
+    cursor: default;
+}
+
+.yk-featured-experts__filters {
+    display: flex;
+    gap: .45rem;
+    margin-bottom: .85rem;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+}
+
+.yk-featured-experts__filters::-webkit-scrollbar {
+    display: none;
+}
+
+.yk-featured-experts__filter {
+    flex: 0 0 auto;
+    min-height: 1.85rem;
+    padding: .35rem .72rem;
+    border: 1px solid #E2E9EE;
+    border-radius: 999px;
+    background: #fff;
+    color: #142B4D;
+    cursor: pointer;
+    font: inherit;
+    font-size: .68rem;
+    font-weight: 500;
+    line-height: 1.2;
+    transition: border-color .2s ease, background-color .2s ease, color .2s ease, transform .2s ease;
+}
+
+.yk-featured-experts__filter:hover {
+    transform: translateY(-1px);
+    border-color: #A9D0C0;
+}
+
+.yk-featured-experts__filter.is-active {
+    border-color: #36877F;
+    background: #36877F;
+    color: #fff;
+}
+
+.yk-featured-experts__filter:focus-visible,
+.yk-featured-experts__carousel-controls button:focus-visible,
+.yk-featured-experts__all-link:focus-visible,
+.yk-expert-card a:focus-visible,
+.yk-featured-experts__grid:focus-visible {
+    outline: 2px solid #8EB5DD;
+    outline-offset: 3px;
+}
+
+.yk-featured-experts__grid {
+    display: grid;
+    grid-auto-columns: 184px;
+    grid-auto-flow: column;
+    grid-template-rows: 1fr;
+    gap: .65rem;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    padding: .2rem .15rem .65rem;
+    scroll-padding-inline: .15rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-color: #C9D9DF transparent;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+}
+
+.yk-expert-card {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #E2E9EE;
+    border-radius: .75rem;
+    background: #fff;
+    box-shadow: 0 2px 9px rgb(20 43 77 / 5%);
+    scroll-snap-align: start;
+    transition: transform .22s cubic-bezier(.22, 1, .36, 1), box-shadow .22s ease, border-color .22s ease;
+}
+
+.yk-expert-card:hover {
+    transform: translateY(-3px);
+    border-color: #B8D9D1;
+    box-shadow: 0 8px 18px rgb(20 43 77 / 9%);
+}
+
+.yk-expert-card[hidden] {
+    display: none;
+}
+
+.yk-expert-card__image-link {
+    position: relative;
+    display: grid;
+    width: 100%;
+    height: 100px;
+    flex: 0 0 100px;
+    place-items: center;
+    overflow: hidden;
+    background: #EAF6F2;
+    color: #286E67;
+    text-decoration: none;
+}
+
+.yk-expert-card:nth-child(4n + 2) .yk-expert-card__image-link,
+.yk-expert-card:nth-child(4n + 2) .yk-expert-card__initials {
+    background-color: #E7F0FB;
+    color: #37658F;
+}
+
+.yk-expert-card:nth-child(4n + 3) .yk-expert-card__image-link,
+.yk-expert-card:nth-child(4n + 3) .yk-expert-card__initials {
+    background-color: #F0EBF8;
+    color: #6C5A8B;
+}
+
+.yk-expert-card:nth-child(4n) .yk-expert-card__image-link,
+.yk-expert-card:nth-child(4n) .yk-expert-card__initials {
+    background-color: #FBE9EB;
+    color: #9A5865;
+}
+
+.yk-expert-card__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 22%;
+    transition: transform .22s cubic-bezier(.22, 1, .36, 1);
+}
+
+.yk-expert-card:hover .yk-expert-card__image {
+    transform: scale(1.025);
+}
+
+.yk-expert-card__image[hidden],
+.yk-expert-card__initials[hidden] {
+    display: none;
+}
+
+.yk-expert-card__initials {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    background: #EAF6F2;
+    color: #286E67;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+}
+
+.yk-expert-card__body {
+    display: flex;
+    min-height: 0;
+    flex: 1;
+    flex-direction: column;
+    padding: .55rem .6rem .6rem;
+}
+
+.yk-expert-card__name {
+    display: -webkit-box;
+    min-height: 2.6em;
+    margin: 0;
+    overflow: hidden;
+    color: #142B4D;
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: -.015em;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.yk-expert-card__specialization {
+    display: -webkit-box;
+    min-height: 2.8em;
+    margin: .15rem 0 0;
+    overflow: hidden;
+    color: #475569;
+    font-size: .65rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.yk-expert-card__experience {
+    margin: .22rem 0 0;
+    color: #718096;
+    font-size: .6rem;
+    line-height: 1.35;
+}
+
+.yk-expert-card__actions {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+    gap: .35rem;
+    margin-top: .4rem;
+}
+
+.yk-expert-card__price {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: .2rem;
+    margin: 0 0 .05rem;
+    white-space: nowrap;
+}
+
+.yk-expert-card__price span {
+    overflow: hidden;
+    color: #718096;
+    font-size: .56rem;
+    text-overflow: ellipsis;
+}
+
+.yk-expert-card__price strong {
+    flex: 0 0 auto;
+    color: #142B4D;
+    font-size: .74rem;
+    font-weight: 600;
+}
+
+.yk-expert-card__profile {
+    align-self: flex-start;
+    color: #36877F;
+    font-size: .64rem;
+    font-weight: 600;
+    line-height: 1.35;
+    text-decoration: none;
+}
+
+.yk-expert-card__book {
+    display: flex;
+    min-height: 2rem;
+    align-items: center;
+    justify-content: center;
+    gap: .22rem;
+    padding: .35rem .4rem;
+    border: 1px solid #36877F;
+    border-radius: .45rem;
+    background: #36877F;
+    color: #fff;
+    font-size: .62rem;
+    font-weight: 600;
+    line-height: 1.15;
+    text-align: center;
+    text-decoration: none;
+    transition: border-color .2s ease, background-color .2s ease, transform .2s ease;
+}
+
+.yk-expert-card__book:hover {
+    transform: translateY(-1px);
+    border-color: #286E67;
+    background: #286E67;
+    color: #fff;
+}
+
+.yk-featured-experts__empty {
+    margin: .8rem 0 0;
+    color: #718096;
+    font-size: .82rem;
+}
+
+.yk-featured-experts.is-enhanced [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 520ms cubic-bezier(.22, 1, .36, 1), transform 520ms cubic-bezier(.22, 1, .36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+}
+
+.yk-featured-experts.is-enhanced [data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (min-width: 1440px) {
+    .yk-featured-experts__grid {
+        grid-auto-columns: initial;
+        grid-auto-flow: initial;
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        overflow: visible;
+        scroll-snap-type: none;
+    }
+}
+
+@media (max-width: 1439px) {
+    .yk-featured-experts__grid {
+        grid-auto-columns: clamp(184px, 15vw, 190px);
+    }
+}
+
+@media (max-width: 767px) {
+    .yk-featured-experts {
+        padding: 2.2rem 1rem 2.4rem;
+    }
+
+    .yk-featured-experts__topline {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: .65rem;
+    }
+
+    .yk-featured-experts__heading-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .yk-featured-experts__grid {
+        grid-auto-columns: min(78vw, 270px);
+        gap: .65rem;
+    }
+
+    .yk-expert-card__image-link {
+        height: 112px;
+        flex-basis: 112px;
+    }
+
+    .yk-expert-card__body {
+        padding: .65rem;
+    }
+
+    .yk-expert-card__name {
+        font-size: .82rem;
+    }
+
+    .yk-expert-card__specialization {
+        font-size: .72rem;
+    }
+
+    .yk-expert-card__experience {
+        font-size: .66rem;
+    }
+
+    .yk-expert-card__price span {
+        font-size: .62rem;
+    }
+
+    .yk-expert-card__price strong {
+        font-size: .82rem;
+    }
+
+    .yk-expert-card__profile {
+        font-size: .72rem;
+    }
+
+    .yk-expert-card__book {
+        min-height: 2.5rem;
+        font-size: .72rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .yk-featured-experts *,
+    .yk-featured-experts *::before,
+    .yk-featured-experts *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}

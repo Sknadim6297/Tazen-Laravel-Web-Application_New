@@ -187,115 +187,6 @@
 		}
 	</style>
 
-	<!-- WhatsApp Floating Button Styles -->
-	<style>
-		.whatsapp-float {
-			position: fixed;
-			width: 60px;
-			height: 60px;
-			bottom: 25px;
-			right: 25px;
-			background-color: #25d366;
-			color: #FFF;
-			border-radius: 50px;
-			text-align: center;
-			font-size: 28px;
-			box-shadow: 2px 2px 3px #999;
-			z-index: 1000;
-			transition: all 0.3s ease;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			text-decoration: none;
-		}
-
-		.whatsapp-float:hover {
-			background-color: #20ba5a;
-			transform: scale(1.1);
-			color: #FFF;
-			text-decoration: none;
-			box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-		}
-
-		.whatsapp-float i {
-			margin-top: 0;
-		}
-
-		/* Pulse animation */
-		.whatsapp-float::before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			border-radius: 50%;
-			border: 2px solid #25d366;
-			animation: pulse 2s infinite;
-			opacity: 0.7;
-		}
-
-		@keyframes pulse {
-			0% {
-				transform: scale(1);
-				opacity: 0.7;
-			}
-			50% {
-				transform: scale(1.1);
-				opacity: 0.4;
-			}
-			100% {
-				transform: scale(1.2);
-				opacity: 0;
-			}
-		}
-
-		/* Responsive adjustments */
-		@media (max-width: 768px) {
-			.whatsapp-float {
-				width: 50px;
-				height: 50px;
-				bottom: 80px; /* Adjusted for mobile */
-				right: 20px;
-				font-size: 24px;
-			}
-		}
-
-		/* Tooltip */
-		.whatsapp-float .tooltip-text {
-			visibility: hidden;
-			width: 140px;
-			background-color: #333;
-			color: #fff;
-			text-align: center;
-			border-radius: 6px;
-			padding: 8px;
-			position: absolute;
-			z-index: 1;
-			bottom: 70px;
-			right: 0;
-			font-size: 12px;
-			opacity: 0;
-			transition: opacity 0.3s;
-		}
-
-		.whatsapp-float .tooltip-text::after {
-			content: "";
-			position: absolute;
-			top: 100%;
-			right: 20px;
-			margin-left: -5px;
-			border-width: 5px;
-			border-style: solid;
-			border-color: #333 transparent transparent transparent;
-		}
-
-		.whatsapp-float:hover .tooltip-text {
-			visibility: visible;
-			opacity: 1;
-		}
-	</style>
-	
 	<!-- Tazen Favicon -->
 	<link rel="icon" type="image/x-icon" href="{{ asset('tazen-favicon.png') }}">
 	<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('frontend/assets/img/tazen_logo-01-removebg-preview.png') }}">
@@ -321,7 +212,12 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 		<link href="{{ asset('frontend/assets/css/yuktione-home.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-home.css')) }}" rel="stylesheet">
+		<link href="{{ asset('frontend/assets/css/yuktione-featured-experts.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-featured-experts.css')) }}" rel="stylesheet">
+		<link href="{{ asset('frontend/assets/css/yuktione-programmes.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-programmes.css')) }}" rel="stylesheet">
 		<link href="{{ asset('admin/assets/css/icons.css') }}" rel="stylesheet">
+	@endif
+	@if (request()->routeIs('event.list', 'event.details'))
+		<link href="{{ asset('frontend/assets/css/yuktione-programmes.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-programmes.css')) }}" rel="stylesheet">
 	@endif
 	@endif
 </head>
@@ -348,8 +244,11 @@
 
 	<!-- WhatsApp Floating Button -->
 	@if (!$isAuthenticationRoute)
-		<a href="https://wa.me/+919147421560?text=Hello%20Tazen!%20I%20need%20assistance%20with%20your%20services." target="_blank" class="whatsapp-float">
-			<i class="fab fa-whatsapp"></i>
+		<a href="https://wa.me/+919147421560?text=Hello%20Tazen!%20I%20need%20assistance%20with%20your%20services." target="_blank" rel="noopener noreferrer" class="whatsapp-float" aria-label="Chat with us on WhatsApp">
+			<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+				<path d="M16 3.4a12.1 12.1 0 0 0-10.4 18.3L4 28l6.5-1.7A12.3 12.3 0 1 0 16 3.4Z"></path>
+				<path d="M12 10.2c.3-.6.6-.6.9-.6h.7c.2 0 .5 0 .7.5l1 2.4c.1.3.1.5-.1.7l-.8 1c-.2.2-.2.4-.1.6.4.8 1.2 1.6 2.1 2.2.8.5 1.5.8 1.8.9.3.1.5 0 .7-.2l1-1.2c.2-.3.5-.3.8-.2l2.3 1.1c.3.2.5.3.5.5 0 .2-.2 1.4-.8 2-.7.7-1.8 1-2.5 1-1.1 0-2.5-.4-4.3-1.4-2.2-1.2-4-3.4-4.6-4.2-.6-.8-1.5-2.1-1.5-3.5s.7-2.1 1-2.5Z"></path>
+			</svg>
 			<span class="tooltip-text">Chat with us on WhatsApp</span>
 		</a>
 	@endif
@@ -765,6 +664,14 @@ $(document).ready(function () {
 	@if (request()->routeIs('home'))
 		<script src="{{ asset('frontend/assets/js/yuktione-home.js') }}?v={{ filemtime(public_path('frontend/assets/js/yuktione-home.js')) }}"></script>
 		<script src="{{ asset('frontend/assets/js/home-category-slider.js') }}?v={{ filemtime(public_path('frontend/assets/js/home-category-slider.js')) }}"></script>
+		<script src="{{ asset('frontend/assets/js/yuktione-featured-experts.js') }}?v={{ filemtime(public_path('frontend/assets/js/yuktione-featured-experts.js')) }}"></script>
+		<script src="{{ asset('frontend/assets/js/yuktione-programmes.js') }}?v={{ filemtime(public_path('frontend/assets/js/yuktione-programmes.js')) }}"></script>
+	@endif
+	@if (request()->routeIs('event.list'))
+		<script src="{{ asset('frontend/assets/js/yuktione-programmes.js') }}?v={{ filemtime(public_path('frontend/assets/js/yuktione-programmes.js')) }}"></script>
+	@endif
+	@if (request()->routeIs('event.details'))
+		<script src="{{ asset('frontend/assets/js/yuktione-programmes.js') }}?v={{ filemtime(public_path('frontend/assets/js/yuktione-programmes.js')) }}"></script>
 	@endif
 	@endif
 	@stack('scripts')

@@ -52,7 +52,7 @@
                     <li><a href="{{ route('gridlisting') }}" @class(['is-active' => request()->routeIs('gridlisting')])>Explore</a></li>
                     <li><a href="#" data-placeholder-link aria-disabled="true">Tools</a></li>
                     <li><a href="{{ route('professionals') }}" @class(['is-active' => request()->routeIs('professionals')])>Experts</a></li>
-                    <li><a href="#" data-placeholder-link aria-disabled="true">Programmes</a></li>
+                    <li><a href="{{ route('programmes.index') }}" @class(['is-active' => request()->routeIs('programmes.*', 'event.list', 'event.details')])>Programmes</a></li>
                     <li><a href="{{ url('/about') }}" @class(['is-active' => request()->is('about')])>About</a></li>
                 </ul>
             </nav>
