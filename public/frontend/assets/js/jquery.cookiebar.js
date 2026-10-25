@@ -27,6 +27,9 @@
 			acceptButton: true, //Set to true to show accept/enable button
 			acceptText: 'OK', //Text on accept/enable button
 			acceptFunction: function(cookieValue){if(cookieValue!='enabled' && cookieValue!='accepted') window.location = window.location.href;}, //Function to run after accept
+			acknowledgmentButton: false, //Show an acknowledgement button without changing cookie consent
+			acknowledgmentText: 'OK',
+			acknowledgmentCookie: 'cb-acknowledged',
 			declineButton: false, //Set to true to show decline/disable button
 			declineText: 'Disable Cookies', //Text on decline/disable button
 			declineFunction: function(cookieValue){if(cookieValue=='enabled' || cookieValue=='accepted') window.location = window.location.href;}, //Function to run after decline
@@ -59,11 +62,13 @@
 		var cookieEntry = 'cb-enabled={value}; expires='+expireDate+'; path=/';
 		
 		//Retrieves current cookie preference
-		var i,cookieValue='',aCookie,aCookies=document.cookie.split('; ');
+		var i,cookieValue='',acknowledgmentValue='',aCookie,aCookies=document.cookie.split('; ');
 		for (i=0;i<aCookies.length;i++){
 			aCookie = aCookies[i].split('=');
 			if(aCookie[0]=='cb-enabled'){
     			cookieValue = aCookie[1];
+			}else if(aCookie[0]==options.acknowledgmentCookie){
+				acknowledgmentValue = aCookie[1];
 			}
 		}
 		//Sets up default cookie preference if not already set
@@ -103,6 +108,11 @@
 			}else{
 				var acceptButton = '';
 			}
+			if(options.acknowledgmentButton){
+				var acknowledgmentButton = '<button type="button" class="cb-acknowledge">'+options.acknowledgmentText+'</button>';
+			}else{
+				var acknowledgmentButton = '';
+			}
 			//Sets up disable/decline button if required
 			if(options.declineButton){
 				var declineButton = '<a href="" class="cb-disable">'+options.declineText+'</a>';
@@ -132,11 +142,11 @@
 			}
 			
 			//Displays the cookie bar if arguments met
-			if(options.forceShow || cookieValue=='enabled' || cookieValue==''){
+			if((options.forceShow || cookieValue=='enabled' || cookieValue=='') && (!options.acknowledgmentButton || acknowledgmentValue!='1')){
 				if(options.append){
-					$(options.element).append('<div id="cookie-bar"'+fixed+zindex+'><p><span class="cb-message">'+message+'</span>'+acceptButton+declineButton+policyButton+'</p></div>');
+					$(options.element).append('<div id="cookie-bar"'+fixed+zindex+'><p><span class="cb-message">'+message+'</span>'+acknowledgmentButton+acceptButton+declineButton+policyButton+'</p></div>');
 				}else{
-					$(options.element).prepend('<div id="cookie-bar"'+fixed+zindex+'><p><span class="cb-message">'+message+'</span>'+acceptButton+declineButton+policyButton+'</p></div>');
+					$(options.element).prepend('<div id="cookie-bar"'+fixed+zindex+'><p><span class="cb-message">'+message+'</span>'+acknowledgmentButton+acceptButton+declineButton+policyButton+'</p></div>');
 				}
 			}
 			
@@ -172,11 +182,17 @@
 				document.cookie = cookieEntry.replace('{value}','declined');
 				removeBar(options.declineFunction);
 			};
+			var cookieAcknowledge = function(){
+				var acknowledgmentEntry = options.acknowledgmentCookie+'=1; expires='+expireDate+'; path=/; SameSite=Lax';
+				document.cookie = acknowledgmentEntry;
+				removeBar();
+			};
 			var anyClick = function(e){
 				if(!$(e.target).hasClass('cb-policy')) cookieAccept();
 			};
 			
 			$('#cookie-bar .cb-enable').click(function(){cookieAccept();return false;});
+			$('#cookie-bar .cb-acknowledge').click(function(){cookieAcknowledge();return false;});
 			$('#cookie-bar .cb-disable').click(function(){cookieDecline();return false;});
 			if(options.acceptOnScroll){
 				var scrollStart = $(document).scrollTop(),scrollNew,scrollDiff;

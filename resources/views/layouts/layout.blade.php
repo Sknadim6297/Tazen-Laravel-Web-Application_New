@@ -480,9 +480,11 @@ function checkSlides(slider, currentSlide) {
 				fixed: true,
 				zindex: 999999,
 				autoEnable: false,
-				acceptText: 'Accept',
-				declineButton: true,
-				declineText: 'Reject'
+				acceptButton: false,
+				acknowledgmentButton: true,
+				acknowledgmentText: 'OK',
+				declineButton: false,
+				policyButton: false
 			});
 		});
 	</script>
