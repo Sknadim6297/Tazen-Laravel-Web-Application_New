@@ -478,13 +478,8 @@ function checkSlides(slider, currentSlide) {
 			'use strict';
 			$.cookieBar({
 				fixed: true,
-				zindex: 999999,
-				autoEnable: false,
-				acceptButton: false,
-				acknowledgmentButton: true,
-				acknowledgmentText: 'OK',
-				declineButton: false,
-				policyButton: false
+				zindex: 999,
+				autoEnable: false
 			});
 		});
 	</script>
