@@ -1,0 +1,349 @@
+.yk-insight {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0.25rem 1rem 2.75rem;
+    background: #fffefc;
+    color: #0b2048;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.yk-insight *,
+.yk-insight *::before,
+.yk-insight *::after {
+    box-sizing: border-box;
+}
+
+.yk-insight__inner {
+    position: relative;
+    width: 100%;
+    max-width: min(100%, 1360px);
+    margin: 0 auto;
+}
+
+.yk-insight__head {
+    position: relative;
+    margin: 0 0 1.35rem;
+}
+
+.yk-insight__copy {
+    position: relative;
+    z-index: 1;
+    max-width: 40rem;
+}
+
+.yk-insight__eyebrow {
+    margin: 0;
+    color: #316d61;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.yk-insight__title {
+    margin: 0.4rem 0 0.55rem;
+    font-size: clamp(1.7rem, 2.6vw, 2.45rem);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+}
+
+.yk-insight__heading-navy {
+    color: #0b2048;
+}
+
+.yk-insight__heading-lavender {
+    color: #9d81db;
+}
+
+.yk-insight__lead {
+    margin: 0;
+    max-width: 36rem;
+    color: #3c4c68;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.55;
+}
+
+.yk-insight__leaves {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 0;
+    width: 150px;
+    height: 124px;
+    pointer-events: none;
+}
+
+.yk-insight__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.9rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.yk-insight__grid > li {
+    display: flex;
+    min-width: 0;
+}
+
+.yk-insight__card {
+    display: flex;
+    flex: 1;
+    align-items: stretch;
+    gap: 0.35rem;
+    width: 100%;
+    min-height: 214px;
+    margin: 0;
+    padding: 1.15rem 0.55rem 1.05rem 1.1rem;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 8px 22px rgba(11, 32, 72, 0.045);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.yk-insight__card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(11, 32, 72, 0.08);
+}
+
+.yk-insight__card--lavender {
+    background: #f4f0ff;
+}
+
+.yk-insight__card--mint {
+    background: #eaf6f2;
+}
+
+.yk-insight__card--blush {
+    background: #fff0f3;
+}
+
+.yk-insight__card--cream {
+    background: #fff6ed;
+}
+
+.yk-insight__body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.yk-insight__badge {
+    margin: 0 0 0.45rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1.3;
+    text-transform: uppercase;
+}
+
+.yk-insight__badge--purple {
+    color: #6e52c0;
+}
+
+.yk-insight__badge--teal {
+    color: #316d61;
+}
+
+.yk-insight__badge--pink {
+    color: #e95585;
+}
+
+.yk-insight__badge--orange {
+    color: #d97706;
+}
+
+.yk-insight__name {
+    margin: 0;
+    color: #0b2048;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+}
+
+.yk-insight__text {
+    margin: 0.4rem 0 0;
+    color: #3e4d68;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.45;
+}
+
+.yk-insight__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    width: fit-content;
+    margin-top: auto;
+    padding-top: 0.9rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+}
+
+a.yk-insight__cta {
+    cursor: pointer;
+}
+
+a.yk-insight__cta:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+a.yk-insight__cta:focus-visible {
+    outline: 2px solid #316d61;
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+.yk-insight__cta--purple {
+    color: #6e52c0;
+}
+
+.yk-insight__cta--teal {
+    color: #316d61;
+}
+
+.yk-insight__cta--pink {
+    color: #e95585;
+}
+
+.yk-insight__cta--orange {
+    color: #d97706;
+}
+
+.yk-insight__art {
+    display: flex;
+    flex: 0 0 112px;
+    align-items: center;
+    justify-content: center;
+    width: 112px;
+}
+
+.yk-insight__art svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+@media (min-width: 640px) {
+    .yk-insight {
+        padding-inline: 1.25rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .yk-insight {
+        padding-inline: 1.5rem;
+        padding-bottom: 3rem;
+    }
+
+    .yk-insight__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .yk-insight__card {
+        min-height: 228px;
+        padding-right: 0.7rem;
+    }
+
+    .yk-insight__art {
+        flex-basis: 136px;
+        width: 136px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .yk-insight {
+        padding-inline: 2rem;
+    }
+
+    .yk-insight__eyebrow {
+        font-size: 0.8125rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .yk-insight__leaves {
+        display: block;
+    }
+}
+
+@media (min-width: 1280px) {
+    .yk-insight {
+        padding-inline: 2.75rem;
+    }
+
+    .yk-insight__grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.85rem;
+    }
+
+    .yk-insight__card {
+        min-height: 252px;
+        padding: 1.05rem 0.4rem 1rem 0.95rem;
+    }
+
+    .yk-insight__name {
+        font-size: 1.05rem;
+    }
+
+    .yk-insight__text {
+        font-size: 0.8125rem;
+    }
+
+    .yk-insight__cta {
+        font-size: 0.875rem;
+    }
+
+    .yk-insight__art {
+        flex-basis: 108px;
+        width: 108px;
+    }
+}
+
+@media (min-width: 1440px) {
+    .yk-insight__card {
+        min-height: 246px;
+        padding: 1.15rem 0.55rem 1.05rem 1.1rem;
+    }
+
+    .yk-insight__name {
+        font-size: 1.125rem;
+    }
+
+    .yk-insight__text,
+    .yk-insight__cta {
+        font-size: 0.875rem;
+    }
+
+    .yk-insight__cta {
+        font-size: 0.9375rem;
+    }
+
+    .yk-insight__art {
+        flex-basis: 128px;
+        width: 128px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .yk-insight__card {
+        transition: none;
+    }
+
+    .yk-insight__card:hover {
+        transform: none;
+    }
+}

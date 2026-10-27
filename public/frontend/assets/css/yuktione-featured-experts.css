@@ -74,15 +74,13 @@
 }
 
 .yk-featured-experts__all-link span,
-.yk-expert-card__profile span,
-.yk-expert-card__book span {
+.yk-expert-card__profile span {
     display: inline-block;
     transition: transform .2s cubic-bezier(.22, 1, .36, 1);
 }
 
 .yk-featured-experts__all-link:hover span,
-.yk-expert-card__profile:hover span,
-.yk-expert-card__book:hover span {
+.yk-expert-card__profile:hover span {
     transform: translateX(2px);
 }
 
@@ -171,18 +169,9 @@
 
 .yk-featured-experts__grid {
     display: grid;
-    grid-auto-columns: 184px;
-    grid-auto-flow: column;
-    grid-template-rows: 1fr;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: .65rem;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
     padding: .2rem .15rem .65rem;
-    scroll-padding-inline: .15rem;
-    scroll-snap-type: x mandatory;
-    scrollbar-color: #C9D9DF transparent;
-    scrollbar-width: thin;
-    -webkit-overflow-scrolling: touch;
 }
 
 .yk-expert-card {
@@ -194,7 +183,6 @@
     border-radius: .75rem;
     background: #fff;
     box-shadow: 0 2px 9px rgb(20 43 77 / 5%);
-    scroll-snap-align: start;
     transition: transform .22s cubic-bezier(.22, 1, .36, 1), box-shadow .22s ease, border-color .22s ease;
 }
 
@@ -212,8 +200,8 @@
     position: relative;
     display: grid;
     width: 100%;
-    height: 100px;
-    flex: 0 0 100px;
+    height: 176px;
+    flex: 0 0 176px;
     place-items: center;
     overflow: hidden;
     background: #EAF6F2;
@@ -244,13 +232,8 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center 22%;
-    transition: transform .22s cubic-bezier(.22, 1, .36, 1);
-}
-
-.yk-expert-card:hover .yk-expert-card__image {
-    transform: scale(1.025);
+    object-fit: contain;
+    object-position: center;
 }
 
 .yk-expert-card__image[hidden],
@@ -272,10 +255,10 @@
 
 .yk-expert-card__body {
     display: flex;
-    min-height: 0;
+    min-height: 156px;
     flex: 1;
     flex-direction: column;
-    padding: .55rem .6rem .6rem;
+    padding: .7rem .75rem .75rem;
 }
 
 .yk-expert-card__name {
@@ -284,7 +267,7 @@
     margin: 0;
     overflow: hidden;
     color: #142B4D;
-    font-size: .75rem;
+    font-size: .92rem;
     font-weight: 600;
     letter-spacing: -.015em;
     line-height: 1.3;
@@ -296,10 +279,10 @@
 .yk-expert-card__specialization {
     display: -webkit-box;
     min-height: 2.8em;
-    margin: .15rem 0 0;
+    margin: .25rem 0 0;
     overflow: hidden;
     color: #475569;
-    font-size: .65rem;
+    font-size: .78rem;
     line-height: 1.4;
     overflow-wrap: anywhere;
     -webkit-box-orient: vertical;
@@ -307,9 +290,9 @@
 }
 
 .yk-expert-card__experience {
-    margin: .22rem 0 0;
+    margin: .25rem 0 0;
     color: #718096;
-    font-size: .6rem;
+    font-size: .72rem;
     line-height: 1.35;
 }
 
@@ -319,65 +302,30 @@
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-end;
-    gap: .35rem;
-    margin-top: .4rem;
-}
-
-.yk-expert-card__price {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: .2rem;
-    margin: 0 0 .05rem;
-    white-space: nowrap;
-}
-
-.yk-expert-card__price span {
-    overflow: hidden;
-    color: #718096;
-    font-size: .56rem;
-    text-overflow: ellipsis;
-}
-
-.yk-expert-card__price strong {
-    flex: 0 0 auto;
-    color: #142B4D;
-    font-size: .74rem;
-    font-weight: 600;
+    margin-top: .45rem;
 }
 
 .yk-expert-card__profile {
-    align-self: flex-start;
-    color: #36877F;
-    font-size: .64rem;
-    font-weight: 600;
-    line-height: 1.35;
-    text-decoration: none;
-}
-
-.yk-expert-card__book {
     display: flex;
-    min-height: 2rem;
+    min-height: 2.55rem;
     align-items: center;
     justify-content: center;
-    gap: .22rem;
-    padding: .35rem .4rem;
-    border: 1px solid #36877F;
-    border-radius: .45rem;
-    background: #36877F;
+    gap: .3rem;
+    padding: .45rem .65rem;
+    border: 1px solid #168F88;
+    border-radius: .55rem;
+    background: #168F88;
     color: #fff;
-    font-size: .62rem;
+    font-size: .82rem;
     font-weight: 600;
-    line-height: 1.15;
-    text-align: center;
     text-decoration: none;
     transition: border-color .2s ease, background-color .2s ease, transform .2s ease;
 }
 
-.yk-expert-card__book:hover {
+.yk-expert-card__profile:hover {
     transform: translateY(-1px);
-    border-color: #286E67;
-    background: #286E67;
+    border-color: #11766F;
+    background: #11766F;
     color: #fff;
 }
 
@@ -401,17 +349,19 @@
 
 @media (min-width: 1440px) {
     .yk-featured-experts__grid {
-        grid-auto-columns: initial;
-        grid-auto-flow: initial;
-        grid-template-columns: repeat(8, minmax(0, 1fr));
-        overflow: visible;
-        scroll-snap-type: none;
+        gap: .8rem;
     }
 }
 
-@media (max-width: 1439px) {
+@media (min-width: 768px) and (max-width: 1023px) {
     .yk-featured-experts__grid {
-        grid-auto-columns: clamp(184px, 15vw, 190px);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1199px) {
+    .yk-featured-experts__grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
@@ -432,13 +382,13 @@
     }
 
     .yk-featured-experts__grid {
-        grid-auto-columns: min(78vw, 270px);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: .65rem;
     }
 
     .yk-expert-card__image-link {
-        height: 112px;
-        flex-basis: 112px;
+        height: 150px;
+        flex-basis: 150px;
     }
 
     .yk-expert-card__body {
@@ -446,7 +396,7 @@
     }
 
     .yk-expert-card__name {
-        font-size: .82rem;
+        font-size: .84rem;
     }
 
     .yk-expert-card__specialization {
@@ -457,21 +407,14 @@
         font-size: .66rem;
     }
 
-    .yk-expert-card__price span {
-        font-size: .62rem;
-    }
-
-    .yk-expert-card__price strong {
-        font-size: .82rem;
-    }
-
     .yk-expert-card__profile {
         font-size: .72rem;
     }
+}
 
-    .yk-expert-card__book {
-        min-height: 2.5rem;
-        font-size: .72rem;
+@media (max-width: 479px) {
+    .yk-featured-experts__grid {
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 

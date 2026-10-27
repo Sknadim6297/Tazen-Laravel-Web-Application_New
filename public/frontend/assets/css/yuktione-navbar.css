@@ -1,0 +1,690 @@
+.yk-navbar {
+    --yk-nav-text: #0b2048;
+    --yk-nav-green: #316d61;
+    --yk-nav-green-hover: #27574e;
+    --yk-nav-lavender: #9d81db;
+    --yk-nav-bg: #ffffff;
+    --yk-nav-border: #e0e4ea;
+    --yk-nav-line: #e6eaf0;
+    --yk-nav-placeholder: #7c88a3;
+    --yk-nav-soft: #f4f7f8;
+    --yk-nav-font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    max-width: 100%;
+    background: var(--yk-nav-bg);
+    border-bottom: 1px solid var(--yk-nav-line);
+    color: var(--yk-nav-text);
+    font-family: var(--yk-nav-font);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+}
+
+.yk-navbar *,
+.yk-navbar *::before,
+.yk-navbar *::after {
+    box-sizing: border-box;
+}
+
+.yk-navbar button,
+.yk-navbar input,
+.yk-navbar a {
+    font-family: inherit;
+}
+
+.yk-navbar__bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 100%;
+    min-height: 68px;
+    margin: 0 auto;
+    padding: 0.5rem max(0.75rem, env(safe-area-inset-right)) 0.5rem max(0.75rem, env(safe-area-inset-left));
+}
+
+.yk-navbar__brand {
+    display: block;
+    flex: 0 1 auto;
+    width: min(148px, 46vw);
+    min-width: 0;
+    margin-right: auto;
+    line-height: 0;
+    text-decoration: none;
+}
+
+.yk-navbar__brand img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: left center;
+}
+
+.yk-navbar__toggle,
+.yk-navbar__close,
+.yk-navbar__bell {
+    display: inline-grid;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--yk-nav-text);
+    cursor: pointer;
+}
+
+.yk-navbar__toggle {
+    flex-direction: column;
+    gap: 5px;
+}
+
+.yk-navbar__toggle span {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.yk-navbar__toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+}
+
+.yk-navbar__toggle[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+}
+
+.yk-navbar__toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+}
+
+.yk-navbar__bell--toolbar,
+.yk-navbar__panel,
+.yk-navbar__mobile-heading,
+.yk-navbar__backdrop {
+    display: none;
+}
+
+.yk-navbar__bell svg,
+.yk-navbar__search button svg,
+.yk-navbar__close svg,
+.yk-navbar__chevron {
+    display: block;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.yk-navbar__bell:hover,
+.yk-navbar__bell:focus-visible,
+.yk-navbar__toggle:hover,
+.yk-navbar__toggle:focus-visible,
+.yk-navbar__close:hover,
+.yk-navbar__close:focus-visible {
+    background: var(--yk-nav-soft);
+}
+
+.yk-navbar__panel {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: 1001;
+    max-height: calc(100dvh - 68px);
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: 0.35rem 1rem calc(1.25rem + env(safe-area-inset-bottom));
+    background: var(--yk-nav-bg);
+    border-top: 1px solid var(--yk-nav-line);
+}
+
+.yk-navbar__panel.is-open {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.35rem;
+}
+
+.yk-navbar__mobile-heading {
+    align-items: center;
+    justify-content: space-between;
+    min-height: 48px;
+    color: var(--yk-nav-text);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.yk-navbar__panel.is-open .yk-navbar__mobile-heading {
+    display: flex;
+}
+
+.yk-navbar__close {
+    border: 1px solid var(--yk-nav-border);
+    border-radius: 999px;
+    background: var(--yk-nav-bg);
+}
+
+.yk-navbar__list {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.yk-navbar__list a {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0.65rem 0.15rem;
+    border-bottom: 1px solid var(--yk-nav-line);
+    color: var(--yk-nav-text);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.3;
+    text-decoration: none;
+}
+
+.yk-navbar__list a:hover,
+.yk-navbar__list a:focus-visible,
+.yk-navbar__list a.is-active {
+    color: var(--yk-nav-green);
+}
+
+.yk-navbar__list a.is-active {
+    font-weight: 600;
+}
+
+.yk-navbar__end {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    width: 100%;
+    min-width: 0;
+    padding-top: 0.85rem;
+}
+
+.yk-navbar__search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    height: 46px;
+    padding: 0 0.85rem 0 0.7rem;
+    border: 1px solid var(--yk-nav-border);
+    border-radius: 999px;
+    background: var(--yk-nav-bg);
+}
+
+.yk-navbar__search:focus-within {
+    border-color: var(--yk-nav-green);
+    box-shadow: 0 0 0 3px rgb(49 109 97 / 14%);
+}
+
+.yk-navbar__search button {
+    display: inline-grid;
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    place-items: center;
+    margin-right: 0.4rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--yk-nav-text);
+    cursor: pointer;
+}
+
+.yk-navbar__search button:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+.yk-navbar__search input {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--yk-nav-text);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.3;
+    appearance: none;
+}
+
+.yk-navbar__search input::placeholder {
+    color: var(--yk-nav-placeholder);
+    opacity: 1;
+}
+
+.yk-navbar__search input::-webkit-search-decoration,
+.yk-navbar__search input::-webkit-search-cancel-button,
+.yk-navbar__search input::-webkit-search-results-button,
+.yk-navbar__search input::-webkit-search-results-decoration {
+    display: none;
+}
+
+.yk-navbar__search-status {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0.85rem;
+    z-index: 2;
+    max-width: calc(100% - 1.5rem);
+    color: #9b3a3a;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+.yk-navbar__search-status:empty {
+    display: none;
+}
+
+.yk-navbar__auth {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    width: 100%;
+}
+
+.yk-navbar__login,
+.yk-navbar__signup {
+    display: inline-flex;
+    min-height: 46px;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1.15rem;
+    border-radius: 10px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.yk-navbar__login {
+    border: 1px solid var(--yk-nav-green);
+    background: var(--yk-nav-bg);
+    color: var(--yk-nav-green);
+}
+
+.yk-navbar__login:hover,
+.yk-navbar__login:focus-visible {
+    background: #f3f7f6;
+    color: var(--yk-nav-green-hover);
+}
+
+.yk-navbar__signup {
+    border: 1px solid var(--yk-nav-green);
+    background: var(--yk-nav-green);
+    color: #fff;
+}
+
+.yk-navbar__signup:hover,
+.yk-navbar__signup:focus-visible {
+    border-color: var(--yk-nav-green-hover);
+    background: var(--yk-nav-green-hover);
+    color: #fff;
+}
+
+.yk-navbar__account {
+    position: relative;
+    width: 100%;
+}
+
+.yk-navbar__account-toggle {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 48px;
+    padding: 0.25rem 0.35rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--yk-nav-text);
+    text-align: left;
+    cursor: pointer;
+}
+
+.yk-navbar__account-toggle:hover,
+.yk-navbar__account-toggle:focus-visible,
+.yk-navbar__account-toggle[aria-expanded="true"] {
+    background: var(--yk-nav-soft);
+}
+
+.yk-navbar__account-toggle img {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.yk-navbar__account-copy {
+    display: grid;
+    min-width: 0;
+    gap: 0.05rem;
+}
+
+.yk-navbar__account-name {
+    overflow: hidden;
+    color: var(--yk-nav-text);
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.yk-navbar__account-role {
+    color: var(--yk-nav-placeholder);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.yk-navbar__chevron {
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+    transition: transform 0.18s ease;
+}
+
+.yk-navbar__account-toggle[aria-expanded="true"] .yk-navbar__chevron {
+    transform: rotate(180deg);
+}
+
+.yk-navbar__account-menu {
+    display: grid;
+    gap: 0.15rem;
+    width: 100%;
+    margin-top: 0.35rem;
+    padding: 0.45rem;
+    border: 1px solid var(--yk-nav-border);
+    border-radius: 12px;
+    background: var(--yk-nav-bg);
+}
+
+.yk-navbar__account-menu[hidden],
+.yk-navbar__backdrop[hidden] {
+    display: none !important;
+}
+
+.yk-navbar__account-label {
+    padding: 0.45rem 0.65rem 0.2rem;
+    color: var(--yk-nav-placeholder);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.yk-navbar__account-menu a,
+.yk-navbar__account-menu form,
+.yk-navbar__account-menu button {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0.65rem 0.7rem;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--yk-nav-text);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.yk-navbar__account-menu a:hover,
+.yk-navbar__account-menu a:focus-visible,
+.yk-navbar__account-menu button:hover,
+.yk-navbar__account-menu button:focus-visible {
+    background: var(--yk-nav-soft);
+    color: var(--yk-nav-green);
+}
+
+.yk-navbar__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: rgb(11 32 72 / 32%);
+    cursor: pointer;
+}
+
+.yk-navbar__backdrop:not([hidden]) {
+    display: block;
+}
+
+.yk-navbar a:focus-visible,
+.yk-navbar button:focus-visible,
+.yk-navbar input:focus-visible {
+    outline: 2px solid var(--yk-nav-green);
+    outline-offset: 2px;
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+    .yk-navbar__bar {
+        min-height: 76px;
+        padding-inline: 1.25rem;
+    }
+
+    .yk-navbar__brand {
+        width: min(164px, 28vw);
+    }
+
+    .yk-navbar__panel {
+        max-height: calc(100dvh - 76px);
+        padding-inline: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .yk-navbar__bar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-height: 84px;
+        padding-inline: 1rem;
+    }
+
+    .yk-navbar__brand {
+        width: 150px;
+        margin-right: 0;
+    }
+
+    .yk-navbar__bell--bar,
+    .yk-navbar__toggle,
+    .yk-navbar__mobile-heading,
+    .yk-navbar__panel.is-open .yk-navbar__mobile-heading {
+        display: none;
+    }
+
+    .yk-navbar__panel,
+    .yk-navbar__panel.is-open {
+        display: contents;
+    }
+
+    .yk-navbar__links {
+        display: flex;
+        flex: 1 1 auto;
+        justify-content: center;
+        min-width: max-content;
+    }
+
+    .yk-navbar__list {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.7rem;
+    }
+
+    .yk-navbar__list a {
+        min-height: 44px;
+        padding: 0.35rem 0.1rem;
+        border-bottom: 0;
+        font-size: 0.875rem;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .yk-navbar__end {
+        display: flex;
+        flex: 0 1 auto;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.7rem;
+        width: auto;
+        min-width: 0;
+        padding-top: 0;
+    }
+
+    .yk-navbar__search {
+        flex: 1 1 190px;
+        width: 190px;
+        min-width: 150px;
+        max-width: 220px;
+        height: 42px;
+    }
+
+    .yk-navbar__search input {
+        font-size: 0.875rem;
+    }
+
+    .yk-navbar__bell--toolbar {
+        display: inline-grid;
+        flex-basis: 40px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .yk-navbar__auth {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.55rem;
+        width: auto;
+    }
+
+    .yk-navbar__login,
+    .yk-navbar__signup {
+        min-height: 42px;
+        padding-inline: 0.8rem;
+        font-size: 0.875rem;
+    }
+
+    .yk-navbar__account {
+        width: auto;
+    }
+
+    .yk-navbar__account-toggle {
+        width: auto;
+        min-height: 42px;
+        padding-right: 0.45rem;
+    }
+
+    .yk-navbar__account-copy {
+        display: none;
+    }
+
+    .yk-navbar__chevron {
+        margin-left: 0;
+    }
+
+    .yk-navbar__account-menu {
+        position: absolute;
+        top: calc(100% + 0.45rem);
+        right: 0;
+        z-index: 1002;
+        width: max-content;
+        min-width: 220px;
+        margin-top: 0;
+        box-shadow: 0 12px 28px rgb(11 32 72 / 8%);
+    }
+}
+
+@media (min-width: 1280px) {
+    .yk-navbar__bar {
+        min-height: 92px;
+        gap: 1.5rem;
+        padding-inline: clamp(1.5rem, 2.2vw, 2.75rem);
+    }
+
+    .yk-navbar__brand {
+        width: 168px;
+    }
+
+    .yk-navbar__list {
+        gap: 1.7rem;
+    }
+
+    .yk-navbar__list a {
+        font-size: 0.9375rem;
+    }
+
+    .yk-navbar__end {
+        gap: 0.85rem;
+    }
+
+    .yk-navbar__search {
+        flex-basis: 260px;
+        width: 260px;
+        max-width: 280px;
+    }
+
+    .yk-navbar__auth {
+        gap: 0.65rem;
+    }
+
+    .yk-navbar__login,
+    .yk-navbar__signup {
+        padding-inline: 1.15rem;
+        font-size: 0.9375rem;
+    }
+
+    .yk-navbar__account-copy {
+        display: grid;
+        max-width: 140px;
+    }
+}
+
+@media (min-width: 1440px) {
+    .yk-navbar__search {
+        flex-basis: 280px;
+        width: 280px;
+        max-width: 300px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .yk-navbar__toggle span,
+    .yk-navbar__chevron,
+    .yk-navbar__login,
+    .yk-navbar__signup,
+    .yk-navbar__list a {
+        transition-duration: 0.01ms;
+    }
+}

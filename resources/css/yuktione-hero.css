@@ -1,0 +1,179 @@
+@layer theme, utilities;
+
+@import "tailwindcss/theme.css" layer(theme) prefix(yk);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(yk);
+
+@source "../views/frontend/home/partials/hero.blade.php";
+
+@theme {
+  --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --color-navy: #0b2048;
+  --color-teal: #316d61;
+  --color-lavender: #9d81db;
+  --color-cream: #fffefc;
+  --color-lilac: #f4f0fa;
+  --color-line: #e0e4ea;
+}
+
+.yk-hero,
+.yk-hero * {
+  box-sizing: border-box;
+}
+
+.yk-hero > div {
+  width: 100%;
+  max-width: min(100%, 1360px);
+  min-width: 0;
+}
+
+.yk-hero__video,
+.yk-hero__benefits {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.yk-hero {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.yk-hero__search,
+.yk-hero__play,
+.yk-hero__watch,
+.yk-hero__search button,
+.yk-hero__benefits > a {
+  border-radius: 999px;
+}
+
+.yk-hero__poster {
+  object-position: center 64%;
+}
+
+.yk-hero__search:focus-within {
+  border-color: #316d61;
+}
+
+.yk-hero__search input {
+  appearance: none;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  box-shadow: none;
+  font: inherit;
+  color: #0b2048;
+}
+
+.yk-hero__search input::-webkit-search-decoration,
+.yk-hero__search input::-webkit-search-cancel-button,
+.yk-hero__search input::-webkit-search-results-button {
+  display: none;
+}
+
+.yk-hero__results {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  right: 0;
+  left: 0;
+  z-index: 30;
+  overflow: hidden;
+  border: 1px solid #e0e4ea;
+  border-radius: 1rem;
+  background: #fff;
+}
+
+.yk-hero__results .list-group {
+  margin: 0;
+}
+
+.yk-hero__results .list-group-item {
+  border: 0;
+  border-bottom: 1px solid #eef1f4;
+  border-radius: 0;
+  background: #fff;
+  color: #0b2048;
+  font-family: inherit;
+  font-size: 0.92rem;
+}
+
+.yk-hero__results .list-group-item:last-child {
+  border-bottom: 0;
+}
+
+.yk-hero__results .list-group-item:hover,
+.yk-hero__results .list-group-item:focus-visible {
+  background: #f4f0fa;
+  color: #0b2048;
+}
+
+.yk-hero__chip {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 0.32rem 0.75rem;
+  border: 0;
+  border-radius: 999px;
+  background: #f3eef9;
+  color: #0b2048;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.yk-hero__chip:hover {
+  background: #e7def6;
+  color: #0b2048;
+}
+
+.yk-hero__script {
+  max-width: 15rem;
+  padding-right: 0.25rem;
+  font-family: "Segoe Print", "Bradley Hand", cursive;
+  font-size: clamp(1.4rem, 1.45vw, 1.75rem);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.yk-hero__video::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(90deg, rgb(11 32 72 / 34%) 0%, rgb(11 32 72 / 8%) 46%, transparent 72%);
+  pointer-events: none;
+}
+
+.yk-hero__video-copy {
+  text-shadow: 0 1px 8px rgb(11 32 72 / 28%);
+}
+
+.yk-hero__video.is-playing::after,
+.yk-hero__video.is-playing .yk-hero__poster,
+.yk-hero__video.is-playing .yk-hero__video-copy,
+.yk-hero__video.is-playing [data-hero-play] {
+  display: none;
+}
+
+.yk-hero__video.is-playing .yk-hero__player {
+  display: block;
+}
+
+.yk-hero button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.yk-hero a:focus-visible,
+.yk-hero button:focus-visible {
+  outline: 2px solid #316d61;
+  outline-offset: 3px;
+}
+
+.yk-hero__search input:focus-visible {
+  outline: none;
+}

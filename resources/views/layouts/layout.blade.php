@@ -212,13 +212,21 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 		<link href="{{ asset('frontend/assets/css/yuktione-home.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-home.css')) }}" rel="stylesheet">
-		<link href="{{ asset('frontend/assets/css/yuktione-featured-experts.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-featured-experts.css')) }}" rel="stylesheet">
+		<link href="{{ asset('frontend/assets/css/yuktione-hero.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-hero.css')) }}" rel="stylesheet">
+		<link href="{{ asset('frontend/assets/css/yuktione-categories.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-categories.css')) }}" rel="stylesheet">
+		<link href="{{ asset('frontend/assets/css/yuktione-tools.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-tools.css')) }}" rel="stylesheet">
+		<link href="{{ asset('frontend/assets/css/yuktione-insights.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-insights.css')) }}" rel="stylesheet">
+		<link href="{{ asset('frontend/assets/css/yuktione-talk.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-talk.css')) }}" rel="stylesheet">
 		<link href="{{ asset('frontend/assets/css/yuktione-programmes.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-programmes.css')) }}" rel="stylesheet">
 		<link href="{{ asset('admin/assets/css/icons.css') }}" rel="stylesheet">
 	@endif
 	@if (request()->routeIs('event.list', 'event.details'))
 		<link href="{{ asset('frontend/assets/css/yuktione-programmes.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-programmes.css')) }}" rel="stylesheet">
 	@endif
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link href="{{ asset('frontend/assets/css/yuktione-navbar.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-navbar.css')) }}" rel="stylesheet">
 	@endif
 </head>
 
@@ -664,7 +672,6 @@ $(document).ready(function () {
 	@if (request()->routeIs('home'))
 		<script src="{{ asset('frontend/assets/js/yuktione-home.js') }}?v={{ filemtime(public_path('frontend/assets/js/yuktione-home.js')) }}"></script>
 		<script src="{{ asset('frontend/assets/js/home-category-slider.js') }}?v={{ filemtime(public_path('frontend/assets/js/home-category-slider.js')) }}"></script>
-		<script src="{{ asset('frontend/assets/js/yuktione-featured-experts.js') }}?v={{ filemtime(public_path('frontend/assets/js/yuktione-featured-experts.js')) }}"></script>
 		<script src="{{ asset('frontend/assets/js/yuktione-programmes.js') }}?v={{ filemtime(public_path('frontend/assets/js/yuktione-programmes.js')) }}"></script>
 	@endif
 	@if (request()->routeIs('event.list'))

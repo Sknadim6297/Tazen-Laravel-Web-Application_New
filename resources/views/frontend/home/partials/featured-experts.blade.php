@@ -63,15 +63,6 @@
                                     : 'storage/' . ltrim($photoPath, '/'));
                         }
 
-                        $price = $expert->rates
-                            ->map(fn ($rate) => $rate->final_rate ?: $rate->rate_per_session)
-                            ->filter(fn ($amount) => is_numeric($amount) && (float) $amount > 0)
-                            ->min();
-                        if ($price === null && filled($expert->profile?->starting_price)) {
-                            preg_match('/[\d,]+(?:\.\d+)?/', (string) $expert->profile->starting_price, $priceMatch);
-                            $price = isset($priceMatch[0]) ? (float) str_replace(',', '', $priceMatch[0]) : null;
-                        }
-
                         $profileUrl = route('professionals.details', [
                             'id' => $expert->id,
                             'professional_name' => \Illuminate\Support\Str::slug($expert->name),
@@ -96,14 +87,10 @@
                                 <p class="yk-expert-card__specialization" title="{{ $specialization }}">{{ $specialization }}</p>
                             @endif
                             @if(filled($expert->profile?->experience))
-                                <p class="yk-expert-card__experience">{{ $expert->profile->experience }}{{ is_numeric($expert->profile->experience) ? ' years' : '' }} experience</p>
+                                <p class="yk-expert-card__experience">{{ $expert->profile->experience }}{{ is_numeric($expert->profile->experience) || !preg_match('/\byears?\b/i', (string) $expert->profile->experience) ? ' years' : '' }} experience</p>
                             @endif
                             <div class="yk-expert-card__actions">
-                                @if($price !== null && $price > 0)
-                                    <p class="yk-expert-card__price"><span>Starting from</span><strong>{{ getCurrencySymbol() }}{{ number_format(convertCurrency($price), 0) }}</strong></p>
-                                @endif
                                 <a class="yk-expert-card__profile" href="{{ $profileUrl }}">View profile <span aria-hidden="true">→</span></a>
-                                <a class="yk-expert-card__book" href="{{ $profileUrl }}#bookNowBtn">Book a session <span aria-hidden="true">→</span></a>
                             </div>
                         </div>
                     </article>

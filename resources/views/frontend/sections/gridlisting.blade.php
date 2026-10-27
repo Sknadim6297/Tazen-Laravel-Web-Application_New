@@ -192,21 +192,23 @@
     
     /* Fiverr-Style Card Design */
     .strip {
+        display: flex;
+        flex-direction: column;
         background: white;
-        border-radius: 6px;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+        border-radius: 14px;
+        box-shadow: 0 2px 10px rgba(20, 43, 77, 0.07);
         transition: all 0.3s ease;
-        margin-bottom: 15px;
+        margin-bottom: 0;
         overflow: hidden;
         position: relative;
-        border: 1px solid #e4e5e7;
+        border: 1px solid #e2e9ee;
         height: 100%;
     }
 
     .strip:hover {
         transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(21, 42, 112, 0.2);
-        border-color: #152a70;
+        box-shadow: 0 8px 20px rgba(20, 43, 77, 0.12);
+        border-color: #a9d0c0;
     }
 
     /* Card Image Section */
@@ -214,8 +216,8 @@
         position: relative;
         margin: 0;
         overflow: hidden;
-        height: 220px;
-        background: #f5f5f5;
+        height: 205px;
+        background: #f1f7f6;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -232,232 +234,97 @@
         left: auto !important;
     }
 
-    /* Wishlist Heart */
-    .wish_bt {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        width: 32px;
-        height: 32px;
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10;
-        transition: all 0.3s ease;
-        text-decoration: none;
-    }
-
-    .wish_bt:hover {
-        background: linear-gradient(135deg, #c51010, #f39c12);
-        transform: scale(1.1);
-    }
-
-    .wish_bt i {
-        color: #666;
-        font-size: 16px;
-    }
-
-    .wish_bt:hover i {
-        color: white;
-    }
-
-    /* Experience Badge */
-    .experience-badge {
-        position: absolute;
-        top: 12px;
-        left: 12px;
-        background: linear-gradient(135deg, #152a70, #c51010, #f39c12);
-        color: white;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        z-index: 10;
-        box-shadow: 0 2px 8px rgba(21, 42, 112, 0.3);
-    }
-
-    .experience-icon {
-        margin-right: 4px;
-        font-size: 10px;
-    }
-
     /* Card Content Section */
     .strip_info {
-        padding: 10px 12px;
-        text-decoration: none;
+        padding: 12px;
         color: inherit;
-        flex-grow: 1;
+        flex: 1;
         display: flex;
         flex-direction: column;
     }
 
-    .strip_info:hover {
-        text-decoration: none;
-        color: inherit;
+    .item_title {
+        min-width: 0;
     }
 
     /* Professional Name */
     .item_title h3 {
+        display: -webkit-box;
+        min-height: 2.4em;
+        font-size: 15px;
+        font-weight: 600;
+        color: #142b4d;
+        margin: 0;
+        line-height: 1.25;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .professional-specialization,
+    .professional-experience {
+        margin: 5px 0 0;
+        overflow: hidden;
+        font-size: 13px;
+        line-height: 1.35;
+        text-overflow: ellipsis;
+    }
+
+    .professional-specialization {
+        display: -webkit-box;
+        color: #475569;
+        overflow-wrap: anywhere;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .professional-experience {
+        color: #718096;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .strip_profile {
+        display: flex;
+        min-height: 42px;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        margin-top: auto;
+        padding: 9px 12px;
+        border: 1px solid #168f88;
+        border-radius: 9px;
+        background: #168f88;
+        color: #fff;
         font-size: 14px;
         font-weight: 600;
-        color: #222;
-        margin: 0 0 4px 0;
-        line-height: 1.2;
-    }
-
-    /* Bio/Description */
-    .item_title .about {
-        font-size: 12px;
-        color: #74767e;
-        margin: 0 0 4px 0;
-        line-height: 1.3;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        flex-grow: 1;
-    }
-
-    /* Price */
-    .item_title small {
-        font-size: 15px;
-        font-weight: 700;
-        background: linear-gradient(135deg, #152a70, #c51010, #f39c12);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        display: block;
-        margin-bottom: 2px;
-    }
-
-    /* Tags */
-    .item_title small:last-child {
-        font-size: 11px;
-        color: #b2b3b4;
-        font-weight: 400;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        margin-bottom: 0;
-    }
-
-    /* Action Buttons */
-    .strip ul {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 8px 12px;
-        margin: 0;
-        background: #fafafa;
-        border-top: 1px solid #e4e5e7;
-        flex-shrink: 0;
-    }
-
-    .strip ul li {
-        list-style: none;
-        margin: 0;
-    }
-
-    .strip ul li a {
-        color: #74767e;
+        text-align: center;
         text-decoration: none;
-        padding: 6px;
-        border-radius: 4px;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        transition: background-color .2s ease, border-color .2s ease, transform .2s ease;
     }
 
-    .strip ul li a:hover {
-        background: linear-gradient(135deg, #152a70, #c51010, #f39c12);
-        color: white;
-        transform: translateY(-2px);
-    }
-
-    .strip ul li a i {
-        font-size: 14px;
-    }
-
-    /* Icon Collage */
-    .icon-collage-container {
-        margin: 0;
-    }
-
-    .icon-collage {
-        display: flex;
-        align-items: center;
-        gap: 0;
-        position: relative;
-    }
-
-    .collage-icon {
-        color: #74767e;
+    .strip_profile:hover {
+        transform: translateY(-1px);
+        border-color: #11766f;
+        background: #11766f;
+        color: #fff;
         text-decoration: none;
-        padding: 6px 8px;
-        border-radius: 4px;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #f5f5f5;
-        border: 1px solid #e4e5e7;
     }
 
-    .collage-icon:first-child {
-        border-radius: 4px 0 0 4px;
-        border-right: none;
+    .strip_profile:focus-visible {
+        outline: 2px solid #8eb5dd;
+        outline-offset: 3px;
     }
 
-    .collage-icon:last-child {
-        border-radius: 0 4px 4px 0;
+    .strip_profile span {
+        transition: transform .2s ease;
     }
 
-    .collage-icon:hover {
-        background: linear-gradient(135deg, #152a70, #c51010, #f39c12);
-        color: white;
-        transform: scale(1.05);
-        z-index: 2;
-        border-color: transparent;
+    .strip_profile:hover span {
+        transform: translateX(2px);
     }
 
-    .collage-icon i {
-        font-size: 14px;
-    }
-
-    /* Rating Section */
-    .score {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .score span {
-        font-size: 11px;
-        color: #74767e;
-    }
-
-    .score em {
-        display: block;
-        font-size: 9px;
-        color: #b2b3b4;
-        font-style: normal;
-    }
-
-    .score strong {
-        font-size: 14px;
-        font-weight: 700;
-        background: linear-gradient(135deg, #152a70, #c51010, #f39c12);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    
     /* Filter Row */
     .filter-row {
         display: flex;
@@ -803,7 +670,7 @@
         }
         
         .strip {
-            margin-bottom: 12px;
+            margin-bottom: 0;
         }
         
         .strip figure {
@@ -817,31 +684,16 @@
         }
         
         .strip_info {
-            padding: 8px 10px;
+            padding: 10px 12px;
         }
         
         .item_title h3 {
-            font-size: 13px;
-        }
-        
-        .item_title .about {
-            font-size: 11px;
-        }
-        
-        .item_title small {
             font-size: 14px;
         }
         
-        .strip ul {
-            padding: 6px 10px;
-        }
-        
-        .strip ul li a {
-            padding: 5px;
-        }
-        
-        .strip ul li a i {
-            font-size: 13px;
+        .professional-specialization,
+        .professional-experience {
+            font-size: 12px;
         }
     }
 
@@ -936,37 +788,21 @@
         }
         
         .strip_info {
-            padding: 6px 8px;
+            padding: 10px 12px;
         }
         
         .item_title h3 {
+            font-size: 14px;
+        }
+        
+        .professional-specialization,
+        .professional-experience {
             font-size: 12px;
         }
         
-        .item_title .about {
-            font-size: 10px;
-        }
-        
-        .item_title small {
+        .strip_profile {
+            min-height: 40px;
             font-size: 13px;
-        }
-        
-        .strip ul {
-            padding: 5px 8px;
-        }
-        
-        .experience-badge {
-            font-size: 10px;
-            padding: 3px 6px;
-        }
-        
-        .wish_bt {
-            width: 26px;
-            height: 26px;
-        }
-        
-        .wish_bt i {
-            font-size: 12px;
         }
     }
 
@@ -1271,137 +1107,54 @@
                 </div>
             @else
                 @foreach($professionals as $professional)
-                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6">
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
                         <div class="strip">
-                            {{-- Card Image Banner --}}
-                            <figure>
-                                {{-- Wishlist Heart Icon --}}
-                                <a href="#0" class="wish_bt"><i class="icon_heart"></i></a>
-
-                                {{-- Experience Badge --}}
-                                @if(!empty($professional->profile->experience))
-                                    <div class="experience-badge">
-                                        <i class="icon_briefcase experience-icon"></i> {{ $professional->profile->experience }} yrs
-                                    </div>
-                                @endif
-
-                                @php
-                                    $defaultAvatar = asset('img/default-avatar.png');
-                                    
-                                    if($professional->profile && !empty($professional->profile->photo)) {
-                                        $photoPath = $professional->profile->photo;
-                                        // Check if it's already a full URL
-                                        if (filter_var($photoPath, FILTER_VALIDATE_URL)) {
-                                            $imageUrl = $photoPath;
-                                        } else {
-                                            // The photo path is stored relative to storage/app/public
-                                            $imageUrl = asset('storage/' . $photoPath);
-                                        }
-                                    } else {
-                                        $imageUrl = $defaultAvatar;
-                                    }
-                                @endphp
-                                <img src="{{ $imageUrl }}" class="img-fluid lazy" alt="{{ $professional->first_name }}" onerror="this.onerror=null; this.src='{{ $defaultAvatar }}';" style="width: 100%; height: 220px; object-fit: cover;">
-                            </figure>
-
-                        
                             @php
-                                $professionalName = $professional->name ?? 'Professional';
-                                $seoFriendlyName = Str::slug($professionalName);
-                                
-                                // Build route parameters
-                                $routeParams = ['id' => $professional->id, 'professional_name' => $seoFriendlyName];
-                                
-                                // Add sub-service slug if selected
-                                if(request('sub_service_id')) {
+                                $displayName = trim(optional($professional->profile)->name ?: $professional->name ?: 'Professional');
+                                $defaultAvatar = asset('img/default-avatar.png');
+                                $photoPath = optional($professional->profile)->photo;
+                                $imageUrl = filled($photoPath)
+                                    ? (filter_var($photoPath, FILTER_VALIDATE_URL) ? $photoPath : asset('storage/' . ltrim($photoPath, '/')))
+                                    : $defaultAvatar;
+                                $specialization = optional($professional->profile)->specialization;
+                                if (!filled($specialization)) {
+                                    $specialization = $professional->professionalServices
+                                        ->map(fn ($professionalService) => $professionalService->service?->name)
+                                        ->filter()
+                                        ->unique()
+                                        ->implode(' · ');
+                                }
+                                $experience = optional($professional->profile)->experience;
+
+                                $routeParams = [
+                                    'id' => $professional->id,
+                                    'professional_name' => Str::slug($professional->name ?? $displayName),
+                                ];
+                                if (request('sub_service_id')) {
                                     $selectedSubService = collect($subServices)->firstWhere('id', request('sub_service_id'));
-                                    if($selectedSubService) {
+                                    if ($selectedSubService) {
                                         $routeParams['sub_service_slug'] = Str::slug($selectedSubService->name);
                                     }
                                 }
-                                
                                 $detailsUrl = route('professionals.details', $routeParams);
-                                
-                                // Determine pricing based on selected service/sub-service
-                                $displayPrice = null;
-                                $displayPriceText = 'Contact for pricing';
-                                
-                                if(request('sub_service_id')) {
-                                    // Sub-service is selected - show sub-service rate
-                                    $subServiceRate = $professional->professionalServices
-                                        ->where('sub_service_id', request('sub_service_id'))
-                                        ->first();
-                                    if($subServiceRate && $subServiceRate->rate) {
-                                        $displayPrice = (float)$subServiceRate->rate;
-                                    }
-                                } elseif(session('selected_service_id')) {
-                                    // No sub-service selected but main service is selected - show main service rate
-                                    $mainServiceRate = $professional->professionalServices
-                                        ->where('service_id', session('selected_service_id'))
-                                        ->whereNull('sub_service_id')
-                                        ->first();
-                                    if($mainServiceRate && $mainServiceRate->rate) {
-                                        $displayPrice = (float)$mainServiceRate->rate;
-                                    } else {
-                                        // Fallback to any service rate for this professional under the selected service
-                                        $anyServiceRate = $professional->professionalServices
-                                            ->where('service_id', session('selected_service_id'))
-                                            ->where('rate', '>', 0)
-                                            ->first();
-                                        if($anyServiceRate && $anyServiceRate->rate) {
-                                            $displayPrice = (float)$anyServiceRate->rate;
-                                        }
-                                    }
-                                }
-                                
-                                // Final fallback to starting price if no specific service rate found
-                                if($displayPrice === null && $professional->profile && $professional->profile->starting_price) {
-                                    $displayPrice = (float)$professional->profile->starting_price;
-                                }
-                                
-                                // Format the display text
-                                if($displayPrice !== null) {
-                                    $displayPriceText = getCurrencySymbol() . ' ' . number_format(convertCurrency($displayPrice), 0);
-                                }
                             @endphp
-                            
-                            <a href="{{ $detailsUrl }}" class="strip_info">
-                                <div class="item_title">
-                                    @php
-                                        // Match professional-details name formatting
-                                        $rawName = trim(optional($professional->profile)->name ?? $professional->name ?? '');
-                                        $parts = $rawName !== '' ? preg_split('/\s+/', $rawName) : [];
-                                        if (empty($parts)) {
-                                            $displayName = '';
-                                        } elseif (count($parts) === 1) {
-                                            $displayName = $parts[0];
-                                        } else {
-                                            $surname = end($parts);
-                                            $displayName = $parts[0] . ' ' . strtoupper(substr($surname, 0, 1)) . '.';
-                                        }
-                                    @endphp
-                                    <h3>{{ $displayName }}</h3>
-                                    <p class="about">{{ $professional->bio ?: 'Professional service provider with expertise in your field.' }}</p>
-                                    <small>From {{ getCurrencySymbol() }}{{ number_format(convertCurrency($displayPrice), 0) }}</small>
-                                    <small>{{ $professional->professionalServices->pluck('tags')->filter()->implode(', ') ?: 'Professional Services' }}</small>
-                                </div>
-                            </a>
 
-                            
-                            <ul>
-                                <li class="icon-collage-container">
-                                    <div class="icon-collage">
-                                        <a href="#0" class="tooltip-1 collage-icon" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Available Chat"><i class="icon-chat"></i></a>
-                                        <a href="#0" class="tooltip-1 collage-icon" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Available Video Call"><i class="icon-videocam"></i></a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="score">
-                                        <span>Excellent<em>{{ rand(50, 500) }} Reviews</em></span>
-                                        <strong>{{ number_format(rand(40, 50) / 10, 1) }}</strong>
-                                    </div>
-                                </li>
-                            </ul>
+                            <figure>
+                                <img src="{{ $imageUrl }}" class="img-fluid lazy" alt="{{ $displayName }}" onerror="this.onerror=null; this.src='{{ $defaultAvatar }}';">
+                            </figure>
+
+                            <div class="strip_info">
+                                <div class="item_title">
+                                    <h3>{{ $displayName }}</h3>
+                                    @if(filled($specialization))
+                                        <p class="professional-specialization">{{ $specialization }}</p>
+                                    @endif
+                                    @if(filled($experience))
+                                        <p class="professional-experience">{{ $experience }}{{ is_numeric($experience) || !preg_match('/\byears?\b/i', (string) $experience) ? ' years' : '' }} experience</p>
+                                    @endif
+                                </div>
+                                <a href="{{ $detailsUrl }}" class="strip_profile">View profile <span aria-hidden="true">→</span></a>
+                            </div>
                         </div>
                     </div>
                 @endforeach

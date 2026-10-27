@@ -785,118 +785,15 @@
 			</div>
 		@endif
 		
-		<section class="yuktione-home-hero" aria-labelledby="yuktione-home-title">
-			<div class="yuktione-home-hero__stage">
-				<div class="yuktione-home-hero__copy">
-					<h1 class="yuktione-home-hero__title" id="yuktione-home-title">
-						<span>Real people.</span>
-						<span>Practical guidance.</span>
-						<em>Real progress.</em>
-					</h1>
-					<p class="yuktione-home-hero__description">Expert support, tools and programmes for your mental wellbeing, career, nutrition, finance and more.</p>
+		@include('frontend.home.partials.hero')
 
-					<div class="yuktione-home-hero__search">
-						<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-							<circle cx="10.8" cy="10.8" r="6.8"></circle>
-							<path d="m16 16 4.2 4.2"></path>
-						</svg>
-						<label class="visually-hidden" for="serviceSearch">Search experts, tools or topics</label>
-						<input type="search" id="serviceSearch" placeholder="Search experts, tools or topics..." autocomplete="off">
-						<button type="button" id="searchButton" aria-label="Search services">
-							<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-								<circle cx="10.8" cy="10.8" r="6.8"></circle>
-								<path d="m16 16 4.2 4.2"></path>
-							</svg>
-						</button>
-						<div id="searchResults" class="d-none" role="listbox" aria-label="Search results"></div>
-					</div>
-				</div>
+		@include('frontend.home.partials.categories')
 
-				<div class="yuktione-home-hero__media">
-					<img class="yuktione-home-hero__photo" src="{{ asset('frontend/assets/img/slides/slide_home_2.jpg') }}" alt="A smiling woman holding a cup in a bright indoor setting" fetchpriority="high">
-					<div class="yuktione-home-hero__note" aria-hidden="true">A calmer,<br>happier you</div>
-					<svg class="yuktione-home-hero__leaves" viewBox="0 0 240 210" aria-hidden="true" focusable="false">
-						<path d="M111 207c-2-52 3-112 48-174" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-						<path d="M137 130c-47-4-69-31-72-75 39 9 65 33 72 75Z" fill="currentColor" opacity=".78"/>
-						<path d="M144 106c-4-40 15-67 54-86 4 37-14 67-54 86Z" fill="currentColor" opacity=".92"/>
-						<path d="M113 171c-48 1-79-19-95-60 42-1 76 18 95 60Z" fill="currentColor" opacity=".7"/>
-						<path d="M119 164c6-40 31-63 75-70-8 39-32 64-75 70Z" fill="currentColor" opacity=".86"/>
-						<path d="M111 202c-39 11-71 1-98-31 35-12 69-2 98 31Z" fill="currentColor" opacity=".68"/>
-					</svg>
-					<a class="yuktione-home-hero__journey" href="{{ route('register') }}">
-						<span class="yuktione-home-hero__journey-icon" aria-hidden="true">
-							<svg viewBox="0 0 24 24" focusable="false"><path d="M12 21s-7.5-4.5-7.5-11a4.2 4.2 0 0 1 7.5-2.6A4.2 4.2 0 0 1 19.5 10c0 6.5-7.5 11-7.5 11Z"/><path d="M12 6c.7-2 2.2-3 4.5-3"/></svg>
-						</span>
-						<span>Your journey to a brighter you starts here.</span>
-						<span class="yuktione-home-hero__journey-arrow" aria-hidden="true">
-							<svg viewBox="0 0 24 24" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
-						</span>
-					</a>
-				</div>
-			</div>
+		@include('frontend.home.partials.tools')
 
-		</section>
+		@include('frontend.home.partials.insights')
 
-			<section class="homepage-category-slider" aria-labelledby="homepage-category-heading">
-				<div class="homepage-category-slider__inner">
-					<div class="homepage-category-slider__heading">
-						<p class="homepage-category-slider__eyebrow">Explore Categories</p>
-						<h2 id="homepage-category-heading">Find the Right Expert for Your Needs</h2>
-						<p class="homepage-category-slider__description">Explore a wide range of professional categories and connect with experts who can help you.</p>
-					</div>
-					<div class="homepage-category-slider__toolbar">
-						<div class="homepage-category-slider__controls" hidden>
-							<button type="button" class="homepage-category-slider__arrow" data-category-slide-prev aria-label="Scroll to previous categories" disabled>
-								<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg>
-							</button>
-							<button type="button" class="homepage-category-slider__arrow" data-category-slide-next aria-label="Scroll to next categories">
-								<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg>
-							</button>
-						</div>
-					</div>
-					@if($homepageCategories->isNotEmpty())
-						<div class="homepage-category-slider__track" data-category-slider-track tabindex="0" aria-label="Expert categories; use left and right arrow keys to scroll">
-						@foreach($homepageCategories as $categoryBox)
-							@php
-								$categoryService = $categoryBox->subCategories->first(fn ($subCategory) => $subCategory->service)?->service;
-								$categoryUrl = route('gridlisting', $categoryService ? ['service' => $categoryService->slug] : []);
-								$categoryImage = $categoryBox->image ?: $categoryBox->icon_path ?: $categoryBox->subCategories->first(fn ($subCategory) => filled($subCategory->image))?->image;
-								$categoryImageUrl = $categoryImage
-									? (preg_match('/^https?:\/\//i', $categoryImage)
-										? $categoryImage
-										: asset('storage/' . ltrim(preg_replace('#^storage/#', '', $categoryImage), '/')))
-									: null;
-							@endphp
-							<a class="homepage-category-card" href="{{ $categoryUrl }}" aria-label="Explore {{ $categoryBox->name }}">
-								<span class="homepage-category-card__art" aria-hidden="true">
-									@if($categoryImageUrl)
-										<img src="{{ $categoryImageUrl }}" alt="" loading="lazy">
-										<svg class="homepage-category-card__fallback" viewBox="0 0 24 24" focusable="false" hidden><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8m0-12.8L5.6 18.4"/></svg>
-									@elseif($categoryBox->icon_name)
-										<i class="{{ $categoryBox->icon_name }}"></i>
-									@else
-										<svg viewBox="0 0 24 24" focusable="false"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8m0-12.8L5.6 18.4"/></svg>
-									@endif
-								</span>
-								<span class="homepage-category-card__content">
-									<span class="homepage-category-card__name">{{ $categoryBox->name }}</span>
-									<span class="homepage-category-card__arrow" aria-hidden="true">
-										<svg viewBox="0 0 24 24" focusable="false"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-									</span>
-								</span>
-							</a>
-						@endforeach
-						</div>
-					@else
-						<p class="homepage-category-slider__empty">Categories are being updated. Please check back soon.</p>
-					@endif
-					<div class="homepage-category-slider__footer">
-						<a class="homepage-category-slider__view-all" href="{{ route('gridlisting') }}">View All Categories <span aria-hidden="true">→</span></a>
-					</div>
-				</div>
-			</section>
-
-			@include('frontend.home.partials.featured-experts')
+		@include('frontend.home.partials.talk-experts')
 		
 		{{-- Popular Services temporarily hidden — uncomment to restore.
 		<section class="popular-services-main-section py-5" style="background-color: white;">

@@ -7,7 +7,7 @@ document.querySelectorAll('[data-public-header]').forEach((header) => {
     const accountMenu = header.querySelector('[data-account-menu]');
     const searchToggle = header.querySelector('[data-home-search-toggle]');
     const searchForm = header.querySelector('[data-header-search]');
-    const desktopBreakpoint = window.matchMedia('(min-width: 68.75rem)');
+    const desktopBreakpoint = window.matchMedia('(min-width: 64rem)');
 
     const setMobileNavigation = (isOpen) => {
         if (!mobileToggle || !mobileNav || !mobileBackdrop) {
@@ -18,6 +18,16 @@ document.querySelectorAll('[data-public-header]').forEach((header) => {
         mobileToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
         mobileNav.classList.toggle('is-open', isOpen);
         mobileBackdrop.hidden = !isOpen;
+
+        if (isOpen) {
+            mobileNav.setAttribute('role', 'dialog');
+            mobileNav.setAttribute('aria-modal', 'true');
+            mobileNav.setAttribute('aria-label', 'Main menu');
+        } else {
+            mobileNav.removeAttribute('role');
+            mobileNav.removeAttribute('aria-modal');
+            mobileNav.removeAttribute('aria-label');
+        }
         document.documentElement.classList.toggle('tazen-public-nav-open', isOpen);
         document.body.classList.toggle('tazen-public-nav-open', isOpen);
 

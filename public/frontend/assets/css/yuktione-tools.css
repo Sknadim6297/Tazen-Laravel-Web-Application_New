@@ -1,0 +1,363 @@
+.yk-tools {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0.35rem 1rem 2.5rem;
+    background: #fffefc;
+    color: #0b2048;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.yk-tools *,
+.yk-tools *::before,
+.yk-tools *::after {
+    box-sizing: border-box;
+}
+
+.yk-tools__inner {
+    position: relative;
+    width: 100%;
+    max-width: min(100%, 1360px);
+    margin: 0 auto;
+}
+
+.yk-tools__head {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.1rem;
+    margin: 0 0 1.35rem;
+}
+
+.yk-tools__copy {
+    position: relative;
+    z-index: 1;
+    max-width: 40rem;
+    min-width: 0;
+}
+
+.yk-tools__eyebrow {
+    margin: 0;
+    color: #316d61;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.yk-tools__title {
+    margin: 0.4rem 0 0.55rem;
+    font-size: clamp(1.7rem, 2.6vw, 2.45rem);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+}
+
+.yk-tools__heading-navy {
+    color: #0b2048;
+}
+
+.yk-tools__heading-lavender {
+    color: #9d81db;
+}
+
+.yk-tools__lead {
+    margin: 0;
+    max-width: 38rem;
+    color: #3c4c68;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.55;
+}
+
+.yk-tools__all {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0.7rem 1.15rem;
+    border: 1.5px solid #316d61;
+    border-radius: 999px;
+    background: transparent;
+    color: #316d61;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.yk-tools__leaves {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 108px;
+    height: 90px;
+    pointer-events: none;
+}
+
+.yk-tools__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.85rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.yk-tools__grid > li {
+    display: flex;
+    min-width: 0;
+}
+
+.yk-tools__card {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 1.15rem 1.05rem 1rem;
+    border-radius: 18px;
+    box-shadow: 0 8px 22px rgba(11, 32, 72, 0.045);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.yk-tools__card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(11, 32, 72, 0.08);
+}
+
+.yk-tools__card--lavender {
+    background: #f2eeff;
+}
+
+.yk-tools__card--mint {
+    background: #eaf5f0;
+}
+
+.yk-tools__card--blush {
+    background: #fff0f1;
+}
+
+.yk-tools__card--blue {
+    background: #eef1ff;
+}
+
+.yk-tools__card--cream {
+    background: #fff5e9;
+}
+
+.yk-tools__art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 128px;
+    margin: 0 0 0.35rem;
+}
+
+.yk-tools__art svg {
+    width: 120px;
+    height: 120px;
+    display: block;
+}
+
+.yk-tools__name {
+    margin: 0;
+    color: #0b2048;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+}
+
+.yk-tools__text {
+    margin: 0.4rem 0 0;
+    color: #3e4d68;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.45;
+}
+
+.yk-tools__cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.yk-tools__cta--purple {
+    color: #6e52c0;
+}
+
+.yk-tools__cta--teal {
+    color: #316d61;
+}
+
+.yk-tools__cta--pink {
+    color: #d45b7c;
+}
+
+.yk-tools__cta--orange {
+    color: #d9892d;
+}
+
+.yk-tools__arrow {
+    display: inline-flex;
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+}
+
+.yk-tools__arrow svg {
+    width: 28px;
+    height: 28px;
+    display: block;
+}
+
+@media (min-width: 360px) {
+    .yk-tools__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .yk-tools__art {
+        height: 112px;
+    }
+
+    .yk-tools__art svg {
+        width: 104px;
+        height: 104px;
+    }
+}
+
+@media (min-width: 640px) {
+    .yk-tools {
+        padding-inline: 1.25rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .yk-tools {
+        padding-inline: 1.5rem;
+        padding-bottom: 3rem;
+    }
+
+    .yk-tools__head {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+    }
+
+    .yk-tools__grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .yk-tools__art {
+        height: 132px;
+    }
+
+    .yk-tools__art svg {
+        width: 124px;
+        height: 124px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .yk-tools {
+        padding-inline: 2rem;
+    }
+
+    .yk-tools__eyebrow {
+        font-size: 0.8125rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .yk-tools__leaves {
+        display: block;
+    }
+
+    .yk-tools__all {
+        margin-right: 7.25rem;
+    }
+}
+
+@media (min-width: 1280px) {
+    .yk-tools {
+        padding-inline: 2.75rem;
+    }
+
+    .yk-tools__grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 0.85rem;
+    }
+
+    .yk-tools__card {
+        padding: 1rem 0.8rem 0.9rem;
+    }
+
+    .yk-tools__art {
+        height: 118px;
+    }
+
+    .yk-tools__art svg {
+        width: 112px;
+        height: 112px;
+    }
+
+    .yk-tools__name {
+        font-size: 1.0625rem;
+    }
+
+    .yk-tools__text {
+        font-size: 0.8125rem;
+    }
+
+    .yk-tools__cta {
+        font-size: 0.875rem;
+    }
+}
+
+@media (min-width: 1440px) {
+    .yk-tools__art {
+        height: 136px;
+    }
+
+    .yk-tools__art svg {
+        width: 132px;
+        height: 132px;
+    }
+
+    .yk-tools__name {
+        font-size: 1.125rem;
+    }
+
+    .yk-tools__text {
+        font-size: 0.875rem;
+    }
+
+    .yk-tools__cta {
+        font-size: 0.9375rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .yk-tools__card {
+        transition: none;
+    }
+
+    .yk-tools__card:hover {
+        transform: none;
+    }
+}

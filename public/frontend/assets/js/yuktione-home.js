@@ -36,7 +36,8 @@ if (searchInput && searchResults && searchButton) {
         }
 
         try {
-            const response = await fetch(`/search-services?query=${encodeURIComponent(query)}`, {
+            const endpoint = searchInput.dataset.searchEndpoint || '/search-services';
+            const response = await fetch(`${endpoint}?query=${encodeURIComponent(query)}`, {
                 headers: { Accept: 'application/json' },
             });
 
@@ -65,7 +66,8 @@ if (searchInput && searchResults && searchButton) {
             services.forEach((service) => {
                 const link = document.createElement('a');
                 link.className = 'list-group-item list-group-item-action';
-                link.href = `/service/${encodeURIComponent(service.slug)}`;
+                const serviceBase = (searchInput.dataset.serviceBase || '/service').replace(/\/$/, '');
+                link.href = `${serviceBase}/${encodeURIComponent(service.slug)}`;
                 link.textContent = service.name;
                 link.setAttribute('role', 'option');
                 list.append(link);
@@ -98,7 +100,8 @@ if (searchInput && searchResults && searchButton) {
         const service = exactMatch || services[0];
 
         if (service) {
-            window.location.assign(`/service/${encodeURIComponent(service.slug)}`);
+            const serviceBase = (searchInput.dataset.serviceBase || '/service').replace(/\/$/, '');
+            window.location.assign(`${serviceBase}/${encodeURIComponent(service.slug)}`);
         }
     };
 
@@ -124,6 +127,15 @@ if (searchInput && searchResults && searchButton) {
     });
 
     searchButton.addEventListener('click', openFirstResult);
+
+    document.querySelectorAll('[data-hero-search]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const term = button.getAttribute('data-hero-search') || '';
+            searchInput.value = term;
+            searchInput.focus();
+            searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+    });
 
     document.addEventListener('click', (event) => {
         if (!searchInput.contains(event.target) && !searchResults.contains(event.target)) {
@@ -233,6 +245,43 @@ document.querySelectorAll('[data-home-faq]').forEach((faq) => {
         toggle.setAttribute('aria-expanded', String(shouldExpand));
         panel.setAttribute('aria-hidden', String(!shouldExpand));
         panel.inert = !shouldExpand;
+    });
+});
+
+document.querySelectorAll('[data-hero-video]').forEach((card) => {
+    const video = card.querySelector('video');
+    const playButtons = card.querySelectorAll('[data-hero-play]');
+
+    if (!(video instanceof HTMLVideoElement) || !playButtons.length) {
+        return;
+    }
+
+    const stop = () => {
+        video.pause();
+        video.controls = false;
+        card.classList.remove('is-playing');
+    };
+
+    const play = async () => {
+        card.classList.add('is-playing');
+        video.controls = true;
+
+        try {
+            await video.play();
+        } catch (error) {
+            stop();
+            console.error('The homepage video could not be played.', error);
+        }
+    };
+
+    playButtons.forEach((button) => {
+        button.addEventListener('click', play);
+    });
+
+    video.addEventListener('ended', stop);
+    video.addEventListener('error', () => {
+        stop();
+        console.error('The homepage video file could not be loaded.');
     });
 });
 
