@@ -2,27 +2,48 @@
 
 namespace App\Services;
 
+use App\Models\Tool;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class ToolsCatalog
 {
     public const TOPICS = ['Anxiety', 'Meditation', 'Sleep', 'Self Care', 'Career', 'Nutrition'];
 
+    private const PER_PAGE = 12;
+
+    private const PRIVATE_ROUTE_MARKERS = ['history', 'complete', 'reflection', 'finish', 'emotions'];
+
     public function browse(Request $request): array
     {
         $filters = $this->filters($request);
-
-        return [
-            'items' => new LengthAwarePaginator([], 0, 12, 1, [
+        $published = $this->published();
+        $matched = $published
+            ->filter(fn (array $card) => $this->matches($card, $filters))
+            ->values();
+        $page = LengthAwarePaginator::resolveCurrentPage();
+        $items = new LengthAwarePaginator(
+            $matched->forPage($page, self::PER_PAGE)->values(),
+            $matched->count(),
+            self::PER_PAGE,
+            $page,
+            [
                 'path' => route('tools.index'),
                 'query' => $request->query(),
-            ]),
+            ]
+        );
+
+        return [
+            'items' => $items,
             'filters' => $filters,
             'categories' => ExploreCatalog::CATEGORIES,
+            'counts' => $this->counts($published, $filters),
             'topics' => self::TOPICS,
-            'catalogueAvailable' => false,
+            'catalogueAvailable' => $published->isNotEmpty(),
         ];
     }
 
@@ -40,5 +61,120 @@ class ToolsCatalog
             'q' => $q,
             'category' => $category,
         ];
+    }
+
+    private function published(): Collection
+    {
+        try {
+            if (!Schema::hasTable('tools')) {
+                return collect();
+            }
+
+            return Tool::query()
+                ->with('category')
+                ->publiclyAvailable()
+                ->orderBy('display_order')
+                ->orderBy('id')
+                ->get()
+                ->map(fn (Tool $tool) => $this->present($tool))
+                ->filter()
+                ->values();
+        } catch (QueryException) {
+            return collect();
+        }
+    }
+
+    private function present(Tool $tool): ?array
+    {
+        if (!$this->isPublicEntry($tool)) {
+            return null;
+        }
+
+        try {
+            $url = route($tool->route_name);
+        } catch (\Throwable) {
+            return null;
+        }
+
+        $category = $this->exploreCategory($tool);
+        $description = str_replace("\0", '', strip_tags((string) $tool->description));
+
+        return [
+            'name' => $tool->name,
+            'description' => Str::limit(trim($description), 140),
+            'url' => $url,
+            'cta' => $tool->slug === 'daily-mood-check-in' ? 'Start Check-in' : 'Open',
+            'access' => $tool->access_type === 'paid' ? 'Paid' : 'Free',
+            'category' => $category,
+            'category_label' => $category ? ExploreCatalog::CATEGORIES[$category]['label'] : '',
+            'icon' => $tool->slug === 'daily-mood-check-in' ? 'mood' : 'leaf',
+        ];
+    }
+
+    private function isPublicEntry(Tool $tool): bool
+    {
+        if (!$tool->canLaunch()) {
+            return false;
+        }
+
+        $name = (string) $tool->route_name;
+        foreach (self::PRIVATE_ROUTE_MARKERS as $marker) {
+            if (str_contains($name, $marker)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function exploreCategory(Tool $tool): ?string
+    {
+        $haystack = mb_strtolower(implode(' ', array_filter([
+            $tool->name,
+            $tool->description,
+            $tool->module_key,
+            $tool->category?->name,
+            $tool->category?->slug,
+        ])));
+
+        foreach (ExploreCatalog::CATEGORIES as $slug => $category) {
+            foreach ($category['needles'] as $needle) {
+                if ($needle !== '' && str_contains($haystack, mb_strtolower($needle))) {
+                    return $slug;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private function matches(array $card, array $filters): bool
+    {
+        if ($filters['category'] !== '' && $card['category'] !== $filters['category']) {
+            return false;
+        }
+
+        if ($filters['q'] === '') {
+            return true;
+        }
+
+        $haystack = mb_strtolower($card['name'].' '.$card['description'].' '.$card['category_label']);
+
+        return str_contains($haystack, mb_strtolower($filters['q']));
+    }
+
+    private function counts(Collection $published, array $filters): array
+    {
+        $search = $filters;
+        $search['category'] = '';
+        $counts = [];
+
+        foreach (array_keys(ExploreCatalog::CATEGORIES) as $slug) {
+            $counts[$slug] = $published->filter(function (array $card) use ($search, $slug) {
+                return $card['category'] === $slug && $this->matches($card, $search);
+            })->count();
+        }
+
+        return $counts;
     }
 }

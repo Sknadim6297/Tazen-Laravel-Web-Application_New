@@ -26,9 +26,12 @@ class ToolRegistryRegistrar
                 [
                     'slug' => 'daily-mood-check-in',
                     'name' => 'Daily Mood Check-in',
-                    'description' => 'A short daily mood record. The workflow is not built yet.',
+                    'description' => 'Understand and track your emotions.',
                     'icon' => 'ri-emotion-line',
                     'display_order' => 1,
+                    'status' => 'active',
+                    'route_name' => 'tools.psychology.mood',
+                    'is_implemented' => true,
                 ],
                 [
                     'slug' => 'digital-journal',
@@ -56,10 +59,10 @@ class ToolRegistryRegistrar
                         'description' => $tool['description'],
                         'icon' => $tool['icon'],
                         'access_type' => 'free',
-                        'status' => 'coming_soon',
+                        'status' => $tool['status'] ?? 'coming_soon',
                         'display_order' => $tool['display_order'],
-                        'route_name' => null,
-                        'is_implemented' => false,
+                        'route_name' => $tool['route_name'] ?? null,
+                        'is_implemented' => $tool['is_implemented'] ?? false,
                     ]
                 );
             }

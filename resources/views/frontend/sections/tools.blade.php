@@ -96,7 +96,7 @@
                         <a href="{{ $link(['category' => $filters['category'] === $slug ? null : $slug]) }}" @if ($filters['category'] === $slug) aria-current="true" @endif>
                             <span class="yk-toolpage__tick" aria-hidden="true"></span>
                             <span>{{ $category['label'] }}</span>
-                            <small>(0)</small>
+                            <small>({{ $counts[$slug] ?? 0 }})</small>
                         </a>
                     @endforeach
                 </fieldset>
@@ -107,18 +107,46 @@
                     <p>Showing {{ $items->total() }} {{ $items->total() === 1 ? 'tool' : 'tools' }}</p>
                     <button class="yk-toolpage__filter-open" type="button" data-tools-open>Filters</button>
                 </div>
-                <div class="yk-toolpage__empty">
-                    <span class="yk-toolpage__empty-mark" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><path d="M16.75 13.5v6.5M13.5 16.75h6.5"/></svg>
-                    </span>
-                    @if ($filtering)
-                        <h2>No tools match these filters</h2>
-                        <p>Try another topic, or <a href="{{ route('tools.index') }}">reset Tools</a>.</p>
-                    @else
-                        <h2>No published tools yet</h2>
-                        <p>When a tool is ready for everyone, it will appear in this catalogue.</p>
-                    @endif
-                </div>
+                @if ($items->isEmpty())
+                    <div class="yk-toolpage__empty">
+                        <span class="yk-toolpage__empty-mark" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><path d="M16.75 13.5v6.5M13.5 16.75h6.5"/></svg>
+                        </span>
+                        @if ($filtering)
+                            <h2>No tools match these filters</h2>
+                            <p>Try another topic, or <a href="{{ route('tools.index') }}">reset Tools</a>.</p>
+                        @else
+                            <h2>No published tools yet</h2>
+                            <p>When a tool is ready for everyone, it will appear in this catalogue.</p>
+                        @endif
+                    </div>
+                @else
+                    <ul class="yk-toolpage__grid">
+                        @foreach ($items as $tool)
+                            <li>
+                                <article class="yk-toolcard">
+                                    <a class="yk-toolcard__media" href="{{ $tool['url'] }}">
+                                        <span class="yk-toolcard__mark" aria-hidden="true">
+                                            @if ($tool['icon'] === 'mood')
+                                                <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8"/><path d="M9 10h.01M15 10h.01"/><path d="M9 14.2c.8 1 1.8 1.5 3 1.5s2.2-.5 3-1.5"/></svg>
+                                            @else
+                                                @include('frontend.sections.partials.explore-icon', ['icon' => 'leaf'])
+                                            @endif
+                                        </span>
+                                        <span class="yk-toolcard__kicker">{{ $tool['access'] }}</span>
+                                    </a>
+                                    <div class="yk-toolcard__body">
+                                        <h3><a href="{{ $tool['url'] }}">{{ $tool['name'] }}</a></h3>
+                                        @if ($tool['description'] !== '')
+                                            <p>{{ $tool['description'] }}</p>
+                                        @endif
+                                        <a class="yk-toolcard__cta" href="{{ $tool['url'] }}">{{ $tool['cta'] }} <span aria-hidden="true">→</span></a>
+                                    </div>
+                                </article>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
             </section>
         </div>
     </div>

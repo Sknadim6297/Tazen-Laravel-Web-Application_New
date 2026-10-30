@@ -185,11 +185,14 @@ class AdminPsychologySettingsTest extends TestCase
             ->assertDontSee('name="journal_body"', false)
             ->assertDontSee('name="gratitude_response"', false);
 
-        $this->assertTrue(Tool::query()->where('status', 'coming_soon')->where('is_implemented', false)->whereNull('route_name')->count() === 3);
+        $this->assertSame(2, Tool::query()->where('status', 'coming_soon')->where('is_implemented', false)->whereNull('route_name')->count());
+        $this->assertTrue(Tool::query()->where('slug', 'daily-mood-check-in')->firstOrFail()->canLaunch());
 
         $this->get(route('tools.index'))
             ->assertOk()
-            ->assertDontSee('Daily Mood Check-in')
+            ->assertSee('Daily Mood Check-in')
+            ->assertSee('Start Check-in')
+            ->assertDontSee('Digital Journal')
             ->assertDontSee('Something good today');
 
         $this->get('/tools/daily-mood-check-in')->assertNotFound();
@@ -226,7 +229,8 @@ class AdminPsychologySettingsTest extends TestCase
         $this->assertSame(9, (int) ToolConfigItem::query()->where('item_key', 'my-thoughts')->value('display_order'));
         $this->assertNotNull(ToolConfigItem::query()->where('item_key', 'evening-review')->where('is_system', false)->first());
         $this->assertSame('Which moment felt good today?', ToolConfigItem::query()->where('item_key', 'something-good-today')->value('detail'));
-        $this->assertSame(3, Tool::query()->where('status', 'coming_soon')->where('is_implemented', false)->count());
+        $this->assertSame(2, Tool::query()->where('status', 'coming_soon')->where('is_implemented', false)->count());
+        $this->assertTrue(Tool::query()->where('slug', 'daily-mood-check-in')->firstOrFail()->canLaunch());
 
         app(PsychologyConfigRegistrar::class)->sync();
         $this->assertSame(30, ToolConfigItem::query()->count());
