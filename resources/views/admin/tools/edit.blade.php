@@ -65,7 +65,7 @@
                         <label class="form-label" for="status">Status</label>
                         <select id="status" class="form-select" name="status">
                             @foreach (['coming_soon', 'unavailable', 'active', 'inactive'] as $status)
-                                <option value="{{ $status }}" @selected(old('status', $tool->status) === $status) @disabled(!$tool->is_implemented && !in_array($status, ['coming_soon', 'unavailable'], true))>{{ str_replace('_', ' ', ucfirst($status)) }}</option>
+                                <option value="{{ $status }}" @selected(old('status', $tool->status) === $status) @disabled(!$tool->is_implemented && !in_array($status, ['coming_soon', 'unavailable'], true))>{{ \Illuminate\Support\Str::headline($status) }}</option>
                             @endforeach
                         </select>
                     </div>

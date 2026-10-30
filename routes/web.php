@@ -82,6 +82,18 @@ Route::post('/check-login', [BookingController::class, 'checkLogin'])->name('che
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('gridlisting', [HomeController::class, 'explore'])->name('gridlisting');
+Route::get('tools/psychology/mood/history', [\App\Http\Controllers\Frontend\MoodCheckinController::class, 'history'])->name('tools.psychology.mood.history');
+Route::get('tools/psychology/mood/finish', [\App\Http\Controllers\Frontend\MoodCheckinController::class, 'finish'])->name('tools.psychology.mood.finish');
+Route::get('tools/psychology/mood/complete/{checkin}', [\App\Http\Controllers\Frontend\MoodCheckinController::class, 'saved'])
+    ->whereUuid('checkin')
+    ->name('tools.psychology.mood.complete');
+Route::get('tools/psychology/mood/reflection', [\App\Http\Controllers\Frontend\MoodCheckinController::class, 'reflection'])->name('tools.psychology.mood.reflection');
+Route::post('tools/psychology/mood/reflection', [\App\Http\Controllers\Frontend\MoodCheckinController::class, 'storeReflection'])->name('tools.psychology.mood.reflection.store');
+Route::get('tools/psychology/mood/emotions', [\App\Http\Controllers\Frontend\MoodCheckinController::class, 'emotions'])->name('tools.psychology.mood.emotions');
+Route::post('tools/psychology/mood/emotions', [\App\Http\Controllers\Frontend\MoodCheckinController::class, 'storeEmotions'])->name('tools.psychology.mood.emotions.store');
+Route::get('tools/psychology/mood', [\App\Http\Controllers\Frontend\MoodCheckinController::class, 'create'])->name('tools.psychology.mood');
+Route::post('tools/psychology/mood', [\App\Http\Controllers\Frontend\MoodCheckinController::class, 'store'])->name('tools.psychology.mood.store');
+Route::get('tools/psychology', [HomeController::class, 'psychology'])->name('tools.psychology');
 Route::get('tools', [HomeController::class, 'tools'])->name('tools.index');
 Route::post('/currency/switch', [CurrencyController::class, 'switch'])->name('currency.switch');
 

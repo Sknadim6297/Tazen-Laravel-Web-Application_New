@@ -339,6 +339,7 @@
 .yk-explore__sidebar h2,
 .yk-explore__featured h2 {
     margin: 0;
+    color: var(--yk-navy);
     font-size: 1.05rem;
     font-weight: 700;
 }

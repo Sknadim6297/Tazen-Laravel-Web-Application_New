@@ -43,7 +43,7 @@
                         <select id="tool-status" class="form-select" name="status">
                             <option value="">All statuses</option>
                             @foreach ($statuses as $status)
-                                <option value="{{ $status }}" @selected(($filters['status'] ?? null) === $status)>{{ str_replace('_', ' ', ucfirst($status)) }}</option>
+                                <option value="{{ $status }}" @selected(($filters['status'] ?? null) === $status)>{{ \Illuminate\Support\Str::headline($status) }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -77,8 +77,12 @@
                                     <td>{{ ucfirst($tool->access_type) }}</td>
                                     <td>{{ $tool->statusLabel() }}</td>
                                     <td>{{ $tool->display_order }}</td>
-                                    <td class="text-nowrap">
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-1">
                                         <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.tools.edit', $tool) }}">View/Edit</a>
+                                        @if ($settingsTab = \App\Support\Psychology\PsychologyCatalog::tabFor($tool->slug))
+                                            <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.psychology.settings.edit', ['tab' => $settingsTab]) }}">Settings</a>
+                                        @endif
                                         @if ($tool->is_implemented)
                                             <form class="d-inline" method="post" action="{{ route('admin.tools.toggle', $tool) }}">
                                                 @csrf
@@ -87,6 +91,7 @@
                                         @else
                                             <button class="btn btn-sm btn-outline-secondary" type="button" disabled>Unavailable</button>
                                         @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @empty

@@ -472,6 +472,17 @@
                             @if($isMenuAccessible('tools.settings'))
                             <li class="slide"><a href="{{ route('admin.tool-settings.edit') }}" class="side-menu__item">Tool Settings</a></li>
                             @endif
+                            @if($isMenuAccessible('tools.psychology'))
+                            <li class="slide has-sub">
+                                <a href="javascript:void(0);" class="side-menu__item">Psychology
+                                    <i class="ri-arrow-down-s-line side-menu__angle"></i></a>
+                                <ul class="slide-menu child2">
+                                    <li class="slide">
+                                        <a href="{{ route('admin.psychology.settings.edit') }}" class="side-menu__item">Settings</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            @endif
                         </ul>
                     </li>
                     @endif

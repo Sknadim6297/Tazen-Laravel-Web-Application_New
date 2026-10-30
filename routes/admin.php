@@ -461,6 +461,8 @@ Route::middleware(['auth:admin', 'admin.menu'])->group(function () {
     });
 
     Route::middleware(['auth:admin', 'admin.menu'])->group(function () {
+        Route::get('tools/psychology/settings', [\App\Http\Controllers\Admin\PsychologySettingController::class, 'edit'])->name('psychology.settings.edit');
+        Route::put('tools/psychology/settings', [\App\Http\Controllers\Admin\PsychologySettingController::class, 'update'])->name('psychology.settings.update');
         Route::get('tools', [\App\Http\Controllers\Admin\ToolRegistryController::class, 'index'])->name('tools.index');
         Route::get('tools/{tool}/edit', [\App\Http\Controllers\Admin\ToolRegistryController::class, 'edit'])->name('tools.edit');
         Route::put('tools/{tool}', [\App\Http\Controllers\Admin\ToolRegistryController::class, 'update'])->name('tools.update');

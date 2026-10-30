@@ -2,11 +2,18 @@
     --yk-navy: #0b2048;
     --yk-teal: #316d61;
     --yk-lavender: #9d81db;
-    --yk-line: #e3e8ee;
+    --yk-mint: #eaf6f2;
+    --yk-lilac: #f4f0ff;
+    --yk-blush: #fff0f3;
+    --yk-cream: #fff6ed;
+    --yk-line: #e6ebf2;
     box-sizing: border-box;
     margin: 0;
-    padding: 0.4rem 0 2rem;
-    background: #fbfcfe;
+    padding: 0 0 2rem;
+    background:
+        radial-gradient(circle at 8% 0%, rgba(157, 129, 219, 0.16), transparent 28%),
+        radial-gradient(circle at 92% 8%, rgba(49, 109, 97, 0.12), transparent 26%),
+        #fff;
     color: var(--yk-navy);
     font-family: "DM Sans", sans-serif;
 }
@@ -20,12 +27,12 @@
     margin-inline: auto;
 }
 
-.yk-toolpage__hero { padding: 0.6rem 0 0.4rem; }
+.yk-toolpage__hero { padding: 1.25rem 0 0.5rem; }
 
 .yk-toolpage__hero-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 0.5rem;
+    gap: 1rem;
     align-items: center;
 }
 
@@ -43,30 +50,30 @@
 .yk-toolpage h1 {
     margin: 0;
     color: var(--yk-navy);
-    font-size: clamp(1.85rem, 3vw, 2.55rem);
+    font-size: clamp(2.15rem, 4vw, 3.35rem);
     font-weight: 700;
     letter-spacing: -0.03em;
-    line-height: 1.08;
+    line-height: 1.05;
 }
 
 .yk-toolpage h1 span { color: var(--yk-lavender); }
 
 .yk-toolpage__lead {
-    max-width: 28rem;
-    margin: 0.45rem 0 0;
-    color: #52627e;
-    font-size: 0.92rem;
-    line-height: 1.45;
+    max-width: 34rem;
+    margin: 0.85rem 0 0;
+    color: #41506d;
+    font-size: 1rem;
+    line-height: 1.5;
 }
 
 .yk-toolpage__search {
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    max-width: 28rem;
-    height: 46px;
-    margin-top: 0.75rem;
-    padding: 0 0.3rem 0 0.85rem;
+    max-width: 38rem;
+    height: 58px;
+    margin-top: 1.15rem;
+    padding: 0 0.4rem 0 1rem;
     border: 1px solid #e0e4ea;
     border-radius: 999px;
     background: #fff;
@@ -126,8 +133,8 @@
 
 .yk-toolpage__search button {
     display: grid;
-    width: 36px;
-    height: 36px;
+    width: 46px;
+    height: 46px;
     flex: 0 0 auto;
     place-items: center;
     border: 0;
@@ -150,9 +157,9 @@
     flex-wrap: wrap;
     gap: 0.35rem 0.5rem;
     align-items: center;
-    margin-top: 0.65rem;
+    margin-top: 0.85rem;
     color: #66758f;
-    font-size: 0.75rem;
+    font-size: 0.82rem;
 }
 
 .yk-toolpage__topics ul {
@@ -166,63 +173,75 @@
 
 .yk-toolpage__topics a {
     display: inline-flex;
-    min-height: 1.5rem;
+    min-height: 28px;
     align-items: center;
-    padding: 0 0.5rem;
+    padding: 0.15rem 0.7rem;
     border-radius: 999px;
-    background: #f4f0ff;
-    color: #5d4d86;
-    font-weight: 600;
+    background: #f4f1fb;
+    color: #6d5b9a;
+    font-weight: 500;
     text-decoration: none;
 }
 
 .yk-toolpage__art { display: none; }
-.yk-toolpage__art svg { width: min(100%, 280px); height: auto; }
+.yk-toolpage__art svg { width: min(100%, 420px); height: auto; }
 
 .yk-toolpage__cats {
     display: flex;
-    gap: 0.4rem;
-    margin: 0.7rem 0 0.75rem;
+    gap: 0.65rem;
+    margin: 0.35rem 0 0.2rem;
+    padding: 0.35rem 0 0.7rem;
     overflow-x: auto;
     overscroll-behavior-x: contain;
-    scrollbar-width: none;
+    scrollbar-width: thin;
 }
 
 .yk-toolpage__cats a {
     display: flex;
-    min-width: 4.7rem;
-    min-height: 3.7rem;
-    flex: 0 0 auto;
+    width: 6.7rem;
+    min-width: 6.7rem;
+    min-height: 5.6rem;
+    flex: 0 0 6.7rem;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.25rem;
-    padding: 0.35rem 0.4rem;
+    gap: 0.4rem;
+    padding: 0.55rem 0.35rem;
     border: 1px solid transparent;
-    border-radius: 12px;
-    background: #f4f7f8;
+    border-radius: 16px;
+    background: var(--yk-mint);
     color: var(--yk-navy);
-    font-size: 0.66rem;
+    font-size: 0.72rem;
     font-weight: 600;
-    line-height: 1.15;
+    line-height: 1.2;
     text-align: center;
     text-decoration: none;
 }
 
-.yk-toolpage__cats svg {
-    width: 1.05rem;
-    height: 1.05rem;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.7;
+.yk-toolpage__cats a > span {
+    display: grid;
+    width: 1.7rem;
+    height: 1.7rem;
+    place-items: center;
 }
 
-.yk-toolpage__cats .is-mint { background: #eaf6f2; color: #316d61; }
+.yk-toolpage__cats svg {
+    width: 1.45rem;
+    height: 1.45rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.6;
+}
+
+.yk-toolpage__cats .is-all,
+.yk-toolpage__cats .is-mint,
+.yk-toolpage__cats .is-sage { background: var(--yk-mint); color: #316d61; }
 .yk-toolpage__cats .is-lavender,
-.yk-toolpage__cats .is-lilac { background: #f4f0ff; color: #6d56a8; }
-.yk-toolpage__cats .is-blush { background: #fff0f3; color: #b85b78; }
-.yk-toolpage__cats .is-cream { background: #fff6ed; color: #b47a32; }
-.yk-toolpage__cats .is-sage { background: #f3f7ef; color: #5d7a52; }
+.yk-toolpage__cats .is-lilac { background: var(--yk-lilac); color: #6d56a8; }
+.yk-toolpage__cats .is-blush { background: var(--yk-blush); color: #b85b78; }
+.yk-toolpage__cats .is-cream { background: var(--yk-cream); color: #b47a32; }
 .yk-toolpage__cats .is-blue { background: #e7f0fb; color: #3d6ea8; }
 .yk-toolpage__cats .is-active {
     border-color: var(--yk-teal);
@@ -261,7 +280,9 @@
 
 .yk-toolpage__sidebar h2 {
     margin: 0;
-    font-size: 0.92rem;
+    color: var(--yk-navy);
+    font-size: 1.05rem;
+    font-weight: 700;
 }
 
 .yk-toolpage__sidebar-head a {
@@ -340,28 +361,72 @@
 }
 
 .yk-toolpage__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 16rem;
     margin: 0;
-    padding: 0.85rem 0.9rem;
-    border: 1px solid var(--yk-line);
-    border-radius: 14px;
+    padding: 2.25rem 1.25rem;
+    border: 1px dashed var(--yk-line);
+    border-radius: 16px;
     background: #fff;
-    color: #52627e;
-    font-size: 0.88rem;
-    line-height: 1.45;
+    text-align: center;
 }
 
-.yk-toolpage__empty a { color: var(--yk-teal); font-weight: 700; }
+.yk-toolpage__empty-mark {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    margin-bottom: 0.9rem;
+    border-radius: 999px;
+    background: var(--yk-mint);
+    color: var(--yk-teal);
+}
+
+.yk-toolpage__empty-mark svg {
+    width: 1.45rem;
+    height: 1.45rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.yk-toolpage__empty h2 {
+    margin: 0;
+    color: var(--yk-navy);
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.yk-toolpage__empty p {
+    max-width: 28rem;
+    margin: 0.45rem 0 0;
+    color: #52627e;
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.yk-toolpage__empty a {
+    color: var(--yk-teal);
+    font-weight: 700;
+    text-decoration: none;
+}
 
 .yk-toolpage__backdrop { display: none; }
 
 @media (min-width: 1024px) {
-    .yk-toolpage__hero-grid { grid-template-columns: minmax(0, 1.1fr) minmax(180px, 0.7fr); }
+    .yk-toolpage__hero-grid { grid-template-columns: minmax(0, 1.15fr) minmax(240px, 0.75fr); }
     .yk-toolpage__art { display: block; justify-self: end; }
-    .yk-toolpage__layout { grid-template-columns: 240px minmax(0, 1fr); gap: 1.15rem; }
+    .yk-toolpage__layout { grid-template-columns: 250px minmax(0, 1fr); gap: 1.25rem; }
     .yk-toolpage__sidebar { display: block; position: sticky; top: 96px; }
     .yk-toolpage__filter-open,
     .yk-toolpage__backdrop { display: none; }
-    .yk-toolpage__cats a { flex: 1 1 0; min-width: 0; }
+    .yk-toolpage__cats a { width: auto; min-width: 5.5rem; flex: 1 1 0; }
 }
 
 @media (max-width: 1023px) {

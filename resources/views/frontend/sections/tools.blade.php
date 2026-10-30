@@ -57,13 +57,14 @@
                 </div>
             </div>
             <div class="yk-toolpage__art" aria-hidden="true">
-                <svg viewBox="0 0 360 280">
-                    <ellipse cx="210" cy="150" rx="96" ry="108" fill="#e7f6ef"/>
-                    <path d="M28 210c36-70 82-108 136-98-28 46-64 74-136 98Z" fill="#7ea36a"/>
-                    <path d="M58 62c46-18 82 10 92 46-36 8-74 0-92-46Z" fill="#9d81db" opacity=".85"/>
-                    <path d="M250 28c28 46 18 92-18 120-8-46-8-82 18-120Z" fill="#8fb67c"/>
-                    <path d="M278 156c36 8 64 36 64 72-46-8-74-28-64-72Z" fill="#b7a4e4"/>
-                    <path d="M16 168c28-8 46 10 50 36-28 4-46-10-50-36Z" fill="#316d61" opacity=".75"/>
+                <svg viewBox="0 0 420 320">
+                    <ellipse cx="250" cy="170" rx="120" ry="130" fill="#e7f6ef"/>
+                    <path d="M40 250c40-80 90-120 150-110-30 50-70 80-150 110Z" fill="#7ea36a"/>
+                    <path d="M70 80c50-20 90 10 100 50-40 10-80 0-100-50Z" fill="#9d81db" opacity=".85"/>
+                    <path d="M300 40c30 50 20 100-20 130-10-50-10-90 20-130Z" fill="#8fb67c"/>
+                    <path d="M330 180c40 10 70 40 70 80-50-10-80-30-70-80Z" fill="#b7a4e4"/>
+                    <path d="M20 200c30-10 50 10 55 40-30 5-50-10-55-40Z" fill="#316d61" opacity=".75"/>
+                    <path d="M360 90c20-30 50-30 70-10-30 8-50 16-70 10Z" fill="#a9d0c0"/>
                 </svg>
             </div>
         </div>
@@ -71,7 +72,7 @@
 
     <div class="yk-toolpage__wrap">
         <nav class="yk-toolpage__cats" aria-label="Tool categories">
-            <a href="{{ $link(['category' => null]) }}" @class(['is-active' => $filters['category'] === ''])>
+            <a href="{{ $link(['category' => null]) }}" @class(['is-all', 'is-active' => $filters['category'] === ''])>
                 <span>@include('frontend.sections.partials.explore-icon', ['icon' => 'grid'])</span>
                 All
             </a>
@@ -106,14 +107,18 @@
                     <p>Showing {{ $items->total() }} {{ $items->total() === 1 ? 'tool' : 'tools' }}</p>
                     <button class="yk-toolpage__filter-open" type="button" data-tools-open>Filters</button>
                 </div>
-                <p class="yk-toolpage__empty">
+                <div class="yk-toolpage__empty">
+                    <span class="yk-toolpage__empty-mark" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><path d="M16.75 13.5v6.5M13.5 16.75h6.5"/></svg>
+                    </span>
                     @if ($filtering)
-                        No tools match these filters.
-                        <a href="{{ route('tools.index') }}">Reset Tools</a>
+                        <h2>No tools match these filters</h2>
+                        <p>Try another topic, or <a href="{{ route('tools.index') }}">reset Tools</a>.</p>
                     @else
-                        YuktiOne does not have a public tools catalogue yet. Published tools will appear here.
+                        <h2>No published tools yet</h2>
+                        <p>When a tool is ready for everyone, it will appear in this catalogue.</p>
                     @endif
-                </p>
+                </div>
             </section>
         </div>
     </div>

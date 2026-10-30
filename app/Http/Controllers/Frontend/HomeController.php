@@ -36,6 +36,7 @@ use App\Models\EventDetail;
 use App\Models\Review;
 use App\Models\CategoryBox;
 use App\Services\ExploreCatalog;
+use App\Services\PsychologyHome;
 use App\Services\ToolsCatalog;
 use App\Models\Help;
 use Illuminate\Http\Request;
@@ -460,6 +461,11 @@ class HomeController extends Controller
     public function tools(Request $request, ToolsCatalog $catalog)
     {
         return view('frontend.sections.tools', $catalog->browse($request));
+    }
+
+    public function psychology(PsychologyHome $home)
+    {
+        return view('frontend.sections.psychology', $home->present());
     }
 
 

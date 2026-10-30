@@ -35,7 +35,7 @@
         [
             'label' => 'Tools',
             'href' => route('tools.index'),
-            'active' => request()->routeIs('tools.index'),
+            'active' => request()->routeIs('tools.index', 'tools.psychology', 'tools.psychology.mood', 'tools.psychology.mood.emotions', 'tools.psychology.mood.reflection', 'tools.psychology.mood.finish', 'tools.psychology.mood.complete', 'tools.psychology.mood.history'),
             'placeholder' => false,
         ],
         [

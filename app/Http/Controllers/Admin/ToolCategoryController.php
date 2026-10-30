@@ -67,16 +67,21 @@ class ToolCategoryController extends Controller
 
     private function validated(Request $request, ?ToolCategory $category = null): array
     {
+        $request->merge([
+            'slug' => $request->filled('slug')
+                ? $request->input('slug')
+                : Str::slug((string) $request->input('name')),
+        ]);
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
-            'slug' => ['nullable', 'alpha_dash', 'max:120', Rule::unique('tool_categories', 'slug')->ignore($category?->id)],
+            'slug' => ['required', 'alpha_dash', 'max:120', Rule::unique('tool_categories', 'slug')->ignore($category?->id)],
             'description' => ['nullable', 'string', 'max:1000'],
             'icon' => ['nullable', 'string', 'max:80', 'regex:/^[A-Za-z0-9 _-]+$/'],
             'is_active' => ['nullable', 'boolean'],
             'display_order' => ['required', 'integer', 'min:0', 'max:9999'],
         ]);
 
-        $data['slug'] = $data['slug'] ?: Str::slug($data['name']);
         $data['is_active'] = $request->boolean('is_active');
 
         return $data;

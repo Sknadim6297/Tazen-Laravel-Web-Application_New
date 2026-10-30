@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Route;
 
 class Tool extends Model
@@ -35,6 +36,11 @@ class Tool extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(ToolCategory::class, 'tool_category_id');
+    }
+
+    public function configItems(): HasMany
+    {
+        return $this->hasMany(ToolConfigItem::class);
     }
 
     public function scopePubliclyAvailable(Builder $query): Builder

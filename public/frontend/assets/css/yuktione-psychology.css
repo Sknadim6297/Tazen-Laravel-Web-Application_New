@@ -1,0 +1,251 @@
+.yk-psych {
+    --yk-ink: #1c2b28;
+    --yk-eucalyptus: #3c6e62;
+    --yk-eucalyptus-deep: #2d574d;
+    --yk-warm: #fbf8f3;
+    --yk-sage: #e7f3ec;
+    --yk-yellow: #f6efd4;
+    --yk-blush: #f6e7e3;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0.75rem 0 2.25rem;
+    overflow-x: clip;
+    background: var(--yk-warm);
+    color: var(--yk-ink);
+    font-family: "DM Sans", sans-serif;
+}
+
+.yk-psych *,
+.yk-psych *::before,
+.yk-psych *::after { box-sizing: border-box; }
+
+.yk-psych__wrap {
+    width: min(1040px, calc(100% - 2rem));
+    margin-inline: auto;
+}
+
+.yk-psych__crumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    align-items: center;
+    margin: 0 0 0.85rem;
+    color: #6d7c78;
+    font-size: 0.78rem;
+}
+
+.yk-psych__crumb a { color: var(--yk-eucalyptus-deep); font-weight: 700; text-decoration: none; }
+
+.yk-psych__intro h1 {
+    margin: 0;
+    color: var(--yk-ink);
+    font-size: clamp(2rem, 4vw, 2.7rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+}
+
+.yk-psych__subtitle {
+    margin: 0.35rem 0 0;
+    color: var(--yk-eucalyptus);
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+}
+
+.yk-psych__lead {
+    max-width: 34rem;
+    margin: 0.4rem 0 0;
+    color: #4e615c;
+    font-size: 1rem;
+    line-height: 1.45;
+}
+
+.yk-psych__mood {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.85rem;
+    align-items: center;
+    margin-top: 1.15rem;
+    padding: 1.15rem;
+    border: 1px solid #d5e6dc;
+    border-radius: 22px;
+    background:
+        radial-gradient(circle at 88% 18%, rgb(243 230 184 / 70%), transparent 28%),
+        linear-gradient(160deg, #f4faf6 0%, var(--yk-sage) 100%);
+    box-shadow: 0 10px 24px rgb(60 110 98 / 8%);
+}
+
+.yk-psych__mood h2,
+.yk-psych__tools h2,
+.yk-psych__support h2,
+.yk-psych__card h3 {
+    margin: 0;
+    color: var(--yk-ink);
+    font-family: "DM Sans", sans-serif;
+    font-size: clamp(1.25rem, 2vw, 1.55rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+}
+
+.yk-psych__mood p,
+.yk-psych__support p,
+.yk-psych__card p {
+    margin: 0.35rem 0 0;
+    color: #4e615c;
+    font-size: 0.95rem;
+    line-height: 1.45;
+}
+
+.yk-psych__state {
+    color: var(--yk-eucalyptus-deep);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.yk-psych__mood-art,
+.yk-psych__card-art {
+    display: grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 18px;
+    background: rgb(255 255 255 / 72%);
+}
+
+.yk-psych__mood-art { justify-self: start; }
+
+.yk-psych__mood-art svg,
+.yk-psych__card-art svg {
+    width: 2.6rem;
+    height: 2.6rem;
+    fill: none;
+    stroke: var(--yk-eucalyptus);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.yk-psych__button,
+.yk-psych__card-action,
+.yk-psych__support-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.55rem 1rem;
+    border-radius: 12px;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+}
+
+.yk-psych__button {
+    justify-self: start;
+    border: 0;
+    background: var(--yk-eucalyptus);
+    color: #fff;
+    box-shadow: 0 8px 16px rgb(60 110 98 / 18%);
+}
+
+.yk-psych__button:disabled {
+    cursor: not-allowed;
+    opacity: 0.72;
+}
+
+.yk-psych__tools { margin-top: 1.35rem; }
+
+.yk-psych__tools ul {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.yk-psych__card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    padding: 0.95rem;
+    border: 1px solid transparent;
+    border-radius: 18px;
+    box-shadow: 0 8px 18px rgb(28 43 40 / 5%);
+}
+
+.yk-psych__card h3 {
+    margin: 0.75rem 0 0;
+    font-size: 1.02rem;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+}
+
+.yk-psych__card p { flex: 1; }
+
+.yk-psych__card.is-sage { background: var(--yk-sage); border-color: #d3e7db; }
+.yk-psych__card.is-yellow { background: var(--yk-yellow); border-color: #eadcab; }
+.yk-psych__card.is-blush { background: var(--yk-blush); border-color: #ead4ce; }
+.yk-psych__card.is-yellow .yk-psych__card-art svg { stroke: #8a7040; }
+.yk-psych__card.is-blush .yk-psych__card-art svg { stroke: #8d5d56; }
+
+.yk-psych__card-action {
+    margin-top: 0.85rem;
+    background: #fff;
+    color: var(--yk-eucalyptus-deep);
+}
+
+.yk-psych__card-action.is-quiet { cursor: default; }
+
+.yk-psych__private {
+    margin: 0.8rem 0 0;
+    color: #6d7c78;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.yk-psych__support {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem 1.25rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.15rem;
+    padding: 1rem 1.05rem;
+    border: 1px solid #e4ece8;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 8px 18px rgb(28 43 40 / 5%);
+}
+
+.yk-psych__support-link {
+    background: var(--yk-sage);
+    color: var(--yk-eucalyptus-deep);
+}
+
+@media (max-width: 767px) {
+    .yk-psych__button,
+    .yk-psych__support-link { width: 100%; }
+}
+
+@media (min-width: 768px) {
+    .yk-psych__mood {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas:
+            "copy art"
+            "button art";
+        padding: 1.35rem 1.4rem;
+    }
+    .yk-psych__mood-copy { grid-area: copy; }
+    .yk-psych__mood-art { grid-area: art; align-self: center; width: 5.5rem; height: 5.5rem; }
+    .yk-psych__button { grid-area: button; }
+    .yk-psych__tools ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1100px) {
+    .yk-psych { padding-top: 1rem; }
+}
