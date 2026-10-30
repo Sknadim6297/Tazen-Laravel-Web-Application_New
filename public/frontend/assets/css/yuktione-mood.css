@@ -474,17 +474,36 @@
     color: #4e615c;
 }
 
-.yk-complete__chips {
+.yk-mood .yk-complete__chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.45rem;
+    align-items: center;
+    gap: 0.4rem;
     margin: 0 0 0.9rem;
     padding: 0;
     list-style: none;
 }
 
-.yk-complete__chips .yk-emotion__chip {
+.yk-mood .yk-complete__chips .yk-emotion__chip {
+    width: auto;
+    flex: 0 0 auto;
+    min-height: 32px;
+    padding: 0.15rem 0.72rem;
+    background: #fff;
     cursor: default;
+}
+
+.yk-mood .yk-complete__chips .yk-emotion__chip.is-positive {
+    color: var(--yk-eucalyptus);
+}
+
+.yk-mood .yk-complete__chips .yk-emotion__chip.is-neutral {
+    background: #f7f4ee;
+}
+
+.yk-mood .yk-complete__chips .yk-emotion__chip.is-difficult {
+    background: var(--yk-blush);
+    color: #8d5d56;
 }
 
 .yk-complete__psychologist,
