@@ -9,9 +9,7 @@
     <meta name="theme-color" content="#168A80">
     <title>@yield('title', 'Professional workspace | Yuktione')</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    @include('partials.dm-sans')
     <link rel="icon" type="image/png" href="{{ asset('frontend/assets/Yuktione_logo.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('frontend/assets/Yuktione_logo.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

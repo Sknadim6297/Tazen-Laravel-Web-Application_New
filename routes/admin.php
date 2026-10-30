@@ -460,6 +460,19 @@ Route::middleware(['auth:admin', 'admin.menu'])->group(function () {
         Route::get('/attachment/{id}/download', [App\Http\Controllers\Admin\ChatController::class, 'downloadAttachment'])->name('attachment.download');
     });
 
+    Route::middleware(['auth:admin', 'admin.menu'])->group(function () {
+        Route::get('tools', [\App\Http\Controllers\Admin\ToolRegistryController::class, 'index'])->name('tools.index');
+        Route::get('tools/{tool}/edit', [\App\Http\Controllers\Admin\ToolRegistryController::class, 'edit'])->name('tools.edit');
+        Route::put('tools/{tool}', [\App\Http\Controllers\Admin\ToolRegistryController::class, 'update'])->name('tools.update');
+        Route::post('tools/{tool}/toggle', [\App\Http\Controllers\Admin\ToolRegistryController::class, 'toggle'])->name('tools.toggle');
+        Route::get('tool-categories', [\App\Http\Controllers\Admin\ToolCategoryController::class, 'index'])->name('tool-categories.index');
+        Route::post('tool-categories', [\App\Http\Controllers\Admin\ToolCategoryController::class, 'store'])->name('tool-categories.store');
+        Route::put('tool-categories/{toolCategory}', [\App\Http\Controllers\Admin\ToolCategoryController::class, 'update'])->name('tool-categories.update');
+        Route::delete('tool-categories/{toolCategory}', [\App\Http\Controllers\Admin\ToolCategoryController::class, 'destroy'])->name('tool-categories.destroy');
+        Route::get('tool-settings', [\App\Http\Controllers\Admin\ToolSettingController::class, 'edit'])->name('tool-settings.edit');
+        Route::put('tool-settings', [\App\Http\Controllers\Admin\ToolSettingController::class, 'update'])->name('tool-settings.update');
+    });
+
     // Chat Management - Admin to Customer Communication
     Route::prefix('customer-chat')->name('customer-chat.')->group(function () {
         Route::post('/get-or-create', [App\Http\Controllers\Admin\CustomerChatController::class, 'getOrCreateChat'])->name('get-or-create');

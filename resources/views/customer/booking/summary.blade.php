@@ -465,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <!-- Enhanced Payment Failure Styles -->
 <style>
 .payment-failure-popup {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "DM Sans", sans-serif;
 }
 
 .payment-failure-confirm,

@@ -25,20 +25,20 @@
     --color-info: #36877F;
     --color-info-surface: #EAF6F2;
     --color-focus-ring: #36877F;
-    --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
-    --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "DM Sans", sans-serif;
+    --font-display: "DM Sans", sans-serif;
     --shadow-card: 0 2px 8px rgb(20 43 77 / 0.05), 0 16px 36px -24px rgb(20 43 77 / 0.18);
     --shadow-popover: 0 18px 42px -20px rgb(20 43 77 / 0.24);
 
     accent-color: #36877F;
     color: #475569;
-    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    font-family: "DM Sans", sans-serif;
 }
 
 body[data-yuktione-panel="professional"] {
     background-color: #F7FAFB;
     color: #475569;
-    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    font-family: "DM Sans", sans-serif;
 }
 
 [data-yuktione-panel="professional"] :where(h1, h2, h3, h4, h5, h6) {
@@ -277,7 +277,7 @@ body[data-yuktione-panel="professional"] {
     border: 1px solid #e0e9f0;
     border-radius: 1rem;
     color: #263238;
-    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    font-family: "DM Sans", sans-serif;
 }
 
 [data-yuktione-panel="professional"] .swal2-styled.swal2-confirm {
@@ -294,7 +294,7 @@ body[data-yuktione-panel="professional"] {
 
 body[data-yuktione-panel="professional"] .yk-toast-region,
 body[data-yuktione-panel="professional"] :where(.yk-toast, .yk-inline-alert, .yk-dialog) {
-    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    font-family: "DM Sans", sans-serif;
 }
 
 body[data-yuktione-panel="professional"] .yk-toast-region {

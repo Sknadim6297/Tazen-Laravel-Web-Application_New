@@ -71,7 +71,7 @@
 .tazen-header,
 .tazen-footer {
     color: var(--tazen-chrome-navy);
-    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    font-family: "DM Sans", sans-serif;
     font-weight: 400;
 }
 
@@ -503,34 +503,49 @@
 
 .tazen-footer__social {
     display: flex;
-    flex-wrap: wrap;
-    gap: .6rem;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .5rem;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #c5d5e4 transparent;
+}
+
+.tazen-footer__social::-webkit-scrollbar {
+    height: 4px;
+}
+
+.tazen-footer__social::-webkit-scrollbar-thumb {
+    border-radius: 99px;
+    background: #c5d5e4;
 }
 
 .tazen-footer__social a {
-    display: inline-grid;
-    width: 38px;
-    height: 38px;
-    place-items: center;
-    border: 1px solid var(--tazen-chrome-border);
-    border-radius: 50%;
-    background: var(--tazen-chrome-white);
-    color: var(--tazen-chrome-teal);
-    font-size: .95rem;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: auto;
+    min-width: max-content;
+    max-width: 5rem;
+    gap: 6px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: #315676;
+    font-family: "DM Sans", sans-serif;
+    font-size: .75rem;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
     text-decoration: none;
-    transition: color .18s ease, background-color .18s ease, border-color .18s ease, transform .18s ease;
 }
-
-.tazen-footer__social a:hover {
-    transform: translateY(-2px);
-}
-
-.tazen-footer__social a:nth-child(1):hover { background: #1877f2; border-color: #1877f2; color: #fff; }
-.tazen-footer__social a:nth-child(2):hover { background: #d94683; border-color: #d94683; color: #fff; }
-.tazen-footer__social a:nth-child(3):hover { background: #0a66c2; border-color: #0a66c2; color: #fff; }
-.tazen-footer__social a:nth-child(4):hover { background: #e62117; border-color: #e62117; color: #fff; }
-.tazen-footer__social a:nth-child(5):hover { background: #111; border-color: #111; color: #fff; }
-.tazen-footer__social a:nth-child(6):hover { background: #25d366; border-color: #25d366; color: #fff; }
 
 .tazen-footer__column h2 {
     margin: .2rem 0 1rem;
@@ -924,7 +939,7 @@ html.tazen-public-nav-open body {
     }
 
     .tazen-footer__social {
-        justify-content: center;
+        justify-content: flex-start;
     }
 
     .tazen-footer__column h2 {
@@ -1223,26 +1238,75 @@ html.tazen-public-nav-open body {
 .tazen-header *,
 .tazen-footer,
 .tazen-footer * {
-    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    font-family: "DM Sans", sans-serif;
+}
+
+.tazen-footer__social a:hover,
+.tazen-footer__social a:focus,
+.tazen-footer__social a:focus-visible {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: #315676;
+    transform: none;
+}
+
+.tazen-footer__social a:focus-visible {
+    outline: none;
+}
+
+.tazen-footer__social a svg {
+    display: block;
+    box-sizing: border-box;
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    padding: 12px;
+    border-radius: 50%;
+    background: #1877f2;
+    box-shadow: 0 6px 14px rgb(20 43 77 / 14%);
+    color: #fff;
+    fill: #fff;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.tazen-footer__social a:hover svg,
+.tazen-footer__social a:focus-visible svg {
+    transform: scale(1.05);
+    box-shadow: 0 8px 18px rgb(20 43 77 / 22%);
+}
+
+.tazen-footer__social a:focus-visible svg {
+    outline: 2px solid #173b60;
+    outline-offset: 3px;
 }
 
 .tazen-footer__social a:nth-child(2) svg {
+    background: radial-gradient(circle at 30% 105%, #ffd76e 0 18%, #fa7e1e 38%, #d62976 67%, #962fbf 84%, #4f5bd5 100%);
     fill: none;
     stroke: #fff;
     stroke-width: 1.8;
 }
+
+.tazen-footer__social a:nth-child(3) svg { background: #0a66c2; }
+.tazen-footer__social a:nth-child(4) svg { background: #f32f32; }
+.tazen-footer__social a:nth-child(5) svg { background: #101010; }
+.tazen-footer__social a:nth-child(6) svg { background: #05c66b; }
 
 .tazen-footer__social .tazen-footer__social-dot {
     fill: #fff;
     stroke: none;
 }
 
-.tazen-footer__social a svg {
+.tazen-footer__social a span {
     display: block;
-    width: 19px;
-    height: 19px;
-    color: #fff;
-    fill: #fff;
+    color: #315676;
+    font-family: "DM Sans", sans-serif;
+    font-size: .75rem;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .tazen-footer__contact > a svg,
@@ -1553,69 +1617,6 @@ html.tazen-public-nav-open body {
     color: #587493;
     font-size: clamp(.96rem, 1.2vw, 1.35rem);
     line-height: 1.55;
-}
-
-.tazen-footer__social {
-    align-items: center;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    gap: clamp(4px, .7vw, 14px);
-}
-
-.tazen-footer__social a {
-    display: inline-flex;
-    width: auto;
-    height: auto;
-    min-width: 0;
-    flex: 1 1 0;
-    flex-direction: column;
-    align-items: center;
-    gap: .55rem;
-    overflow: visible;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    color: #fff !important;
-    font-size: clamp(.78rem, .8vw, .95rem);
-    line-height: 1.2;
-    text-decoration: none;
-    transition: transform .2s ease;
-}
-
-.tazen-footer__social a:hover {
-    transform: scale(1.04);
-}
-
-.tazen-footer__social a svg {
-    width: clamp(34px, 3.75vw, 54px);
-    height: clamp(34px, 3.75vw, 54px);
-    flex: 0 0 auto;
-    padding: 14px;
-    border-radius: 50%;
-    background: #1877f2;
-    box-shadow: 0 7px 16px rgb(20 43 77 / 15%);
-    color: #fff;
-    fill: #fff;
-    opacity: 1;
-}
-
-.tazen-footer__social a:nth-child(2) svg {
-    background: radial-gradient(circle at 30% 105%, #ffd76e 0 18%, #fa7e1e 38%, #d62976 67%, #962fbf 84%, #4f5bd5 100%);
-    fill: none;
-    stroke: #fff;
-    stroke-width: 1.8;
-}
-
-.tazen-footer__social a:nth-child(1) svg { background: #1877f2; }
-.tazen-footer__social a:nth-child(3) svg { background: #0a66c2; }
-.tazen-footer__social a:nth-child(4) svg { background: #f32f32; }
-.tazen-footer__social a:nth-child(5) svg { background: #101010; }
-.tazen-footer__social a:nth-child(6) svg { background: #05c66b; }
-
-.tazen-footer__social a span {
-    color: #315676;
-    text-align: center;
-    white-space: nowrap;
 }
 
 .tazen-footer__column h2 {
@@ -1940,20 +1941,6 @@ html.tazen-public-nav-open body {
         gap: clamp(.9rem, 2vw, 1.75rem);
     }
 
-    .tazen-footer__social {
-        gap: clamp(4px, .7vw, 8px);
-    }
-
-    .tazen-footer__social a {
-        font-size: .48rem;
-    }
-
-    .tazen-footer__social a svg {
-        width: clamp(32px, 3.75vw, 44px);
-        height: clamp(32px, 3.75vw, 44px);
-        padding: 11px;
-    }
-
     .tazen-footer__contact-form > div {
         min-height: 58px;
         gap: .45rem;
@@ -1972,20 +1959,6 @@ html.tazen-public-nav-open body {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 3rem 2.5rem;
         padding: 4rem 0;
-    }
-
-    .tazen-footer__social {
-        gap: clamp(4px, .7vw, 7px);
-    }
-
-    .tazen-footer__social a {
-        font-size: .62rem;
-    }
-
-    .tazen-footer__social a svg {
-        width: clamp(32px, 5.5vw, 46px);
-        height: clamp(32px, 5.5vw, 46px);
-        padding: 11px;
     }
 
     .tazen-footer__bottom {
@@ -2021,21 +1994,6 @@ html.tazen-public-nav-open body {
 
     .tazen-footer__brand p {
         margin: 1rem 0 1.5rem;
-    }
-
-    .tazen-footer__social {
-        justify-content: flex-start;
-        gap: clamp(4px, 1.5vw, 7px);
-    }
-
-    .tazen-footer__social a {
-        font-size: clamp(.5rem, 2.1vw, .62rem);
-    }
-
-    .tazen-footer__social a svg {
-        width: clamp(38px, 11.3vw, 46px);
-        height: clamp(38px, 11.3vw, 46px);
-        padding: 11px;
     }
 
     .tazen-footer__column h2 {
@@ -2128,23 +2086,11 @@ html.tazen-public-nav-open body {
         width: calc(100% - 2rem);
     }
 
-    .tazen-footer__social {
-        gap: 3px;
-    }
-
-    .tazen-footer__social a {
-        font-size: 7px;
-    }
-
-    .tazen-footer__social a svg {
-        width: 36px;
-        height: 36px;
-        padding: 10px;
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .tazen-footer__social a,
+    .tazen-footer__social a svg,
     .tazen-footer__column li a::after,
     .whatsapp-float {
         transition-duration: .01ms;

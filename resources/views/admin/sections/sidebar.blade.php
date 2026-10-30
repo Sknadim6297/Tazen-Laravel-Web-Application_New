@@ -454,6 +454,27 @@
     </ul>
 </li>
 @endif
+                    @if($isMenuAccessible('tools_management'))
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item">
+                            <i class="ri-tools-line side-menu__icon"></i>
+                            <span class="side-menu__label">Tools Management</span>
+                            <i class="ri-arrow-down-s-line side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1">
+                            <li class="slide side-menu__label1"><a href="javascript:void(0)">Tools Management</a></li>
+                            @if($isMenuAccessible('tools.all'))
+                            <li class="slide"><a href="{{ route('admin.tools.index') }}" class="side-menu__item">All Tools</a></li>
+                            @endif
+                            @if($isMenuAccessible('tools.categories'))
+                            <li class="slide"><a href="{{ route('admin.tool-categories.index') }}" class="side-menu__item">Tool Categories</a></li>
+                            @endif
+                            @if($isMenuAccessible('tools.settings'))
+                            <li class="slide"><a href="{{ route('admin.tool-settings.edit') }}" class="side-menu__item">Tool Settings</a></li>
+                            @endif
+                        </ul>
+                    </li>
+                    @endif
                     @if($isMenuAccessible('reviews'))
                     <li class="slide has-sub">
     <a href="javascript:void(0);" class="side-menu__item">

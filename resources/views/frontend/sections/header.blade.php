@@ -34,9 +34,9 @@
         ],
         [
             'label' => 'Tools',
-            'href' => '#',
-            'active' => false,
-            'placeholder' => true,
+            'href' => route('tools.index'),
+            'active' => request()->routeIs('tools.index'),
+            'placeholder' => false,
         ],
         [
             'label' => 'Experts',

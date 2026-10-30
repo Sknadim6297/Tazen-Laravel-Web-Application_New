@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#168A80">
     <title>Reset Password | Yuktione</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    @include('partials.dm-sans')
     @vite(['resources/css/tazen.css', 'resources/css/auth-theme.css'])
     <style>
         .password-strength { height: 4px; margin-top: .5rem; overflow: hidden; border-radius: 9999px; background: #e0e9f0; }

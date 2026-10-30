@@ -4,7 +4,7 @@
     padding: 0.35rem 1rem 2.75rem;
     background: #fffefc;
     color: #0b2048;
-    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: "DM Sans", sans-serif;
 }
 
 .yk-talk *,
@@ -238,27 +238,6 @@
 .yk-talk__count {
     color: #5c6b84;
     font-weight: 500;
-}
-
-.yk-talk__tags {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.3rem;
-    margin: 0.6rem 0 0;
-    padding: 0;
-    list-style: none;
-}
-
-.yk-talk__tags li {
-    max-width: 100%;
-    padding: 0.18rem 0.45rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.78);
-    color: #3e4d68;
-    font-size: 0.68rem;
-    font-weight: 500;
-    line-height: 1.3;
 }
 
 .yk-talk__book {

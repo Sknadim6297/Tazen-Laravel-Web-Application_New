@@ -27,7 +27,7 @@ h1, h2, h3, h4, h5, h6,
 p, a, button, input, select, textarea, label,
 .event-card, .page_header, .filter_col, .ttm-row, .ttm-bg,
 .featured-content-inner, .ttm-btn {
-    font-family: 'Poppins', sans-serif !important;
+    font-family: "DM Sans", sans-serif !important;
 }
 </style>
 

@@ -45,26 +45,12 @@
                             ->implode('');
 
                         $specialization = $expert->profile?->specialization;
-                        $serviceNames = $expert->professionalServices
-                            ->map(fn ($professionalService) => $professionalService->service?->name)
-                            ->filter()
-                            ->unique()
-                            ->values();
                         if (!filled($specialization)) {
-                            $specialization = $serviceNames->first();
-                        }
-
-                        $tags = $expert->professionalServices
-                            ->flatMap(fn ($professionalService) => $professionalService->subServices->pluck('name'))
-                            ->filter()
-                            ->unique()
-                            ->take(3)
-                            ->values();
-                        if ($tags->isEmpty()) {
-                            $tags = $serviceNames
-                                ->reject(fn ($name) => strcasecmp((string) $name, (string) $specialization) === 0)
-                                ->take(3)
-                                ->values();
+                            $specialization = $expert->professionalServices
+                                ->map(fn ($professionalService) => $professionalService->service?->name)
+                                ->filter()
+                                ->unique()
+                                ->first();
                         }
 
                         $reviewStat = $talkReviewStats->get($expert->id);
@@ -108,20 +94,15 @@
                             @if (filled($specialization))
                                 <p class="yk-talk__role">{{ $specialization }}</p>
                             @endif
-                            @if ($averageRating)
-                                <p class="yk-talk__rating">
-                                    <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="#e0a106" d="M8 1.4 9.8 5.8l4.7.4-3.6 3.1 1.1 4.6L8 11.6 3.9 14l1.1-4.6L1.5 6.2l4.7-.4Z"></path></svg>
+                            <p class="yk-talk__rating" @unless($averageRating) aria-label="No reviews yet" @endunless>
+                                <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="#e0a106" d="M8 1.4 9.8 5.8l4.7.4-3.6 3.1 1.1 4.6L8 11.6 3.9 14l1.1-4.6L1.5 6.2l4.7-.4Z"></path></svg>
+                                @if ($averageRating)
                                     <span>{{ $averageRating }}</span>
                                     <span class="yk-talk__count">({{ $reviewCount }})</span>
-                                </p>
-                            @endif
-                            @if ($tags->isNotEmpty())
-                                <ul class="yk-talk__tags">
-                                    @foreach ($tags as $tag)
-                                        <li>{{ $tag }}</li>
-                                    @endforeach
-                                </ul>
-                            @endif
+                                @else
+                                    <span class="yk-talk__count">New</span>
+                                @endif
+                            </p>
                             <a class="yk-talk__book" href="{{ $profileUrl }}">Book Now <span aria-hidden="true">→</span></a>
                         </article>
                     </li>

@@ -14,7 +14,7 @@ class CustomerRegistrationPageTest extends TestCase
             ->assertSee('Create your account')
             ->assertSee('Join Yuktione to connect with trusted professionals.')
             ->assertSee('frontend/assets/Yuktione_logo.png')
-            ->assertSee('family=Poppins', false)
+            ->assertSee('family=DM+Sans', false)
             ->assertSee('name="first_name"', false)
             ->assertSee('name="last_name"', false)
             ->assertSee('name="phone"', false)

@@ -25,17 +25,17 @@
     --color-info: #36877F;
     --color-info-surface: #EAF6F2;
     --color-focus-ring: #36877F;
-    --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
-    --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "DM Sans", sans-serif;
+    --font-display: "DM Sans", sans-serif;
 
     color: #475569;
-    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    font-family: "DM Sans", sans-serif;
 }
 
 body.yuktione-auth-page {
     background: #F7FAFB;
     color: #475569;
-    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    font-family: "DM Sans", sans-serif;
 }
 
 .yuktione-auth-page :where(h1, h2, h3, h4, h5, h6) {

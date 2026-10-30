@@ -81,7 +81,8 @@ Route::get('/csrf-token', function () {
 Route::post('/check-login', [BookingController::class, 'checkLogin'])->name('check.login');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('gridlisting', [HomeController::class, 'professionals'])->name('gridlisting');
+Route::get('gridlisting', [HomeController::class, 'explore'])->name('gridlisting');
+Route::get('tools', [HomeController::class, 'tools'])->name('tools.index');
 Route::post('/currency/switch', [CurrencyController::class, 'switch'])->name('currency.switch');
 
 // Professional details page - public viewing but requires auth for booking

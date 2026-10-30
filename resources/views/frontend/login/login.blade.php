@@ -10,10 +10,6 @@
 @section('meta_description', 'Sign in to your Yuktione account to manage consultations and bookings.')
 @section('body_class', 'yuktione-auth-page')
 
-@push('head')
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-@endpush
-
 @section('content')
 <main id="loginPanel" data-yuktione-auth class="yuktione-auth-page flex min-h-dvh w-full items-center justify-center bg-background px-4 py-8 sm:px-6">
     <section class="w-full max-w-md rounded-panel border border-border bg-surface p-5 shadow-popover sm:p-8" aria-labelledby="login-heading">

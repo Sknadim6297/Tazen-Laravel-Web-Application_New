@@ -35,6 +35,8 @@ use App\Models\BlogPost;
 use App\Models\EventDetail;
 use App\Models\Review;
 use App\Models\CategoryBox;
+use App\Services\ExploreCatalog;
+use App\Services\ToolsCatalog;
 use App\Models\Help;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -448,6 +450,16 @@ class HomeController extends Controller
         }
 
         return view('frontend.sections.gridlisting', compact('professionals', 'services', 'subServices', 'selectedServiceId'));
+    }
+
+    public function explore(Request $request, ExploreCatalog $catalog)
+    {
+        return view('frontend.sections.explore', $catalog->browse($request));
+    }
+
+    public function tools(Request $request, ToolsCatalog $catalog)
+    {
+        return view('frontend.sections.tools', $catalog->browse($request));
     }
 
 

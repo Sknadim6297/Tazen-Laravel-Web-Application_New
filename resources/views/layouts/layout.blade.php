@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="author" content="Tazen">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
+	@include('partials.dm-sans')
 	
 	<!-- SEO Meta Tags -->
 	<meta name="robots" content="index, follow">
@@ -201,16 +202,10 @@
 	@yield('schema')
 	@vite('resources/css/yuktione-feedback.css')
 	@if ($isCustomerPanelFlow)
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 		@vite('resources/css/customer-panel.css')
 	@endif
 	<link href="{{ asset('frontend/assets/css/tazen-public-chrome.css') }}?v={{ filemtime(public_path('frontend/assets/css/tazen-public-chrome.css')) }}" rel="stylesheet">
 	@if (request()->routeIs('home'))
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 		<link href="{{ asset('frontend/assets/css/yuktione-home.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-home.css')) }}" rel="stylesheet">
 		<link href="{{ asset('frontend/assets/css/yuktione-hero.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-hero.css')) }}" rel="stylesheet">
 		<link href="{{ asset('frontend/assets/css/yuktione-categories.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-categories.css')) }}" rel="stylesheet">
@@ -223,9 +218,12 @@
 	@if (request()->routeIs('event.list', 'event.details'))
 		<link href="{{ asset('frontend/assets/css/yuktione-programmes.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-programmes.css')) }}" rel="stylesheet">
 	@endif
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+	@if (request()->routeIs('gridlisting'))
+		<link href="{{ asset('frontend/assets/css/yuktione-explore.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-explore.css')) }}" rel="stylesheet">
+	@endif
+	@if (request()->routeIs('tools.index'))
+		<link href="{{ asset('frontend/assets/css/yuktione-tools-page.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-tools-page.css')) }}" rel="stylesheet">
+	@endif
 	<link href="{{ asset('frontend/assets/css/yuktione-navbar.css') }}?v={{ filemtime(public_path('frontend/assets/css/yuktione-navbar.css')) }}" rel="stylesheet">
 	@endif
 </head>

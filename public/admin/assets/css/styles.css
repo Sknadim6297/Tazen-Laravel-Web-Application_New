@@ -94,7 +94,7 @@ typography
   --primary08: rgba(var(--primary-rgb), 0.8);
   --primary09: rgba(var(--primary-rgb), 0.9);
   --primary005: rgba(var(--primary-rgb), 0.05);
-  --default-font-family: "Plus Jakarta Sans", sans-serif;
+  --default-font-family: "DM Sans", sans-serif;
   --default-font-weight: 400;
   --default-text-color: #010101;
   --default-border: #eeeeee;

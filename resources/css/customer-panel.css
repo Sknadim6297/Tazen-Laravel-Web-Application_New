@@ -49,8 +49,8 @@
     --color-info-surface: var(--yk-soft-blue);
     --color-focus-ring: var(--yk-primary);
 
-    --font-sans: "Poppins", "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    --font-display: "Poppins", "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-sans: "DM Sans", sans-serif;
+    --font-display: "DM Sans", sans-serif;
 
     --radius-control: 0.75rem;
     --radius-card: 1rem;
@@ -694,8 +694,8 @@ body[data-yuktione-panel="customer"]#customer-auth-page {
     --yk-success: #168a80;
     --yk-danger: #b42318;
 
-    --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
-    --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "DM Sans", sans-serif;
+    --font-display: "DM Sans", sans-serif;
     --color-brand-50: #eaf8f5;
     --color-brand-100: #d5f0eb;
     --color-brand-200: #b2e3db;
@@ -730,7 +730,7 @@ body[data-yuktione-panel="customer"]#customer-auth-page {
     --shadow-card: 0 1px 2px rgb(38 50 56 / 0.04), 0 12px 32px -20px rgb(38 50 56 / 0.2);
     --shadow-popover: 0 16px 40px -24px rgb(38 50 56 / 0.24);
 
-    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    font-family: "DM Sans", sans-serif;
 }
 
 body.customer-registration-page {
@@ -753,7 +753,7 @@ body.customer-registration-page :where(h1, h2, h3, h4, h5, h6) {
 }
 
 body.customer-registration-page [data-yuktione-feedback] :where(.yk-toast, .yk-inline-alert, .yk-dialog) {
-    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    font-family: "DM Sans", sans-serif;
 }
 
 @media (min-width: 40rem) {

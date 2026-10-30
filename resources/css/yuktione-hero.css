@@ -6,7 +6,7 @@
 @source "../views/frontend/home/partials/hero.blade.php";
 
 @theme {
-  --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "DM Sans", sans-serif;
   --color-navy: #0b2048;
   --color-teal: #316d61;
   --color-lavender: #9d81db;
@@ -33,7 +33,10 @@
 }
 
 .yk-hero {
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 400;
 }
 
 .yk-hero__search,

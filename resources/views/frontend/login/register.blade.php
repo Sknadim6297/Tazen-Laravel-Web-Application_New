@@ -8,9 +8,7 @@
     <meta name="theme-color" content="#EFF9FF">
     <title>Create a Customer Account | Yuktione</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    @include('partials.dm-sans')
     <link rel="icon" type="image/png" href="{{ asset('tazen-favicon.png') }}">
     @vite([
         'resources/css/tazen.css',
